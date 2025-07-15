@@ -96,9 +96,9 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="flex h-screen bg-slate-900 text-white">
+    <div className="flex h-screen text-gray-900 bg-gray-100">
       {/* Sidebar */}
-      <div className="w-64 bg-slate-800 border-r border-slate-700">
+      <div className="w-64 text-slate-800 bg-gray-100 border-r border-gray-300">
         <div className="p-6">
           <h1 className="text-2xl font-bold text-pink-400">Onulive</h1>
         </div>
@@ -107,19 +107,19 @@ export default function DashboardPage() {
           {sidebarItems.map((item, index) => (
             <div key={index} className="relative">
               <div
-                className={`flex items-center justify-between px-6 py-3 hover:bg-slate-700 cursor-pointer ${
-                  item.active ? "bg-slate-700 border-r-2 border-pink-400" : ""
+                className={`flex items-center justify-between px-6 py-3 hover:bg-gray-200 cursor-pointer ${
+                  item.active ? "text-gray-700 border-r-2 border-pink-400" : ""
                 }`}
               >
                 <div className="flex items-center space-x-3">
                   <item.icon
                     className={`w-5 h-5 ${
-                      item.active ? "text-pink-400" : "text-gray-400"
+                      item.active ? "text-pink-400" : "text-gray-600"
                     }`}
                   />
                   <span
                     className={`${
-                      item.active ? "text-pink-400" : "text-gray-300"
+                      item.active ? "text-pink-400" : "text-gray-500"
                     }`}
                   >
                     {item.label}
@@ -137,7 +137,7 @@ export default function DashboardPage() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <div className="bg-slate-800 border-b border-slate-700 px-6 py-4 flex items-center justify-between">
+        <div className="bg-gray-100 border-b border-gray-300 px-6 py-4 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-semibold">User</h2>
           </div>
@@ -151,7 +151,7 @@ export default function DashboardPage() {
         {/* Stats Cards */}
         <div className="p-6">
           <div className="grid grid-cols-4 gap-6 mb-8">
-            <Card className="bg-slate-800 border-slate-700">
+            <Card className="bg-gray-50 border-none">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -165,7 +165,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-800 border-slate-700">
+            <Card className="bg-gray-50 border-none">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -179,7 +179,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-800 border-slate-700">
+            <Card className="bg-gray-50 border-none">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -193,7 +193,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-800 border-slate-700">
+            <Card className="bg-gray-50 border-none">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -217,7 +217,7 @@ export default function DashboardPage() {
                 className={`${
                   activeTab === "All"
                     ? "bg-blue-600 hover:bg-blue-700 text-white"
-                    : "bg-slate-700 border-slate-600 text-gray-300 hover:bg-slate-600"
+                    : "bg-gray-100 border-gray-600 text-gray-700 hover:bg-gray-200"
                 }`}
               >
                 All
@@ -239,52 +239,52 @@ export default function DashboardPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
                 placeholder="What're you searching for?"
-                className="pl-10 w-80 bg-slate-700 border-slate-600 text-white placeholder-gray-400"
+                className="pl-10 w-80 bg-gray-100 border-gray-600 text-white placeholder-gray-400"
               />
             </div>
           </div>
 
           {/* Data Table */}
-          <Card className="bg-slate-800 border-slate-700">
+          <Card className="bg-gray-100 border-gray-300">
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-slate-700 hover:bg-slate-700/50">
-                    <TableHead className="text-gray-400">No.</TableHead>
-                    <TableHead className="text-gray-400">Image</TableHead>
-                    <TableHead className="text-gray-400">Name</TableHead>
-                    <TableHead className="text-gray-400">Uniqueld</TableHead>
-                    <TableHead className="text-gray-400">Gender</TableHead>
-                    <TableHead className="text-gray-400">RCoin</TableHead>
-                    <TableHead className="text-gray-400">Country</TableHead>
-                    <TableHead className="text-gray-400">Level</TableHead>
-                    <TableHead className="text-gray-400">isBlock</TableHead>
-                    <TableHead className="text-gray-400">isHost</TableHead>
-                    <TableHead className="text-gray-400">Agency</TableHead>
+                  <TableRow className="border-gray-300 bg-gray-200 hover:bg-gray-700/50">
+                    <TableHead className="text-gray-700">No.</TableHead>
+                    <TableHead className="text-gray-700">Image</TableHead>
+                    <TableHead className="text-gray-700">Name</TableHead>
+                    <TableHead className="text-gray-700">Uniqueld</TableHead>
+                    <TableHead className="text-gray-700">Gender</TableHead>
+                    <TableHead className="text-gray-700">RCoin</TableHead>
+                    <TableHead className="text-gray-700">Country</TableHead>
+                    <TableHead className="text-gray-700">Level</TableHead>
+                    <TableHead className="text-gray-700">isBlock</TableHead>
+                    <TableHead className="text-gray-700">isHost</TableHead>
+                    <TableHead className="text-gray-700">Agency</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {userData.map((user) => (
                     <TableRow
                       key={user.id}
-                      className="border-slate-700 hover:bg-slate-700/50"
+                      className="border-gray-300 hover:bg-gray-700/50"
                     >
-                      <TableCell className="text-gray-300">{user.id}</TableCell>
+                      <TableCell className="text-gray-700">{user.id}</TableCell>
                       <TableCell>
                         <Avatar className="w-10 h-10">
                           <AvatarImage src={user.image || "/placeholder.svg"} />
-                          <AvatarFallback className="bg-slate-600">
+                          <AvatarFallback className="bg-gray-600">
                             {user.name.charAt(0)}
                           </AvatarFallback>
                         </Avatar>
                       </TableCell>
-                      <TableCell className="text-gray-300">
+                      <TableCell className="text-gray-700">
                         {user.name}
                       </TableCell>
-                      <TableCell className="text-gray-300">
+                      <TableCell className="text-gray-700">
                         {user.uniqueId}
                       </TableCell>
-                      <TableCell className="text-gray-300">
+                      <TableCell className="text-gray-700">
                         {user.gender}
                       </TableCell>
                       <TableCell className="text-red-400">
@@ -303,10 +303,10 @@ export default function DashboardPage() {
                           {user.isBlock}
                         </span>
                       </TableCell>
-                      <TableCell className="text-gray-300">
+                      <TableCell className="text-gray-700">
                         {user.isHost}
                       </TableCell>
-                      <TableCell className="text-gray-300">
+                      <TableCell className="text-gray-700">
                         {user.agency}
                       </TableCell>
                     </TableRow>
