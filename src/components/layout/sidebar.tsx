@@ -8,6 +8,7 @@ export function Sidebar({
     icon: React.ComponentType<{ className?: string }>;
     active?: boolean;
     hasSubmenu?: boolean;
+    link: string;
   }[];
 }) {
   return (
@@ -17,7 +18,7 @@ export function Sidebar({
       </div>
       <nav className="mt-6">
         {items.map((item, index) => (
-          <div key={index} className="relative">
+          <a href={item.link} key={index} className="relative">
             <div
               className={`flex items-center justify-between px-6 py-3 hover:bg-gray-200 cursor-pointer ${
                 item.active ? "text-gray-700 border-r-2 border-pink-400" : ""
@@ -41,7 +42,7 @@ export function Sidebar({
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               )}
             </div>
-          </div>
+          </a>
         ))}
       </nav>
     </div>
