@@ -1,29 +1,16 @@
 import { PageHeader } from "@/components/layout/page-header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Activity, BarChart3, Gift, UserIcon } from "lucide-react";
-
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const Home = () => {
-  // const [activeTab, setActiveTab] = useState("All");
+  const location = useLocation();
 
   const sidebarItems = [
-    { icon: Activity, label: "Dashboard", active: false, link: "/" },
-    {
-      icon: UserIcon,
-      label: "User",
-      link: "/user-lists",
-      active: true,
-      hasSubmenu: false,
-    },
-    {
-      icon: BarChart3,
-      label: "Agency",
-      link: "/agencies",
-      active: false,
-      hasSubmenu: false,
-    },
-    { icon: Gift, label: "Reseler", link: "/", active: false },
+    { icon: Activity, label: "Dashboard", link: "/" },
+    { icon: UserIcon, label: "User", link: "/user-lists", hasSubmenu: false },
+    { icon: BarChart3, label: "Agency", link: "/agencies", hasSubmenu: false },
+    { icon: Gift, label: "Reseler", link: "/reseler", hasSubmenu: false },
   ];
 
   const breadcrumbs = [
@@ -33,9 +20,9 @@ const Home = () => {
 
   return (
     <div className="flex h-screen text-gray-900 bg-gray-100">
-      <Sidebar items={sidebarItems} />
+      <Sidebar items={sidebarItems} currentPath={location.pathname} />
       <div className="flex-1 flex flex-col">
-        <PageHeader title="User" breadcrumbs={breadcrumbs} />
+        <PageHeader title="" breadcrumbs={breadcrumbs} />
         <Outlet />
       </div>
     </div>
