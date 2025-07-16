@@ -1,16 +1,19 @@
+import { TResponse } from "@/types/api";
 import { onuliveCloneDashboardBaseApi } from "./base.api";
 import {
   TChangePassword,
   TForgetPassword,
   TLoginBody,
   TResetPassword,
+  TUser,
 } from "@/types/api/auth";
 
+type TLoginResponse = TResponse<TUser> & { access_token: string };
 const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation({
-      query: (userInfo: TLoginBody) => ({
-        url: "/auth/login",
+    login: builder.mutation<TLoginResponse, TLoginBody>({
+      query: (userInfo) => ({
+        url: "/admin/login",
         method: "POST",
         body: userInfo,
       }),
@@ -45,6 +48,13 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         body: userInfo,
       }),
     }),
+    adminRegister: builder.mutation({
+      query: (adminInfo) => ({
+        url: "/admin/auth",
+        method: "POST",
+        body: adminInfo,
+      }),
+    }),
   }),
 });
 
@@ -53,4 +63,5 @@ export const {
   useResetPasswordMutation,
   useForgetPasswordMutation,
   useChangePasswordMutation,
+  useAdminRegisterMutation,
 } = authApi;

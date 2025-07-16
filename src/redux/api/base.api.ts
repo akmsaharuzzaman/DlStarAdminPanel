@@ -2,8 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 import { tagTypesList } from "../tag.types";
 
-// const baseURL = "http://192.168.40.76:3000/api";
-const baseURL = "http://localhost:6006/api"; // hosted server
+const baseURL = " http://dlstarlive.com:8000/api"; // hosted server
 const baseQuery = fetchBaseQuery({
   baseUrl: baseURL,
   prepareHeaders: (headers, { getState }) => {

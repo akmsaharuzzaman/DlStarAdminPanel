@@ -1,17 +1,38 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { LoginForm } from "@/components/forms/login-form";
+import { useLoginMutation } from "@/redux/api/auth.api";
+import { LoginFormValues } from "@/schema/login-schema.zod";
+import { toast } from "sonner";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("onu.live.official@gmail.com");
-  const [password, setPassword] = useState("••••••");
+  const [login, { isLoading }] = useLoginMutation();
+
+  // Replace this with your actual login logic (API call + redux dispatch)
+  const handleLogin = async (values: LoginFormValues) => {
+    // For demonstration, just logging the values
+    console.log(values);
+    try {
+      // await dispatch(loginThunk(values));
+      const response = await login(values).unwrap();
+      console.log("Login successful:", response);
+      // handle success (e.g., store token in localStorage, update redux state)
+      // or call your API and handle redux state
+      toast.success(response.message);
+      // redirect after login
+    } catch (error: unknown) {
+      console.error("Login failed:", error);
+      if (typeof error === "object" && error !== null && "message" in error) {
+        toast.success((error as { message?: string }).message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }
+      // handle error (e.g., show notification)
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Background with geometric pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-slate-900 to-purple-800">
-        {/* Geometric pattern overlay */}
         <div className="absolute inset-0 opacity-20">
           <svg
             className="w-full h-full"
@@ -36,8 +57,6 @@ export default function LoginPage() {
             <rect width="100" height="100" fill="url(#grid)" />
           </svg>
         </div>
-
-        {/* Additional geometric lines */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent rotate-45"></div>
           <div className="absolute top-3/4 right-1/4 w-96 h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent -rotate-45"></div>
@@ -57,45 +76,7 @@ export default function LoginPage() {
               access admin panel.
             </p>
           </div>
-
-          {/* Form */}
-          <form className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-slate-400 text-sm">
-                Email address
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-500 focus:border-pink-400 focus:ring-pink-400"
-                placeholder="Email address"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-slate-400 text-sm">
-                Password
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-500 focus:border-pink-400 focus:ring-pink-400"
-                placeholder="Password"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full bg-pink-500 hover:bg-pink-600 text-white font-medium py-3 mt-6"
-            >
-              Sign In
-            </Button>
-          </form>
-
+          <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
           {/* Forgot Password Link */}
           <div className="text-center mt-6">
             <a

@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/auth/protected-route";
 import DashboardPage from "@/components/pages/dashboard";
 import LoginPage from "@/components/pages/login";
 import Agencies from "@/pages/Agencies";
@@ -7,21 +8,50 @@ import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Home />,
-    errorElement: <div>Page not found</div>,
+    element: <ProtectedRoute allowedRoles={["admin", "user"]} />,
     children: [
       {
         path: "/",
-        element: <DashboardPage />,
+        element: <Home />,
+        errorElement: <div>Page not found</div>,
+        children: [
+          {
+            path: "/",
+            element: <DashboardPage />,
+          },
+          {
+            path: "/user-lists",
+            element: <UserListsPage />,
+          },
+          {
+            path: "/agencies",
+            element: <Agencies />,
+          },
+        ],
       },
+    ],
+  },
+  {
+    element: <ProtectedRoute allowedRoles={["admin"]} />,
+    children: [
       {
-        path: "/user-lists",
-        element: <UserListsPage />,
-      },
-      {
-        path: "/agencies",
-        element: <Agencies />,
+        path: "/",
+        element: <Home />,
+        errorElement: <div>Page not found</div>,
+        children: [
+          {
+            path: "/",
+            element: <DashboardPage />,
+          },
+          {
+            path: "/user-lists",
+            element: <UserListsPage />,
+          },
+          {
+            path: "/agencies",
+            element: <Agencies />,
+          },
+        ],
       },
     ],
   },
