@@ -1,10 +1,15 @@
 import { LoginForm } from "@/components/forms/login-form";
 import { useLoginMutation } from "@/redux/api/auth.api";
+import { setUser } from "@/redux/features/auth.slice";
+import { useAppDispatch } from "@/redux/hooks";
 import { LoginFormValues } from "@/schema/login-schema.zod";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function LoginPage() {
   const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // Replace this with your actual login logic (API call + redux dispatch)
   const handleLogin = async (values: LoginFormValues) => {
@@ -16,12 +21,37 @@ export default function LoginPage() {
       console.log("Login successful:", response);
       // handle success (e.g., store token in localStorage, update redux state)
       // or call your API and handle redux state
+      const user = response.result?.[0];
+      const token = response.access_token;
+
+      if (user && token) {
+        dispatch(
+          setUser({
+            user: {
+              id: user._id,
+              name: user.username,
+              email: user.email,
+              role: user.userRole,
+            },
+            token,
+          })
+        );
+      }
+
+      // Redirect based on role
+      if (user && user.userRole === "admin") {
+        navigate("/");
+      } else if (user) {
+        navigate("/user-lists");
+      }
       toast.success(response.message);
       // redirect after login
     } catch (error: unknown) {
       console.error("Login failed:", error);
       if (typeof error === "object" && error !== null && "message" in error) {
-        toast.success((error as { message?: string }).message || "Login failed");
+        toast.success(
+          (error as { message?: string }).message || "Login failed"
+        );
       } else {
         toast.error("Login failed");
       }

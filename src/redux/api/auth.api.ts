@@ -8,7 +8,7 @@ import {
   TUser,
 } from "@/types/api/auth";
 
-type TLoginResponse = TResponse<TUser> & { access_token: string };
+type TLoginResponse = TResponse<TUser[]> & { access_token: string };
 const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<TLoginResponse, TLoginBody>({
