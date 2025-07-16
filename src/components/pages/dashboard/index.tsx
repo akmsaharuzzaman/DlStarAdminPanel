@@ -1,22 +1,17 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
-import {
-  Activity,
-  UserIcon,
-  Users,
-  BarChart3,
-  Gift,
-  Search,
-  MapPin,
-} from "lucide-react";
+import { UserIcon, Users, MapPin } from "lucide-react";
 import { StatsCard } from "@/components/cards";
-import { UserTable } from "@/components/tables";
-import { userData } from "@/assets/data/user-data";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState("All");
+  // const [activeTab, setActiveTab] = useState("All");
 
   const stats = [
     {
@@ -45,6 +40,12 @@ export default function DashboardPage() {
     },
   ];
 
+  // Prepare data for the chart
+  const chartData = stats.map((stat) => ({
+    name: stat.label,
+    value: stat.value,
+  }));
+
   return (
     <div className="p-6">
       <div className="grid grid-cols-4 gap-6 mb-8">
@@ -52,8 +53,23 @@ export default function DashboardPage() {
           <StatsCard key={idx} {...stat} />
         ))}
       </div>
+
+      {/* Visual Graph */}
+      <div className="bg-white rounded-lg shadow p-6 mb-8">
+        <h3 className="text-lg font-semibold mb-4">Statistics Overview</h3>
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Bar dataKey="value" fill="#ec4899" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
       {/* Filters and Search */}
-      <div className="flex items-center justify-between mb-6">
+      {/* <div className="flex items-center justify-between mb-6">
         <div className="flex space-x-2">
           <Button
             variant={activeTab === "All" ? "default" : "outline"}
@@ -86,7 +102,7 @@ export default function DashboardPage() {
           />
         </div>
       </div>
-      <UserTable users={userData} />
+      <UserTable users={userData} /> */}
     </div>
   );
 }
