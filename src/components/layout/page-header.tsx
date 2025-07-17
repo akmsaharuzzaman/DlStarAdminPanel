@@ -42,14 +42,14 @@ export function PageHeader({
         <h2 className="text-2xl font-semibold">{title}</h2>
       </div>
       <div className="flex items-center space-x-6">
-        <div className="flex items-center space-x-2 text-sm text-gray-400">
+        {/* <div className="flex items-center space-x-2 text-sm text-gray-400">
           {breadcrumbs.map((crumb, idx) => (
             <span key={idx} className={crumb.active ? "text-pink-400" : ""}>
               {crumb.label}
               {idx < breadcrumbs.length - 1 && <span className="mx-1">/</span>}
             </span>
           ))}
-        </div>
+        </div> */}
         {/* Profile Action Bar */}
         <div className="relative" ref={dropdownRef}>
           <button

@@ -26,7 +26,7 @@ export function UserTable({
             <TableHeader>
               <TableRow className="border-gray-300 bg-gray-200">
                 <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
-                  No.
+                  Serial No.
                 </TableHead>
                 <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
                   Image
@@ -35,7 +35,7 @@ export function UserTable({
                   Name
                 </TableHead>
                 <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
-                  Uniqueld
+                  User ID
                 </TableHead>
                 <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
                   Gender
@@ -51,13 +51,13 @@ export function UserTable({
                   Level
                 </TableHead>
                 <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
-                  isBlock
+                  Activity Zone
                 </TableHead>
                 <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
-                  isHost
+                  Birthday
                 </TableHead>
                 <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
-                  Agency
+                  Joined At
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -65,13 +65,13 @@ export function UserTable({
               {isLoading ? (
                 <UsersLoadingSkeleton />
               ) : (
-                usersData?.map((user, index) => (
+                usersData?.map((user) => (
                   <TableRow
                     key={user._id}
                     className="border-gray-300 hover:bg-gray-100"
                   >
                     <TableCell className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
-                      {index + 1}
+                      {user._id}
                     </TableCell>
                     <TableCell className="px-2 md:px-4">
                       <Avatar className="w-8 h-8 md:w-10 md:h-10">
@@ -93,7 +93,7 @@ export function UserTable({
                     <TableCell className="text-red-600 text-xs md:text-sm px-2 md:px-4">
                       {user?.userRole}
                     </TableCell>
-                    <TableCell className="text-green-600 text-xs md:text-sm px-2 md:px-4">
+                    <TableCell className="text-blue-600 text-xs md:text-sm px-2 md:px-4">
                       {user?.country}
                     </TableCell>
                     <TableCell className="px-2 md:px-4">
@@ -102,15 +102,31 @@ export function UserTable({
                       </span>
                     </TableCell>
                     <TableCell className="px-2 md:px-4">
-                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-[10px] md:text-xs">
-                        {user?.isBlock}
+                      <span
+                        className={`px-2 py-1 rounded text-[10px] md:text-xs ${
+                          user?.activityZone?.zone == "safe"
+                            ? "bg-green-100 text-green-800"
+                            : ""
+                        }`}
+                      >
+                        {user?.activityZone.zone}
                       </span>
                     </TableCell>
                     <TableCell className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
-                      {user?.isHost}
+                      {user?.birthday
+                        ? new Date(user.birthday).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          })
+                        : ""}
                     </TableCell>
                     <TableCell className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
-                      {user?.agency}
+                      {new Date(user.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })}
                     </TableCell>
                   </TableRow>
                 ))
@@ -122,5 +138,3 @@ export function UserTable({
     </Card>
   );
 }
-
-

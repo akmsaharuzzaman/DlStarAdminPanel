@@ -6,6 +6,9 @@ const ModeratorListsPage = () => {
     useGetAllModeratorUsersQuery(null);
   return (
     <div className="p-4">
+      <div className="mb-4 max-w-xs">
+        <h1 className="text-2xl font-bold">Moderator Lists</h1>
+      </div>
       <ModeratorTable
         moderatorsData={moderatorsData?.result?.users}
         isLoading={isLoading}
