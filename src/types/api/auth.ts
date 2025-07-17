@@ -30,7 +30,7 @@ export type TUser = {
   email: string;
   userStateInApp: "Offline" | "Online" | string;
   userPermissions: string[];
-  country:string;
+  country: string;
   avatar: string;
   name: string;
   uid: string;
@@ -43,4 +43,8 @@ export type TUser = {
   birthday: string; // ISO Date string
   gender: "Male" | "Female" | "Other" | string;
   highLevelRequirements: string[];
+  stats: {
+    coins: number;
+    diamonds: number;
+  };
 };

@@ -47,6 +47,13 @@ export function UserTable({
                 <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
                   Country
                 </TableHead>
+
+                <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
+                  Coins
+                </TableHead>
+                <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
+                  Diamonds
+                </TableHead>
                 <TableHead className="text-gray-700 text-xs md:text-sm px-2 md:px-4">
                   Level
                 </TableHead>
@@ -95,6 +102,16 @@ export function UserTable({
                     </TableCell>
                     <TableCell className="text-blue-600 text-xs md:text-sm px-2 md:px-4">
                       {user?.country}
+                    </TableCell>
+                    <TableCell className="px-2 md:px-4">
+                      <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-[10px] md:text-xs">
+                        {user.stats.coins ? user?.stats.coins : 0}
+                      </span>
+                    </TableCell>
+                    <TableCell className="px-2 md:px-4">
+                      <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-[10px] md:text-xs">
+                        {user.stats.diamonds ? user?.stats.diamonds : 0}
+                      </span>
                     </TableCell>
                     <TableCell className="px-2 md:px-4">
                       <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-[10px] md:text-xs">
