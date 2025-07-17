@@ -47,25 +47,29 @@ export default function DashboardPage() {
   }));
 
   return (
-    <div className="p-6">
-      <div className="grid grid-cols-4 gap-6 mb-8">
+    <div className="p-2 sm:p-4 md:p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
         {stats.map((stat, idx) => (
           <StatsCard key={idx} {...stat} />
         ))}
       </div>
 
       {/* Visual Graph */}
-      <div className="bg-white rounded-lg shadow p-6 mb-8">
-        <h3 className="text-lg font-semibold mb-4">Statistics Overview</h3>
-        <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis allowDecimals={false} />
-            <Tooltip />
-            <Bar dataKey="value" fill="#ec4899" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+      <div className="bg-white rounded-lg shadow p-4 md:p-6 mb-6 md:mb-8 w-full">
+        <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-4">
+          Statistics Overview
+        </h3>
+        <div className="w-full h-[200px] md:h-[250px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+              <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
+              <Tooltip />
+              <Bar dataKey="value" fill="#ec4899" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Filters and Search */}

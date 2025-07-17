@@ -4,3 +4,10 @@ export type TResponse<T = any> = {
   result?: T;
   access_token?: string;
 };
+
+export type Tpagination = {
+  total: number;
+  limit: number;
+  page: number;
+  totalPage: number;
+};

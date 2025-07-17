@@ -14,11 +14,10 @@ export default function LoginPage() {
   // Replace this with your actual login logic (API call + redux dispatch)
   const handleLogin = async (values: LoginFormValues) => {
     // For demonstration, just logging the values
-    console.log(values);
+
     try {
       // await dispatch(loginThunk(values));
       const response = await login(values).unwrap();
-      console.log("Login successful:", response);
       // handle success (e.g., store token in localStorage, update redux state)
       // or call your API and handle redux state
       const user = response.result?.[0];
@@ -108,14 +107,14 @@ export default function LoginPage() {
           </div>
           <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
           {/* Forgot Password Link */}
-          <div className="text-center mt-6">
-            <a
-              href="#"
-              className="text-slate-400 hover:text-pink-400 text-sm transition-colors"
-            >
-              Forgot password?
-            </a>
-          </div>
+          {/* // <div className="text-center mt-6">
+          //   <a
+          //     href="#"
+          //     className="text-slate-400 hover:text-pink-400 text-sm transition-colors"
+          //   >
+          //     Forgot password?
+          //   </a>
+          // </div> */}
         </div>
       </div>
     </div>

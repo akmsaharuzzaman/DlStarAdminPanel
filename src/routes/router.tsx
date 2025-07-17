@@ -1,8 +1,8 @@
 import ProtectedRoute from "@/components/auth/protected-route";
 import DashboardPage from "@/components/pages/dashboard";
 import LoginPage from "@/components/pages/login";
-import Agencies from "@/pages/Agencies";
 import Home from "@/pages/Home";
+import ModeratorListsPage from "@/pages/Moderator-lists";
 import UserListsPage from "@/pages/User-lists";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/agencies",
-            element: <Agencies />,
+            element: <ModeratorListsPage />,
           },
         ],
       },
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/agencies",
-            element: <Agencies />,
+            element: <ModeratorListsPage />,
           },
         ],
       },
