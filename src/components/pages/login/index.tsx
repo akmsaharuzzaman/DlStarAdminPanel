@@ -98,7 +98,8 @@ export default function LoginPage() {
         <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-8 border border-slate-700/50">
           {/* Logo/Brand */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-pink-400 mb-4">Onulive</h1>
+            <img src="/logo.jpeg" alt="Logo" className="h-16 w-16 mx-auto mb-4 rounded-lg" />
+            <h1 className="text-3xl font-bold text-pink-400 mb-4">DlStar</h1>
             <p className="text-slate-300 text-sm leading-relaxed">
               Enter your email address and password to
               <br />

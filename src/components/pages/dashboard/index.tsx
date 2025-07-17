@@ -1,4 +1,4 @@
-import { UserIcon, Users, MapPin } from "lucide-react";
+import { UserIcon, Users, HandCoins, Coins } from "lucide-react";
 import { StatsCard } from "@/components/cards";
 import {
   BarChart,
@@ -9,33 +9,43 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useGetUsersQuery } from "@/redux/api/user.api";
+import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
 
 export default function DashboardPage() {
   // const [activeTab, setActiveTab] = useState("All");
+  const { data: users } = useGetUsersQuery(null);
+  const { data: moderators } = useGetAllModeratorUsersQuery(null);
+  const staticStatesData = {
+    totalUser: users?.result?.length || 0,
+    totalAgency: moderators?.result?.users.length || 0,
+    totalCoin: 100,
+    totalSpendCoin: 1,
+  };
 
   const stats = [
     {
-      value: 9,
+      value: staticStatesData.totalUser,
       label: "Total User",
       icon: <UserIcon className="w-6 h-6 text-white" />,
       iconBg: "bg-pink-500",
     },
     {
-      value: 0,
+      value: staticStatesData.totalAgency,
       label: "Total Agency",
-      icon: <MapPin className="w-6 h-6 text-white" />,
+      icon: <Users className="w-6 h-6 text-white" />,
       iconBg: "bg-green-500",
     },
     {
-      value: 1,
+      value: staticStatesData.totalCoin,
       label: "Total Coin",
-      icon: <Users className="w-6 h-6 text-white" />,
+      icon: <HandCoins className="w-6 h-6 text-white" />,
       iconBg: "bg-red-400",
     },
     {
-      value: 1,
+      value: staticStatesData.totalSpendCoin,
       label: "Total Spend Coin",
-      icon: <Users className="w-6 h-6 text-white" />,
+      icon: <Coins className="w-6 h-6 text-white" />,
       iconBg: "bg-red-400",
     },
   ];
@@ -71,42 +81,6 @@ export default function DashboardPage() {
           </ResponsiveContainer>
         </div>
       </div>
-
-      {/* Filters and Search */}
-      {/* <div className="flex items-center justify-between mb-6">
-        <div className="flex space-x-2">
-          <Button
-            variant={activeTab === "All" ? "default" : "outline"}
-            onClick={() => setActiveTab("All")}
-            className={`${
-              activeTab === "All"
-                ? "bg-blue-600 hover:bg-blue-700 text-white"
-                : "bg-gray-100 border-gray-600 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            All
-          </Button>
-          <Button
-            variant={activeTab === "Analytics" ? "default" : "outline"}
-            onClick={() => setActiveTab("Analytics")}
-            className={`${
-              activeTab === "Analytics"
-                ? "bg-blue-600 hover:bg-blue-700 text-white"
-                : "bg-slate-700 border-slate-600 text-gray-300 hover:bg-slate-600"
-            }`}
-          >
-            Analytics
-          </Button>
-        </div>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input
-            placeholder="What're you searching for?"
-            className="pl-10 w-80 bg-gray-100 border-gray-600 text-black placeholder-gray-400"
-          />
-        </div>
-      </div>
-      <UserTable users={userData} /> */}
     </div>
   );
 }
