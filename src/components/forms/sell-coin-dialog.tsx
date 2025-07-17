@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 import { TUser } from "@/types/api/auth";
+import { useAsignCoinToUserByIdMutation } from "@/redux/api/user.api";
+import { toast } from "sonner";
 
 const sellCoinSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
@@ -20,7 +22,7 @@ type SellCoinDialogProps = {
 export function SellCoinDialog({ open, onClose, users }: SellCoinDialogProps) {
   const [searchName, setSearchName] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-
+  const [asignCoinToUser, { isLoading }] = useAsignCoinToUserByIdMutation();
   const filteredUsers = users.filter((user) =>
     user.name?.toLowerCase().includes(searchName.toLowerCase())
   );
@@ -36,16 +38,30 @@ export function SellCoinDialog({ open, onClose, users }: SellCoinDialogProps) {
     defaultValues: { userId: "", coinAmount: 1 },
   });
 
-  const onSubmit = (data: SellCoinFormValues) => {
-    setSuccessMsg(
-      `Successfully added ${data.coinAmount} coins to user ${data.userId}`
-    );
-    setTimeout(() => {
-      onClose();
-      setSuccessMsg("");
-      reset();
-    }, 1500);
+  const onSubmit = async (data: SellCoinFormValues) => {
+    try {
+      const payload = {
+        userId: data.userId,
+        coins: data.coinAmount,
+      };
+
+      const response = await asignCoinToUser(payload).unwrap();
+      toast.success(response.message);
+      setSuccessMsg(
+        `Successfully added ${data.coinAmount} coins to user ${data.userId}`
+      );
+      setTimeout(() => {
+        onClose();
+        setSuccessMsg("");
+        reset();
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to sell coins. Please try again.");
+      setSuccessMsg("Failed to sell coins. Please try again.");
+    }
   };
+  // in this file we are selling coin. i already integrated the api for selling coin. this could be useAsignCoinToUserByIdMutation. please make sure you are perfectly implmented
 
   if (!open) return null;
 
@@ -151,12 +167,23 @@ export function SellCoinDialog({ open, onClose, users }: SellCoinDialogProps) {
               </p>
             )}
           </div>
-          <button
-            type="submit"
-            className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 rounded mt-2"
-          >
-            Sell Coin
-          </button>
+          {isLoading ? (
+            <button
+              type="submit"
+              className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 rounded mt-2"
+              disabled
+            >
+              Selling coin...
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 rounded mt-2"
+            >
+              Sell Coin
+            </button>
+          )}
+
           {successMsg && (
             <p className="text-green-600 text-sm mt-2 text-center">
               {successMsg}
