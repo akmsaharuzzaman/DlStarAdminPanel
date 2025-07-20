@@ -22,7 +22,7 @@ export default function DashboardPage() {
     totalCoin: 100,
     totalSpendCoin: 1,
   };
-fix: improve error handling in sellCoinDialog and update user state display in UserTable
+
   const stats = [
     {
       value: staticStatesData.totalUser,
