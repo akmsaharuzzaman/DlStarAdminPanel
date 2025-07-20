@@ -10,18 +10,11 @@ export const tagTypes = {
   post: "Post",
   newProducts: "NewProducts",
   product: "Product",
-  privacy: "Privacy",
-  terms: "Terms",
-  notification: "Notification",
 };
 
 export const tagTypesList = [
   tagTypes.category,
   tagTypes.review,
-  tagTypes.privacy,
-  tagTypes.terms,
-  tagTypes.advertise,
   tagTypes.post,
-  tagTypes.notification,
   tagTypes.profile
 ];
