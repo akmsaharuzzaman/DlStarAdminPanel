@@ -1,9 +1,9 @@
-import { TResponse } from "@/types/api";
+import { Tpagination, TResponse } from "@/types/api";
 import { onuliveCloneDashboardBaseApi } from "./base.api";
 import { TUser } from "@/types/api/auth";
 import { TAsignCoinToUserRequestBody, TUserRewards } from "@/types/api/user";
 
-type TGetUserResponse = TResponse<TUser[]>;
+type TGetUserResponse = TResponse<{ pagination: Tpagination; users: TUser[] }>;
 type TAsignCoinToUserResponse = TResponse<TUserRewards>;
 const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({

@@ -10,15 +10,19 @@ const UserListsPage = () => {
   return (
     <div className="p-4">
       <Header onSellCoinClick={() => setDialogOpen(true)} />
-      <SellCoinDialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        users={usersData?.result || []}
-      />
+      {isLoading ? (
+        <div className="text-center">Loading...</div>
+      ) : (
+        <SellCoinDialog
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          users={usersData?.result?.users || []}
+        />
+      )}
       <div className="mb-4 max-w-xs">
         <h1 className="text-2xl font-bold">User Lists</h1>
       </div>
-      <UserTable usersData={usersData?.result} isLoading={isLoading} />
+      <UserTable usersData={usersData?.result?.users} isLoading={isLoading} />
     </div>
   );
 };
