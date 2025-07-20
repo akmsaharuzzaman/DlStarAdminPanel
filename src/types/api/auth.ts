@@ -46,5 +46,8 @@ export type TUser = {
   stats: {
     coins: number;
     diamonds: number;
+    level: number;
+    stars: number,
+    "gifts": number[],
   };
 };

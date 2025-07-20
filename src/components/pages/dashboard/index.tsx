@@ -17,12 +17,12 @@ export default function DashboardPage() {
   const { data: users } = useGetUsersQuery(null);
   const { data: moderators } = useGetAllModeratorUsersQuery(null);
   const staticStatesData = {
-    totalUser: users?.result?.length || 0,
+    totalUser: users?.result?.users?.length || 0,
     totalAgency: moderators?.result?.users.length || 0,
     totalCoin: 100,
     totalSpendCoin: 1,
   };
-
+fix: improve error handling in sellCoinDialog and update user state display in UserTable
   const stats = [
     {
       value: staticStatesData.totalUser,

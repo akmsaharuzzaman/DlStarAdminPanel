@@ -9,7 +9,6 @@ const UserListsPage = () => {
 
   return (
     <div className="p-4">
-      <Header onSellCoinClick={() => setDialogOpen(true)} />
       {isLoading ? (
         <div className="text-center">Loading...</div>
       ) : (
@@ -19,8 +18,9 @@ const UserListsPage = () => {
           users={usersData?.result?.users || []}
         />
       )}
-      <div className="mb-4 max-w-xs">
+      <div className="mb-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">User Lists</h1>
+        <Header onSellCoinClick={() => setDialogOpen(true)} />
       </div>
       <UserTable usersData={usersData?.result?.users} isLoading={isLoading} />
     </div>

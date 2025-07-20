@@ -55,9 +55,11 @@ export function SellCoinDialog({ open, onClose, users }: SellCoinDialogProps) {
         setSuccessMsg("");
         reset();
       }, 1500);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      toast.error("Failed to sell coins. Please try again.");
+      toast.error(
+        error?.data?.message || "Failed to sell coins. Please try again."
+      );
       setSuccessMsg("Failed to sell coins. Please try again.");
     }
   };
