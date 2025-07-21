@@ -2,8 +2,9 @@ import { useState } from "react";
 import { UserTable } from "@/components/tables";
 import { useGetUsersQuery } from "@/redux/api/user.api";
 import { SellCoinDialog } from "@/components/forms/sell-coin-dialog";
+import { ShadcnPagination } from "@/components/ui/shadcn-pagination";
 
-const PAGE_LIMIT = 2;
+const PAGE_LIMIT = 6;
 
 const UserListsPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -29,23 +30,12 @@ const UserListsPage = () => {
         <Header onSellCoinClick={() => setDialogOpen(true)} />
       </div>
       <UserTable usersData={users} isLoading={isLoading} />
-      <div className="flex justify-center items-center mt-6 gap-2">
-        <button
-          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300"
-          disabled={page === 1}
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
-        >
-          Previous
-        </button>
-        <span className="mx-2">Page {page} of {totalPage}</span>
-        <button
-          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300"
-          disabled={page === totalPage}
-          onClick={() => setPage((p) => Math.min(totalPage, p + 1))}
-        >
-          Next
-        </button>
-      </div>
+      <ShadcnPagination
+        page={page}
+        totalPages={totalPage}
+        onPageChange={setPage}
+        maxButtons={5}
+      />
     </div>
   );
 };
