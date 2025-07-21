@@ -35,4 +35,3 @@ const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
 });
 
 export const { useGetUsersQuery, useAsignCoinToUserByIdMutation } = userApi;
-feat: implement shadcn pagination component and update userlists page for pagination ui and pagination logics
