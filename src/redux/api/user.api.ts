@@ -9,9 +9,9 @@ const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     // TODO: need to remove this endpoint
 
-    getUsers: builder.query<TGetUserResponse, null>({
-      query: () => ({
-        url: "/admin/users",
+    getUsers: builder.query<TGetUserResponse, { page?: number; limit?: number }>({
+      query: ({ page = 1, limit = 10 } = {}) => ({
+        url: `/admin/users?page=${page}&limit=${limit}`,
         method: "GET",
       }),
     }),
