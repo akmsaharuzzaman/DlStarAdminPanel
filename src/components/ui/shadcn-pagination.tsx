@@ -1,5 +1,3 @@
-import React from "react";
-
 interface PaginationProps {
   page: number;
   totalPages: number;
@@ -7,11 +5,16 @@ interface PaginationProps {
   maxButtons?: number;
 }
 
-export function ShadcnPagination({ page, totalPages, onPageChange, maxButtons = 5 }: PaginationProps) {
+export function ShadcnPagination({
+  page,
+  totalPages,
+  onPageChange,
+  maxButtons = 5,
+}: PaginationProps) {
   if (totalPages <= 1) return null;
 
   const pages: (number | string)[] = [];
-  const showEllipsis = totalPages > maxButtons;
+  // const showEllipsis = totalPages > maxButtons;
   const half = Math.floor(maxButtons / 2);
 
   let start = Math.max(1, page - half);
@@ -53,13 +56,19 @@ export function ShadcnPagination({ page, totalPages, onPageChange, maxButtons = 
         typeof p === "number" ? (
           <button
             key={p}
-            className={`px-3 py-1 rounded ${p === page ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300"}`}
+            className={`px-3 py-1 rounded ${
+              p === page
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
             onClick={() => onPageChange(p)}
           >
             {p}
           </button>
         ) : (
-          <span key={"ellipsis-" + idx} className="px-2">...</span>
+          <span key={"ellipsis-" + idx} className="px-2">
+            ...
+          </span>
         )
       )}
       <button
