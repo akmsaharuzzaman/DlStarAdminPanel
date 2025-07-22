@@ -14,7 +14,7 @@ import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
 
 export default function DashboardPage() {
   // const [activeTab, setActiveTab] = useState("All");
-  const { data: users } = useGetUsersQuery(null);
+  const { data: users } = useGetUsersQuery({ page: 1, limit: 9999 });
   const { data: moderators } = useGetAllModeratorUsersQuery(null);
   const staticStatesData = {
     totalUser: users?.result?.users?.length || 0,
