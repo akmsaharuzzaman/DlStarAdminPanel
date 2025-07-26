@@ -1,6 +1,7 @@
 import ProtectedRoute from "@/components/auth/protected-route";
 import DashboardPage from "@/components/pages/dashboard";
 import LoginPage from "@/components/pages/login";
+import GiftListsPage from "@/pages/Gifts";
 import Home from "@/pages/Home";
 import ModeratorListsPage from "@/pages/Moderator-lists";
 import UserListsPage from "@/pages/User-lists";
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
           {
             path: "/agencies",
             element: <ModeratorListsPage />,
+          },
+          {
+            path: "/gifts",
+            element: <GiftListsPage />,
           },
         ],
       },

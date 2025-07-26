@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut, selectUser } from "@/redux/features/auth.slice";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import { Activity, BarChart3, Gift, UserIcon } from "lucide-react";
+import { Activity, BarChart3, Gift, UserIcon, UsersRound } from "lucide-react";
 
 export function PageHeader() {
   const user = useSelector(selectUser);
@@ -38,7 +38,8 @@ export function PageHeader() {
     { icon: Activity, label: "Dashboard", link: "/" },
     { icon: UserIcon, label: "User", link: "/user-lists", hasSubmenu: false },
     { icon: BarChart3, label: "Agency", link: "/agencies", hasSubmenu: false },
-    { icon: Gift, label: "Reseler", link: "/reseler", hasSubmenu: false },
+    { icon: UsersRound, label: "Reseler", link: "/reseler", hasSubmenu: false },
+    { icon: Gift, label: "Gifts", link: "/gifts", hasSubmenu: false },
   ];
 
   const currentPath = window.location.pathname;
