@@ -6,6 +6,8 @@ import { TResponse } from "@/types/api";
 
 type TGetAllGiftResponse = TResponse<TGift[]>;
 type TCreateGiftResponse = TResponse<TGift>;
+type TDeleteGiftResponse = TResponse<{ deleted: boolean }>;
+
 const giftApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllGifts: builder.query<TGetAllGiftResponse, undefined>({
@@ -33,7 +35,14 @@ const giftApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.gift],
     }),
+    deleteGift: builder.mutation<TDeleteGiftResponse, string>({
+      query: (id) => ({
+        url: `/admin/gift/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Gift"], // Adjust tag if you use cache tags
+    }),
   }),
 });
 
-export const { useGetAllGiftsQuery, useCreateGiftMutation } = giftApi;
+export const { useGetAllGiftsQuery, useCreateGiftMutation, useDeleteGiftMutation } = giftApi;

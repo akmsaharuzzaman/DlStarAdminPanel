@@ -23,7 +23,7 @@ const GiftListsPage = () => {
         />
       )}
       <div className="mb-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gifts</h1>
+        <h1 className="text-2xl font-bold text-pink-500">Gifts</h1>
         <Header onSellCoinClick={() => setDialogOpen(true)} />
       </div>
 

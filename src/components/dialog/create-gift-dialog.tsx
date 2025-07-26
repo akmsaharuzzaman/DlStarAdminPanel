@@ -157,7 +157,8 @@ export function CreateGiftDialog({ open, onClose }: CreateGiftDialogProps) {
             </label>
             <input
               type="file"
-              accept="image/*"
+              // accept="image/*"
+              accept=".png"
               className="w-full border border-gray-300 rounded px-3 py-2"
               onChange={(e) =>
                 setValue("previewImage", e.target.files?.[0] as File)
@@ -175,7 +176,7 @@ export function CreateGiftDialog({ open, onClose }: CreateGiftDialogProps) {
             </label>
             <input
               type="file"
-              accept=".svga"
+              accept=".png"
               className="w-full border border-gray-300 rounded px-3 py-2"
               onChange={(e) =>
                 setValue("svgaImage", e.target.files?.[0] as File)
@@ -193,7 +194,7 @@ export function CreateGiftDialog({ open, onClose }: CreateGiftDialogProps) {
               className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 rounded mt-2"
               disabled
             >
-              Creating gift...
+              Creating gift, please wait...
             </button>
           ) : (
             <button

@@ -1,9 +1,11 @@
 export type TGift = {
   _id: string;
   name: string;
+  category: string;
   diamonds: number;
   coinPrice: number;
-  image: string;
+  previewImage: string;
+  svgaImage: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -17,11 +19,11 @@ export type TGift = {
 //   gifts: TGift[];
 // };
 
-export type TCreateGiftBody= {
+export type TCreateGiftBody = {
   previewImage: File;
   giftName: string;
   diamonds: number;
   coinPrice: number;
   svgaImage: File;
   category: string;
-}
+};
