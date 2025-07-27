@@ -23,9 +23,13 @@ export function SellCoinDialog({ open, onClose, users }: SellCoinDialogProps) {
   const [searchName, setSearchName] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [asignCoinToUser, { isLoading }] = useAsignCoinToUserByIdMutation();
-  const filteredUsers = users?.filter((user) =>
-    user.name?.toLowerCase().includes(searchName.toLowerCase())
-  );
+  const filteredUsers = users?.filter((user) => {
+    const search = searchName.toLowerCase();
+    return (
+      user.name?.toLowerCase().includes(search) ||
+      user.email?.toLowerCase().includes(search)
+    );
+  });
 
   const {
     register,
