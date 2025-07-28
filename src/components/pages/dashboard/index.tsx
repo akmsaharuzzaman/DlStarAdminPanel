@@ -11,8 +11,31 @@ import {
 } from "recharts";
 import { useGetUsersQuery } from "@/redux/api/user.api";
 import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useUpdateAdminMutation } from "@/redux/api/auth.api";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export default function DashboardPage() {
+  const [coinAmount, setCoinAmount] = useState("");
+  const [updateAdmin, { isLoading }] = useUpdateAdminMutation();
+
+  const handleAddCoin = async () => {
+    if (!coinAmount || isNaN(Number(coinAmount)) || Number(coinAmount) <= 0) {
+      toast.error("Please enter a valid coin amount.");
+      return;
+    }
+    try {
+      await updateAdmin({ coins: Number(coinAmount) }).unwrap();
+      toast.success("Coins added successfully!");
+      setCoinAmount("");
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to add coins.");
+    }
+  };
+
   // const [activeTab, setActiveTab] = useState("All");
   const { data: users } = useGetUsersQuery({ page: 1, limit: 9999 });
   const { data: moderators } = useGetAllModeratorUsersQuery(null);
@@ -62,6 +85,36 @@ export default function DashboardPage() {
         {stats.map((stat, idx) => (
           <StatsCard key={idx} {...stat} />
         ))}
+
+        <Card className="bg-gray-50 border-none">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Input
+                    placeholder="Amount"
+                    type="number"
+                    className=""
+                    value={coinAmount}
+                    onChange={(e) => setCoinAmount(e.target.value)}
+                    disabled={isLoading}
+                  />
+                  <Button onClick={handleAddCoin} disabled={isLoading}>
+                    {isLoading ? "Adding..." : "Add"}
+                  </Button>
+                </div>
+                <div className="text-gray-400 mt-1">
+                  {/* You can show a message here if needed */}
+                </div>
+              </div>
+              {/* <div
+                className={`w-12 h-12 bg-red-400 rounded-lg flex items-center justify-center`}
+              >
+                <HandCoins className="w-6 h-6 text-white" />
+              </div> */}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Visual Graph */}
