@@ -31,7 +31,23 @@ const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.coin],
     }),
+    searchUsersByEmail: builder.query<
+      TResponse<{ meta: Tpagination; result: TUser[] }>,
+      { email: string; page?: number; limit?: number }
+    >({
+      query: ({ email, page = 1, limit = 5 }) => ({
+        url: `/admin/users/search?email=${encodeURIComponent(
+          email
+        )}&page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
   }),
 });
 
-export const { useGetUsersQuery, useAsignCoinToUserByIdMutation } = userApi;
+export const {
+  useGetUsersQuery,
+  useAsignCoinToUserByIdMutation,
+  useSearchUsersByEmailQuery,
+} = userApi;

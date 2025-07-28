@@ -34,7 +34,7 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
           type="username"
           {...register("username")}
           className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-500 focus:border-pink-400 focus:ring-pink-400"
-          placeholder="Enger your username"
+          placeholder="Enter your username"
           autoComplete="username"
         />
         {errors.username && (

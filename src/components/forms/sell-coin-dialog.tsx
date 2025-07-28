@@ -1,10 +1,14 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
-import { TUser } from "@/types/api/auth";
-import { useAsignCoinToUserByIdMutation } from "@/redux/api/user.api";
+import { useState, useEffect } from "react";
+import {
+  useAsignCoinToUserByIdMutation,
+  useSearchUsersByEmailQuery,
+} from "@/redux/api/user.api";
 import { toast } from "sonner";
+import { skipToken } from "@reduxjs/toolkit/query";
+import { TUser } from "@/types/api/auth";
 
 const sellCoinSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
@@ -16,20 +20,35 @@ type SellCoinFormValues = z.infer<typeof sellCoinSchema>;
 type SellCoinDialogProps = {
   open: boolean;
   onClose: () => void;
-  users: Array<TUser>;
+  // users: Array<TUser>;
 };
 
-export function SellCoinDialog({ open, onClose, users }: SellCoinDialogProps) {
+export function SellCoinDialog({ open, onClose }: SellCoinDialogProps) {
   const [searchName, setSearchName] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [asignCoinToUser, { isLoading }] = useAsignCoinToUserByIdMutation();
-  const filteredUsers = users?.filter((user) => {
-    const search = searchName.toLowerCase();
-    return (
-      user.name?.toLowerCase().includes(search) ||
-      user.email?.toLowerCase().includes(search)
+
+  // Debounce search input
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchName);
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [searchName]);
+
+  // Use backend search for email
+  const { data: searchedUsers, isLoading: isSearching } =
+    useSearchUsersByEmailQuery(
+      debouncedSearch.length > 0
+        ? { email: debouncedSearch, page: 1, limit: 5 }
+        : skipToken
     );
-  });
+
+  console.log("searchedUsers response:", searchedUsers);
+
+  const filteredUsers =
+    debouncedSearch.length > 0 ? searchedUsers?.result || [] : [];
 
   const {
     register,
@@ -99,40 +118,47 @@ export function SellCoinDialog({ open, onClose, users }: SellCoinDialogProps) {
             />
             {searchName && (
               <div className="mt-2 max-h-32 overflow-y-auto border rounded bg-white shadow">
-                {filteredUsers.length > 0 ? (
-                  filteredUsers.map((user) => (
-                    <div
-                      key={user._id}
-                      className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-pink-50 text-sm"
-                      onClick={() => {
-                        setValue("userId", user._id);
-                        setSearchName(user.name);
-                      }}
-                    >
-                      {user.avatar ? (
-                        <img
-                          src={user.avatar}
-                          alt={user.name}
-                          className="w-8 h-8 rounded-full border border-gray-200 object-cover"
-                        />
-                      ) : (
-                        <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 font-bold border border-gray-200">
-                          {user.name?.charAt(0).toUpperCase()}
+                {isSearching ? (
+                  <div className="px-3 py-2 text-gray-400 text-sm text-center">
+                    Searching...
+                  </div>
+                ) : (filteredUsers as TUser[]).length > 0 ? ( // Todo: need to remove the type assertion
+                  (filteredUsers as TUser[]).map(
+                    // Todo: need to remove the  type assertion
+                    (user) => (
+                      <div
+                        key={user._id}
+                        className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-pink-50 text-sm"
+                        onClick={() => {
+                          setValue("userId", user._id);
+                          setSearchName(user.name);
+                        }}
+                      >
+                        {user.avatar ? (
+                          <img
+                            src={user.avatar}
+                            alt={user.name}
+                            className="w-8 h-8 rounded-full border border-gray-200 object-cover"
+                          />
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 font-bold border border-gray-200">
+                            {user.name?.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                        <div className="flex flex-col">
+                          <span className="font-medium text-gray-800">
+                            {user.name}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {user.email}
+                          </span>
+                          <span className="text-xs text-gray-400">
+                            ID: {user._id}
+                          </span>
                         </div>
-                      )}
-                      <div className="flex flex-col">
-                        <span className="font-medium text-gray-800">
-                          {user.name}
-                        </span>
-                        <span className="text-xs text-gray-500">
-                          {user.email}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          ID: {user._id}
-                        </span>
                       </div>
-                    </div>
-                  ))
+                    )
+                  )
                 ) : (
                   <div className="px-3 py-2 text-gray-400 text-sm">
                     No user found

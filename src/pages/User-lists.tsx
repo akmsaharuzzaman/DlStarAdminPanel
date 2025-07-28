@@ -9,22 +9,22 @@ const PAGE_LIMIT = 6;
 const UserListsPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const { data: usersData, isLoading } = useGetUsersQuery({ page, limit: PAGE_LIMIT });
+  const { data: usersData, isLoading } = useGetUsersQuery({
+    page,
+    limit: PAGE_LIMIT,
+  });
 
   const totalPage = usersData?.result?.pagination?.totalPage || 1;
   const users = usersData?.result?.users || [];
 
   return (
     <div className="p-4">
-      {isLoading ? (
-        <div className="text-center">Loading...</div>
-      ) : (
-        <SellCoinDialog
-          open={dialogOpen}
-          onClose={() => setDialogOpen(false)}
-          users={users}
-        />
-      )}
+      <SellCoinDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        // users={users}
+      />
+
       <div className="mb-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">User Lists</h1>
         <Header onSellCoinClick={() => setDialogOpen(true)} />
