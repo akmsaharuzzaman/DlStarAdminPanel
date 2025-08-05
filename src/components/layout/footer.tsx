@@ -18,6 +18,7 @@ export const Footer = () => {
                 >
                   Terms and Conditions
                 </Link>
+                <p className="">|</p>
                 <Link
                   className="text-sm underline-offset-4 hover:underline font-medium px-1"
                   to="/privacy-policy"
