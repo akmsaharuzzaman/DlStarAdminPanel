@@ -4,7 +4,7 @@ import { useGetUsersQuery } from "@/redux/api/user.api";
 import { SellCoinDialog } from "@/components/forms/sell-coin-dialog";
 import { ShadcnPagination } from "@/components/ui/shadcn-pagination";
 
-const PAGE_LIMIT = 6;
+const PAGE_LIMIT = 8;
 
 export const UserListsPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
