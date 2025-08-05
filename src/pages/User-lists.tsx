@@ -6,7 +6,7 @@ import { ShadcnPagination } from "@/components/ui/shadcn-pagination";
 
 const PAGE_LIMIT = 6;
 
-const UserListsPage = () => {
+export const UserListsPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
   const { data: usersData, isLoading } = useGetUsersQuery({
@@ -52,5 +52,3 @@ function Header({ onSellCoinClick }: { onSellCoinClick: () => void }) {
     </div>
   );
 }
-
-export default UserListsPage;

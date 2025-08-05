@@ -1,4 +1,4 @@
-const PrivacyPolicy = () => {
+export const PrivacyPolicy = () => {
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-3 text-center text-pink-500">
@@ -87,4 +87,3 @@ const PrivacyPolicy = () => {
   );
 };
 
-export default PrivacyPolicy;

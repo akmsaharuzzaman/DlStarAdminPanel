@@ -4,7 +4,7 @@ import { useGetAllGiftsQuery } from "@/redux/api/gift.api";
 import { GiftLists } from "@/components/pages/gifts";
 import { CreateGiftDialog } from "@/components/dialog";
 
-const GiftListsPage = () => {
+export const GiftListsPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   // const [page, setPage] = useState(1);
   const { data: gitftsData, isLoading } = useGetAllGiftsQuery(undefined);
@@ -44,5 +44,3 @@ function Header({ onSellCoinClick }: { onSellCoinClick: () => void }) {
     </div>
   );
 }
-
-export default GiftListsPage;

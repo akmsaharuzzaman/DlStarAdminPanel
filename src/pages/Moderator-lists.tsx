@@ -1,7 +1,7 @@
 import { ModeratorTable } from "@/components/tables/moderator-tables";
 import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
 
-const ModeratorListsPage = () => {
+export const ModeratorListsPage = () => {
   const { data: moderatorsData, isLoading } =
     useGetAllModeratorUsersQuery(null);
   return (
@@ -16,5 +16,3 @@ const ModeratorListsPage = () => {
     </div>
   );
 };
-
-export default ModeratorListsPage;
