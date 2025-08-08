@@ -12,6 +12,7 @@ import {
   UserListsPage,
 } from "../pages";
 import { createBrowserRouter } from "react-router-dom";
+import App from "@/pages/Demo";
 
 const protectedChildren = [
   { path: "/", element: <DashboardPage /> },
@@ -36,7 +37,12 @@ const router = createBrowserRouter([
     element: <PublicLayout />,
     children: publicChildren,
   },
+  {
+    path: "/demo",
+    element: <App/>
+  },
   { path: "*", element: <NotFound /> },
+  
 ]);
 
 export default router;

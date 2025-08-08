@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games App Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/babel-standalone@7.22.9/babel.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+      }
+    </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    // Mock authentication context (simulating Google login for SubAdmin, Agency, Merchant, Reseller)
+    const AuthContext = React.createContext(null);
+
+    // Main App Component
+    function App() {
+      const [userRole, setUserRole] = useState('Admin'); // Default role for demo
+      const [isAuthenticated, setIsAuthenticated] = useState(true); // Mock Google login state
+
+      // Mock data
+      const dashboardData = {
+        totalUsers: 1000,
+        totalSubAdmins: 10,
+        totalAgencies: 50,
+        totalMerchants: 20,
+        totalCountryAdmins: 5,
+        totalResellers: 30,
+        totalHosts: 200,
+        totalResellerCoins: 5000,
+        totalEarnings: 10000,
+        currentSalary: 5000,
+        agencyList: [{ id: 1, name: 'Agency 1' }],
+        resellerList: [{ id: 1, name: 'Reseller 1' }],
+        merchantList: [{ id: 1, name: 'Merchant 1' }],
+        subAdminList: [{ id: 1, name: 'SubAdmin 1' }],
+        userList: [{ id: 1, email: 'user1@example.com' }],
+        hostList: [{ id: 1, email: 'host1@example.com' }],
+        blockedUsers: [{ id: 1, email: 'user1@example.com', blockedBy: 'Admin', blockedTime: '2025-08-08', duration: '1 day' }],
+        history: [{ id: 1, type: 'Receive', amount: 100 }, { id: 2, type: 'Send', amount: 50 }],
+      };
+
+      // Mock permissions
+      const permissions = {
+        allowSellCoin: true,
+        allowBlockUser: true,
+      };
+
+      const handleGoogleLogin = () => {
+        // Simulate Google login
+        setIsAuthenticated(true);
+      };
+
+      return (
+        <AuthContext.Provider value={{ userRole, setUserRole, isAuthenticated, handleGoogleLogin }}>
+          <div className="min-h-screen bg-gray-100">
+            <nav className="bg-blue-600 text-white p-4 flex justify-between">
+              <h1 className="text-2xl font-bold">Games App Dashboard</h1>
+              <div>
+                <select
+                  className="text-black p-2 rounded"
+                  value={userRole}
+                  onChange={(e) => setUserRole(e.target.value)}
+                >
+                  <option value="Admin">Admin</option>
+                  <option value="SubAdmin">SubAdmin</option>
+                  <option value="Agency">Agency</option>
+                  <option value="Merchant">Merchant</option>
+                  <option value="Reseller">Reseller</option>
+                </select>
+                {!isAuthenticated && userRole !== 'Admin' && (
+                  <button
+                    onClick={handleGoogleLogin}
+                    className="ml-4 bg-white text-blue-600 px-4 py-2 rounded"
+                  >
+                    Login with Google
+                  </button>
+                )}
+              </div>
+            </nav>
+            {isAuthenticated || userRole === 'Admin' ? (
+              <Dashboard role={userRole} data={dashboardData} permissions={permissions} />
+            ) : (
+              <div className="text-center mt-10">Please login to access the dashboard.</div>
+            )}
+          </div>
+        </AuthContext.Provider>
+      );
+    }
+
+    // Dashboard Component
+    function Dashboard({ role, data, permissions }) {
+      return (
+        <div className="p-6">
+          {role === 'Admin' && <AdminDashboard data={data} permissions={permissions} />}
+          {role === 'SubAdmin' && <SubAdminDashboard data={data} permissions={permissions} />}
+          {role === 'Agency' && <AgencyDashboard data={data} />}
+          {role === 'Merchant' && <MerchantDashboard data={data} />}
+          {role === 'Reseller' && <ResellerDashboard data={data} />}
+        </div>
+      );
+    }
+
+    // Admin Dashboard
+    function AdminDashboard({ data, permissions }) {
+      const [email, setEmail] = useState('');
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <StatCard title="Total Users" value={data.totalUsers} />
+          <StatCard title="Total Sub-Admins" value={data.totalSubAdmins} />
+          <StatCard title="Total Agencies" value={data.totalAgencies} />
+          <StatCard title="Total Merchants" value={data.totalMerchants} />
+          <StatCard title="Total Country Admins (BD)" value={data.totalCountryAdmins} />
+          <StatCard title="Total Resellers" value={data.totalResellers} />
+          <ListSection title="Agency List" items={data.agencyList} />
+          <ListSection title="Reseller List" items={data.resellerList} />
+          <ListSection title="Merchant List" items={data.merchantList} />
+          <ListSection title="SubAdmin List" items={data.subAdminList} />
+          <ListSection title="User List" items={data.userList} showEmail />
+          <ActionSection title="Sell Coin">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded">Sell Coin</button>
+          </ActionSection>
+          <ActionSection title="Create SubAdmin">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              className="border p-2 rounded w-full mb-2"
+            />
+            <div className="flex items-center mb-2">
+              <input type="checkbox" id="sellCoin" className="mr-2" />
+              <label htmlFor="sellCoin">Allow Sell Coin Permission</label>
+            </div>
+            <div className="flex items-center mb-2">
+              <input type="checkbox" id="blockUser" className="mr-2" />
+              <label htmlFor="blockUser">Allow Block User Permission</label>
+            </div>
+            <button className="bg-green-500 text-white px-4 py-2 rounded">Create</button>
+          </ActionSection>
+          <ActionSection title="Create Merchant">
+            <input
+              type="email"
+              placeholder="Email"
+              className="border p-2 rounded w-full mb-2"
+            />
+            <button className="bg-green-500 text-white px-4 py-2 rounded">Create</button>
+          </ActionSection>
+          <ActionSection title="Create Reseller">
+            <input
+              type="email"
+              placeholder="Email"
+              className="border p-2 rounded w-full mb-2"
+            />
+            <button className="bg-green-500 text-white px-4 py-2 rounded">Create</button>
+          </ActionSection>
+          <ActionSection title="Block User">
+            <input
+              type="email"
+              placeholder="Search by Email"
+              className="border p-2 rounded w-full mb-2"
+            />
+            <input
+              type="text"
+              placeholder="Kick from live room"
+              className="border p-2 rounded w-full mb-2"
+            />
+            <input
+              type="text"
+              placeholder="Blocked duration"
+              className="border p-2 rounded w-full mb-2"
+            />
+            <button className="bg-red-500 text-white px-4 py-2 rounded">Update</button>
+          </ActionSection>
+          <ActionSection title="History">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Receive History</button>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded">Send History</button>
+          </ActionSection>
+          <ListSection
+            title="Blocked Users"
+            items={data.blockedUsers}
+            showBlockedDetails
+          />
+        </div>
+      );
+    }
+
+    // SubAdmin Dashboard
+    function SubAdminDashboard({ data, permissions }) {
+      const [email, setEmail] = useState('');
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <StatCard title="Total Users" value={data.totalUsers} />
+          <StatCard title="Total Agencies" value={data.totalAgencies} />
+          <ListSection title="Agency List" items={data.agencyList} />
+          <ListSection title="Reseller List" items={data.resellerList} />
+          <ListSection title="User List" items={data.userList} showEmail />
+          {permissions.allowSellCoin && (
+            <ActionSection title="Sell Coin">
+              <button className="bg-blue-500 text-white px-4 py-2 rounded">Sell Coin</button>
+            </ActionSection>
+          )}
+          <ActionSection title="Create Agency">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Search by Email"
+              className="border p-2 rounded w-full mb-2"
+            />
+            <button className="bg-green-500 text-white px-4 py-2 rounded">Create</button>
+          </ActionSection>
+          {permissions.allowBlockUser && (
+            <ActionSection title="Block User">
+              <input
+                type="email"
+                placeholder="Search by Email"
+                className="border p-2 rounded w-full mb-2"
+              />
+              <input
+                type="text"
+                placeholder="Kick from live room"
+                className="border p-2 rounded w-full mb-2"
+              />
+              <input
+                type="text"
+                placeholder="Blocked duration"
+                className="border p-2 rounded w-full mb-2"
+              />
+              <button className="bg-red-500 text-white px-4 py-2 rounded">Update</button>
+            </ActionSection>
+          )}
+          <ActionSection title="History">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Receive History</button>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded">Send History</button>
+          </ActionSection>
+          <ListSection
+            title="Blocked Users"
+            items={data.blockedUsers}
+            showBlockedDetails
+          />
+        </div>
+      );
+    }
+
+    // Agency Dashboard
+    function AgencyDashboard({ data }) {
+      const [email, setEmail] = useState('');
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <StatCard title="Current Salary" value={data.currentSalary} note="(In Future, Official)" />
+          <StatCard title="Total Hosts" value={data.totalHosts} />
+          <ListSection title="Host List" items={data.hostList} showEmail />
+          <ActionSection title="Create Host">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Search by Email"
+              className="border p-2 rounded w-full mb-2"
+            />
+            <button className="bg-green-500 text-white px-4 py-2 rounded">Create</button>
+          </ActionSection>
+          <ActionSection title="Remove Host">
+            <input
+              type="email"
+              placeholder="Search by Email"
+              className="border p-2 rounded w-full mb-2"
+            />
+            <button className="bg-red-500 text-white px-4 py-2 rounded">Remove</button>
+          </ActionSection>
+          <ActionSection title="History" note="(In Future, Official)" />
+          <ActionSection title="Salary" note="(In Future, Official)" />
+        </div>
+      );
+    }
+
+    // Merchant Dashboard
+    function MerchantDashboard({ data }) {
+      const [email, setEmail] = useState('');
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <StatCard title="Total Resellers" value={data.totalResellers} />
+          <ListSection title="Reseller List" items={data.resellerList} />
+          <ActionSection title="Sell Coin">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded">Sell Coin</button>
+          </ActionSection>
+          <ActionSection title="Create Reseller">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Search by Email"
+              className="border p-2 rounded w-full mb-2"
+            />
+            <button className="bg-green-500 text-white px-4 py-2 rounded">Create</button>
+          </ActionSection>
+          <ActionSection title="History">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Receive History</button>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded">Send History</button>
+          </ActionSection>
+        </div>
+      );
+    }
+
+    // Reseller Dashboard
+    function ResellerDashboard({ data }) {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <StatCard title="Total Reseller Coins" value={data.totalResellerCoins} />
+          <StatCard title="Total Earnings" value={data.totalEarnings} />
+          <ActionSection title="Sell Coin">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded">Sell Coin</button>
+          </ActionSection>
+          <ActionSection title="History">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Receive History</button>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded">Send History</button>
+          </ActionSection>
+        </div>
+      );
+    }
+
+    // StatCard Component
+    function StatCard({ title, value, note }) {
+      return (
+        <div className="bg-white p-4 rounded shadow">
+          <h3 className="text-lg font-semibold">{title}</h3>
+          <p className="text-2xl">{value}</p>
+          {note && <p className="text-sm text-gray-500">{note}</p>}
+        </div>
+      );
+    }
+
+    // ListSection Component
+    function ListSection({ title, items, showEmail, showBlockedDetails }) {
+      return (
+        <div className="bg-white p-4 rounded shadow">
+          <h3 className="text-lg font-semibold mb-2">{title}</h3>
+          <ul>
+            {items.map((item) => (
+              <li key={item.id} className="py-1">
+                {showEmail ? item.email : item.name}
+                {showBlockedDetails && (
+                  <div className="text-sm text-gray-600">
+                    <p>Blocked By: {item.blockedBy}</p>
+                    <p>Blocked Time: {item.blockedTime}</p>
+                    <p>Duration: {item.duration}</p>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    // ActionSection Component
+    function ActionSection({ title, children, note }) {
+      return (
+        <div className="bg-white p-4 rounded shadow">
+          <h3 className="text-lg font-semibold mb-2">{title}</h3>
+          {children}
+          {note && <p className="text-sm text-gray-500 mt-2">{note}</p>}
+        </div>
+      );
+    }
+
+    // Render the App
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game App Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide-react@0.378.0/dist/umd/lucide.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .dashboard-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        .btn-secondary {
+            background-color: #6b7280;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+        .btn-success {
+            background-color: #22c55e;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #16a34a;
+        }
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            width: 90%;
+            max-width: 500px;
+            z-index: 50;
+        }
+        [data-lucide] {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div id="app" class="min-h-screen">
+        <!-- Header & Navigation -->
+        <header class="bg-white shadow-md">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <i data-lucide="gamepad-2" class="h-8 w-8 text-blue-600"></i>
+                        <span class="ml-3 text-2xl font-bold text-gray-800">GameApp Panel</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                         <span class="hidden sm:inline text-gray-600">Viewing as:</span>
+                         <select id="role-switcher" class="p-2 border rounded-md bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                            <option value="admin" selected>Admin</option>
+                            <option value="sub-admin">Sub-Admin</option>
+                            <option value="agency">Agency</option>
+                            <option value="merchant">Merchant</option>
+                            <option value="re-seller">Re-Seller</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+            <!-- Admin Dashboard -->
+            <div id="admin-dashboard" class="dashboard-view">
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
+                    <div class="dashboard-card"><h3 class="text-gray-500">Total Users</h3><p class="text-3xl font-bold">10,452</p></div>
+                    <div class="dashboard-card"><h3 class="text-gray-500">Total Sub-Admins</h3><p class="text-3xl font-bold">12</p></div>
+                    <div class="dashboard-card"><h3 class="text-gray-500">Total Agencies</h3><p class="text-3xl font-bold">45</p></div>
+                    <div class="dashboard-card"><h3 class="text-gray-500">Total Merchants</h3><p class="text-3xl font-bold">88</p></div>
+                    <div class="dashboard-card"><h3 class="text-gray-500">Total Resellers</h3><p class="text-3xl font-bold">210</p></div>
+                </div>
+
+                <!-- Main Actions -->
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <button class="btn btn-success" onclick="openModal('sellCoinModal')"><i data-lucide="coins"></i>Sell Coin</button>
+                    <button class="btn btn-primary" onclick="openModal('createSubAdminModal')"><i data-lucide="user-plus"></i>Create Sub-Admin</button>
+                    <button class="btn btn-primary" onclick="openModal('createMerchantModal')"><i data-lucide="store"></i>Create Merchant</button>
+                    <button class="btn btn-primary" onclick="openModal('createResellerModal')"><i data-lucide="user-cog"></i>Create Reseller</button>
+                    <button class="btn btn-danger" onclick="openModal('blockUserModal')"><i data-lucide="user-x"></i>Block User</button>
+                    <button class="btn btn-secondary" onclick="openModal('historyModal')"><i data-lucide="history"></i>History</button>
+                    <button class="btn btn-secondary" onclick="openModal('blockedUsersModal')"><i data-lucide="list-x"></i>Blocked Users</button>
+                </div>
+
+                <!-- Data Lists -->
+                <div class="space-y-8">
+                    <!-- User List -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h2 class="text-xl font-semibold mb-4">User List</h2>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead><tr class="bg-gray-50"><th class="p-3">Email</th><th class="p-3">Joined Date</th><th class="p-3">Status</th></tr></thead>
+                                <tbody>
+                                    <tr class="border-b">
+                                        <td class="p-3">user1@example.com</td>
+                                        <td class="p-3">2024-07-20</td>
+                                        <td class="p-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Active</span></td>
+                                    </tr>
+                                    <tr class="border-b bg-gray-50">
+                                        <td class="p-3">user2@example.com</td>
+                                        <td class="p-3">2024-07-19</td>
+                                        <td class="p-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Active</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Other lists would follow a similar structure -->
+                    <div class="bg-white p-6 rounded-lg shadow"><h2 class="text-xl font-semibold mb-4">Sub-Admin List</h2><div class="text-center py-4 text-gray-500">Sub-admin data would appear here.</div></div>
+                    <div class="bg-white p-6 rounded-lg shadow"><h2 class="text-xl font-semibold mb-4">Agency List</h2><div class="text-center py-4 text-gray-500">Agency data would appear here.</div></div>
+                    <div class="bg-white p-6 rounded-lg shadow"><h2 class="text-xl font-semibold mb-4">Merchant List</h2><div class="text-center py-4 text-gray-500">Merchant data would appear here.</div></div>
+                    <div class="bg-white p-6 rounded-lg shadow"><h2 class="text-xl font-semibold mb-4">Reseller List</h2><div class="text-center py-4 text-gray-500">Reseller data would appear here.</div></div>
+                </div>
+            </div>
+
+            <!-- Sub-Admin Dashboard -->
+            <div id="sub-admin-dashboard" class="dashboard-view hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="dashboard-card"><h3 class="text-gray-500">Total Users</h3><p class="text-3xl font-bold">5,120</p></div>
+                    <div class="dashboard-card"><h3 class="text-gray-500">Total Agencies</h3><p class="text-3xl font-bold">20</p></div>
+                </div>
+                 <div class="flex flex-wrap gap-4 mb-8">
+                    <!-- This button's visibility would be controlled by admin permission -->
+                    <button class="btn btn-success" onclick="openModal('sellCoinModal')"><i data-lucide="coins"></i>Sell Coin</button>
+                    <button class="btn btn-primary" onclick="openModal('createAgencyModal')"><i data-lucide="building"></i>Create Agency</button>
+                    <!-- This button's visibility would be controlled by admin permission -->
+                    <button class="btn btn-danger" onclick="openModal('blockUserModal')"><i data-lucide="user-x"></i>Block User</button>
+                    <button class="btn btn-secondary" onclick="openModal('historyModal')"><i data-lucide="history"></i>History</button>
+                </div>
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg shadow"><h2 class="text-xl font-semibold mb-4">User List</h2><div class="text-center py-4 text-gray-500">User data would appear here.</div></div>
+                    <div class="bg-white p-6 rounded-lg shadow"><h2 class="text-xl font-semibold mb-4">Agency List</h2><div class="text-center py-4 text-gray-500">Agency data would appear here.</div></div>
+                    <div class="bg-white p-6 rounded-lg shadow"><h2 class="text-xl font-semibold mb-4">Reseller List</h2><div class="text-center py-4 text-gray-500">Reseller data would appear here.</div></div>
+                </div>
+            </div>
+
+            <!-- Agency Dashboard -->
+            <div id="agency-dashboard" class="dashboard-view hidden">
+                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="dashboard-card"><h3 class="text-gray-500">Current Salary</h3><p class="text-3xl font-bold text-gray-400">Future Feature</p></div>
+                    <div class="dashboard-card"><h3 class="text-gray-500">Total Hosts</h3><p class="text-3xl font-bold">150</p></div>
+                </div>
+                 <div class="flex flex-wrap gap-4 mb-8">
+                    <button class="btn btn-primary" onclick="openModal('createHostModal')"><i data-lucide="user-plus"></i>Create Host</button>
+                    <button class="btn btn-danger" onclick="openModal('removeHostModal')"><i data-lucide="user-minus"></i>Remove Host</button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow"><h2 class="text-xl font-semibold mb-4">Host List</h2><div class="text-center py-4 text-gray-500">Host data would appear here.</div></div>
+            </div>
+
+            <!-- Merchant Dashboard -->
+            <div id="merchant-dashboard" class="dashboard-view hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="dashboard-card"><h3 class="text-gray-500">Total Resellers</h3><p class="text-3xl font-bold">50</p></div>
+                </div>
+                 <div class="flex flex-wrap gap-4 mb-8">
+                    <button class="btn btn-success" onclick="openModal('sellCoinModal')"><i data-lucide="coins"></i>Sell Coin</button>
+                    <button class="btn btn-primary" onclick="openModal('createResellerModal')"><i data-lucide="user-cog"></i>Create Reseller</button>
+                    <button class="btn btn-secondary" onclick="openModal('historyModal')"><i data-lucide="history"></i>History</button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow"><h2 class="text-xl font-semibold mb-4">Reseller List</h2><div class="text-center py-4 text-gray-500">Reseller data would appear here.</div></div>
+            </div>
+
+            <!-- Re-Seller Dashboard -->
+            <div id="re-seller-dashboard" class="dashboard-view hidden">
+                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="dashboard-card"><h3 class="text-gray-500">Your ResellerCoins</h3><p class="text-3xl font-bold">50,000</p></div>
+                    <div class="dashboard-card"><h3 class="text-gray-500">Total Earning</h3><p class="text-3xl font-bold">$1,250</p></div>
+                </div>
+                 <div class="flex flex-wrap gap-4 mb-8">
+                    <button class="btn btn-success" onclick="openModal('sellCoinModal')"><i data-lucide="coins"></i>Sell Coin to User</button>
+                    <button class="btn btn-secondary" onclick="openModal('historyModal')"><i data-lucide="history"></i>History</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Sell Coin Modal -->
+    <div id="sellCoinModal" class="modal-backdrop hidden" onclick="closeModal('sellCoinModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 class="text-2xl font-bold mb-4">Sell Coin</h2>
+            <p class="text-gray-600 mb-6">Send coins to a user, reseller, or merchant.</p>
+            <div class="space-y-4">
+                <div>
+                    <label for="sell-email" class="block text-sm font-medium text-gray-700">Search by Email</label>
+                    <input type="email" id="sell-email" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="user@example.com">
+                </div>
+                <div>
+                    <label for="sell-amount" class="block text-sm font-medium text-gray-700">Coin Amount</label>
+                    <input type="number" id="sell-amount" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="1000">
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button class="btn btn-secondary" onclick="closeModal('sellCoinModal')">Cancel</button>
+                <button class="btn btn-success">Confirm Sale</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Sub-Admin Modal -->
+    <div id="createSubAdminModal" class="modal-backdrop hidden" onclick="closeModal('createSubAdminModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 class="text-2xl font-bold mb-4">Create Sub-Admin</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="subadmin-email" class="block text-sm font-medium text-gray-700">Email ID</label>
+                    <input type="email" id="subadmin-email" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="subadmin@example.com">
+                </div>
+                <div class="space-y-2 mt-4">
+                    <label class="block text-sm font-medium text-gray-700">Permissions</label>
+                    <div class="flex items-center">
+                        <input id="allow-sell-coin" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+                        <label for="allow-sell-coin" class="ml-2 block text-sm text-gray-900">Allow Sell Coin Permission</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="allow-block-user" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+                        <label for="allow-block-user" class="ml-2 block text-sm text-gray-900">Allow Block User Permission</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button class="btn btn-secondary" onclick="closeModal('createSubAdminModal')">Cancel</button>
+                <button class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Block User Modal -->
+    <div id="blockUserModal" class="modal-backdrop hidden" onclick="closeModal('blockUserModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 class="text-2xl font-bold mb-4">Block User</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="block-email" class="block text-sm font-medium text-gray-700">Search by Email</label>
+                    <input type="email" id="block-email" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="user@example.com">
+                </div>
+                <div class="flex items-center">
+                    <input id="kick-live" type="checkbox" class="h-4 w-4 text-red-600 border-gray-300 rounded">
+                    <label for="kick-live" class="ml-2 block text-sm text-gray-900">Kick from live room</label>
+                </div>
+                <div>
+                    <label for="block-duration" class="block text-sm font-medium text-gray-700">Blocked Duration</label>
+                    <select id="block-duration" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                        <option>1 Hour</option>
+                        <option>24 Hours</option>
+                        <option>7 Days</option>
+                        <option>Permanent</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button class="btn btn-secondary" onclick="closeModal('blockUserModal')">Cancel</button>
+                <button class="btn btn-danger">Update Block</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- History Modal -->
+    <div id="historyModal" class="modal-backdrop hidden" onclick="closeModal('historyModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 class="text-2xl font-bold mb-4">Transaction History</h2>
+             <div class="flex border-b mb-4">
+                <button class="flex-1 p-3 text-blue-600 border-b-2 border-blue-600 font-semibold">Receive History (Coin)</button>
+                <button class="flex-1 p-3 text-gray-500">Send History (Coin)</button>
+            </div>
+            <!-- History content would be dynamically loaded here -->
+            <p class="text-center text-gray-500 py-8">No recent transactions.</p>
+            <div class="mt-6 flex justify-end">
+                <button class="btn btn-secondary" onclick="closeModal('historyModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other Modals -->
+    <div id="createMerchantModal" class="modal-backdrop hidden" onclick="closeModal('createMerchantModal')"><div class="modal-content" onclick="event.stopPropagation()"><h2 class="text-2xl font-bold mb-4">Create Merchant</h2><p class="text-gray-600">Merchant creation form goes here.</p><div class="mt-6 flex justify-end"><button class="btn btn-secondary" onclick="closeModal('createMerchantModal')">Close</button></div></div></div>
+    <div id="createResellerModal" class="modal-backdrop hidden" onclick="closeModal('createResellerModal')"><div class="modal-content" onclick="event.stopPropagation()"><h2 class="text-2xl font-bold mb-4">Create Reseller</h2><p class="text-gray-600">Reseller creation form goes here.</p><div class="mt-6 flex justify-end"><button class="btn btn-secondary" onclick="closeModal('createResellerModal')">Close</button></div></div></div>
+    <div id="blockedUsersModal" class="modal-backdrop hidden" onclick="closeModal('blockedUsersModal')"><div class="modal-content" onclick="event.stopPropagation()"><h2 class="text-2xl font-bold mb-4">Blocked Users</h2><p class="text-gray-600">A list of currently blocked users would appear here.</p><div class="mt-6 flex justify-end"><button class="btn btn-secondary" onclick="closeModal('blockedUsersModal')">Close</button></div></div></div>
+    <div id="createAgencyModal" class="modal-backdrop hidden" onclick="closeModal('createAgencyModal')"><div class="modal-content" onclick="event.stopPropagation()"><h2 class="text-2xl font-bold mb-4">Create Agency</h2><p class="text-gray-600">Agency creation form goes here.</p><div class="mt-6 flex justify-end"><button class="btn btn-secondary" onclick="closeModal('createAgencyModal')">Close</button></div></div></div>
+    <div id="createHostModal" class="modal-backdrop hidden" onclick="closeModal('createHostModal')"><div class="modal-content" onclick="event.stopPropagation()"><h2 class="text-2xl font-bold mb-4">Create Host</h2><p class="text-gray-600">Host creation form goes here.</p><div class="mt-6 flex justify-end"><button class="btn btn-secondary" onclick="closeModal('createHostModal')">Close</button></div></div></div>
+    <div id="removeHostModal" class="modal-backdrop hidden" onclick="closeModal('removeHostModal')"><div class="modal-content" onclick="event.stopPropagation()"><h2 class="text-2xl font-bold mb-4">Remove Host</h2><p class="text-gray-600">Host removal confirmation form goes here.</p><div class="mt-6 flex justify-end"><button class="btn btn-secondary" onclick="closeModal('removeHostModal')">Close</button></div></div></div>
+
+    <script>
+        // Wait for the DOM to be fully loaded before running scripts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
+            lucide.createIcons();
+
+            const roleSwitcher = document.getElementById('role-switcher');
+            const dashboardViews = document.querySelectorAll('.dashboard-view');
+
+            // Function to switch dashboard views
+            if(roleSwitcher) {
+                roleSwitcher.addEventListener('change', (event) => {
+                    const selectedRole = event.target.value;
+                    dashboardViews.forEach(view => {
+                        if (view.id === `${selectedRole}-dashboard`) {
+                            view.classList.remove('hidden');
+                        } else {
+                            view.classList.add('hidden');
+                        }
+                    });
+                });
+            }
+        });
+
+        // Modal functions are defined globally so they can be accessed by the inline onclick handlers
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
