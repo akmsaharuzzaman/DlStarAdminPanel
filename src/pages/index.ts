@@ -5,3 +5,4 @@ export { NotFound } from "./Not-found";
 export { PrivacyPolicy } from "./Privacy-policy";
 export { TermsAndConditions } from "./Terms-and-conditions";
 export { UserListsPage } from "./User-lists";
+export { DashboardPage } from "./Dashboard";

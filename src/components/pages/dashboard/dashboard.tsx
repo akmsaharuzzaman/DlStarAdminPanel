@@ -1,0 +1,332 @@
+import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
+import { DashboardCard } from "@/components/cards/dashboard-card";
+import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
+import { useGetUsersQuery } from "@/redux/api/user.api";
+import { ButtonProps } from "@/types/buttons";
+import { ModalName, Role } from "@/types/pages/dashboard";
+import {
+  Building,
+  Coins,
+  History,
+  ListX,
+  LucideIcon,
+  Store,
+  UserCog,
+  UserMinus,
+  UserPlus,
+  UserX,
+} from "lucide-react";
+import { FC, ReactNode } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+
+// Dashboard action button config
+interface DashboardAction {
+  label: string;
+  icon: LucideIcon;
+  variant?: ButtonProps["variant"];
+  modal: ModalName;
+}
+
+// Dashboard card config
+interface DashboardStat {
+  title: string;
+  value: ReactNode;
+  link?: string;
+}
+
+// Dashboard config for each role
+interface DashboardConfig {
+  stats: DashboardStat[];
+  actions: DashboardAction[];
+  lists?: { title: string; emptyText: string }[];
+}
+
+enum ClientRoutes {
+  Users = "/users",
+  SubAdmins = "/sub-admins",
+  Agencies = "/agencies",
+  Merchants = "/merchants",
+  Resellers = "/resellers",
+  Hosts = "/hosts",
+}
+
+/**
+ * Dashboard: Renders the dashboard for the current role using config.
+ * This is fully reusable for any role.
+ */
+export const DashboardContent: FC<{
+  role: Role;
+  openModal: (modal: ModalName) => void;
+}> = ({ role, openModal }) => {
+  // fetching data from server
+  const { data: users } = useGetUsersQuery({ page: 1, limit: 10000 });
+  const { data: moderators } = useGetAllModeratorUsersQuery(null);
+  const staticStatesData = {
+    totalUser: users?.result?.users?.length || 0,
+    totalSubAdmin: users?.result?.users.filter(
+      (user) => user.userRole === "sub-admin"
+    ).length,
+    totalAgency: moderators?.result?.users.length || 0,
+    totalMerchant:
+      users?.result?.users.filter((user) => user.userRole === "merchant")
+        .length || 0,
+    totalReseller:
+      users?.result?.users.filter((user) => user.userRole === "re-seller")
+        .length || 0,
+    totalCoin: 100,
+    totalSpendCoin: 1,
+  };
+
+  /**
+   * dashboardConfigs: All dashboard stats, actions, and lists for each role.
+   * This makes the dashboard fully config-driven and easy to extend.
+   */
+  const dashboardConfigs: Record<Role, DashboardConfig> = {
+    admin: {
+      stats: [
+        {
+          title: "Total Users",
+          value: staticStatesData.totalUser || 0,
+          link: ClientRoutes.Users,
+        },
+        {
+          title: "Total Sub-Admins",
+          value: staticStatesData.totalSubAdmin || 0,
+          link: ClientRoutes.SubAdmins,
+        },
+        {
+          title: "Total Agencies",
+          value: staticStatesData.totalAgency || 0,
+          link: ClientRoutes.Agencies,
+        },
+        {
+          title: "Total Merchants",
+          value: staticStatesData.totalMerchant || 0,
+          link: ClientRoutes.Merchants,
+        },
+        {
+          title: "Total Resellers",
+          value: staticStatesData.totalReseller || 0,
+          link: ClientRoutes.Resellers,
+        },
+      ],
+      actions: [
+        {
+          label: "Sell Coin",
+          icon: Coins,
+          variant: "success",
+          modal: "sellCoin",
+        },
+        { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
+        { label: "Create Merchant", icon: Store, modal: "createMerchant" },
+        { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
+        {
+          label: "Block User",
+          icon: UserX,
+          variant: "danger",
+          modal: "blockUser",
+        },
+        {
+          label: "History",
+          icon: History,
+          variant: "secondary",
+          modal: "history",
+        },
+        {
+          label: "Blocked Users",
+          icon: ListX,
+          variant: "secondary",
+          modal: "blockedUsers",
+        },
+      ],
+      lists: [
+        { title: "User List", emptyText: "User data would appear here." },
+        {
+          title: "Sub-Admin List",
+          emptyText: "Sub-admin data would appear here.",
+        },
+      ],
+    },
+    "sub-admin": {
+      stats: [
+        {
+          title: "Total Users",
+          value: staticStatesData.totalUser,
+          link: ClientRoutes.Users,
+        },
+        {
+          title: "Total Agencies",
+          value: staticStatesData.totalAgency,
+          link: ClientRoutes.Agencies,
+        },
+        {
+          title: "Total Resellers",
+          value: staticStatesData.totalReseller,
+          link: ClientRoutes.Resellers,
+        },
+      ],
+      actions: [
+        {
+          label: "Sell Coin",
+          icon: Coins,
+          variant: "success",
+          modal: "sellCoin",
+        },
+        { label: "Create Agency", icon: Building, modal: "createAgency" },
+        {
+          label: "Block User",
+          icon: UserX,
+          variant: "danger",
+          modal: "blockUser",
+        },
+        {
+          label: "History",
+          icon: History,
+          variant: "secondary",
+          modal: "history",
+        },
+      ],
+      lists: [
+        { title: "User List", emptyText: "User data would appear here." },
+      ],
+    },
+    agency: {
+      stats: [
+        { title: "Current Salary", value: "Future Feature" },
+        { title: "Total Hosts", value: "150", link: ClientRoutes.Hosts },
+      ],
+      actions: [
+        { label: "Create Host", icon: UserPlus, modal: "createHost" },
+        {
+          label: "Remove Host",
+          icon: UserMinus,
+          variant: "danger",
+          modal: "removeHost",
+        },
+      ],
+      lists: [
+        { title: "Host List", emptyText: "Host data would appear here." },
+      ],
+    },
+    merchant: {
+      stats: [{ title: "Total Resellers", value: staticStatesData.totalReseller, link: ClientRoutes.Resellers }],
+      actions: [
+        {
+          label: "Sell Coin",
+          icon: Coins,
+          variant: "success",
+          modal: "sellCoin",
+        },
+        { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
+        {
+          label: "History",
+          icon: History,
+          variant: "secondary",
+          modal: "history",
+        },
+      ],
+      lists: [
+        {
+          title: "Reseller List",
+          emptyText: "Reseller data would appear here.",
+        },
+      ],
+    },
+    "re-seller": {
+      stats: [
+        { title: "Your ResellerCoins", value: "50,000" },
+        { title: "Total Earning", value: "$1,250" },
+      ],
+      actions: [
+        {
+          label: "Sell Coin to User",
+          icon: Coins,
+          variant: "success",
+          modal: "sellCoin",
+        },
+        {
+          label: "History",
+          icon: History,
+          variant: "secondary",
+          modal: "history",
+        },
+      ],
+      // No lists for re-seller
+    },
+  };
+  const config = dashboardConfigs[role];
+  // Prepare data for the chart
+  const chartData = dashboardConfigs[role].stats.map((stat) => ({
+    name: stat.title,
+    value: stat.value,
+  }));
+  return (
+    <div>
+      {/* Stats Cards */}
+      <div
+        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ${
+          role === "admin" ? "xl:grid-cols-5" : ""
+        } gap-6 mb-8`}
+      >
+        {config.stats.map((stat) => (
+          <DashboardCard
+            key={stat.title}
+            title={stat.title}
+            value={stat.value}
+          />
+        ))}
+      </div>
+      {/* Action Buttons */}
+      <div className="flex flex-wrap gap-4 mb-8">
+        {config.actions.map((action) => (
+          <ActionTinyButton
+            key={action.label}
+            variant={action.variant}
+            onClick={() => openModal(action.modal)}
+          >
+            <action.icon size={16} className="mr-2" />
+            {action.label}
+          </ActionTinyButton>
+        ))}
+      </div>
+      {/* Data Lists (if any) */}
+      {/* {config.lists && (
+        <div className={config.lists.length > 1 ? "space-y-8" : undefined}>
+          {config.lists.map((list) => (
+            <div key={list.title} className="bg-white p-6 rounded-lg shadow">
+              <h2 className="text-xl font-semibold mb-4">{list.title}</h2>
+              <div className="text-center py-4 text-gray-500">
+                {list.emptyText}
+              </div>
+            </div>
+          ))}
+        </div>
+      )} */}
+      {/* Visual Graph */}
+      <div className="bg-white rounded-lg shadow p-4 md:p-6 mb-6 md:mb-8 w-full">
+        <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-4">
+          Statistics Overview
+        </h3>
+        <div className="w-full h-[200px] md:h-[250px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+              <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
+              <Tooltip />
+              <Bar dataKey="value" fill="#ec4899" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+};

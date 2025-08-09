@@ -10,9 +10,10 @@ import {
   PrivacyPolicy,
   TermsAndConditions,
   UserListsPage,
+  DashboardPage as DashboardRoute,
 } from "../pages";
 import { createBrowserRouter } from "react-router-dom";
-import App from "@/pages/Demo";
+// import App from "@/pages/Demo";
 
 const protectedChildren = [
   { path: "/", element: <DashboardPage /> },
@@ -39,11 +40,9 @@ const router = createBrowserRouter([
   },
   {
     path: "/demo",
-    element: <App/>
+    element: <DashboardRoute />,
   },
   { path: "*", element: <NotFound /> },
-  
 ]);
 
 export default router;
-

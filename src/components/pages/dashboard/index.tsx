@@ -104,6 +104,7 @@ export default function DashboardPage() {
     name: stat.label,
     value: stat.value,
   }));
+  // add dashboard page and related components. imlement dashboardpage with role-based content rendering. added dashboardcontent compoennt to display state and actions based on user role. - Created reusable action tinyButton and dashbaordcard compon
 
   return (
     <div className="p-2 sm:p-4 md:p-6">
