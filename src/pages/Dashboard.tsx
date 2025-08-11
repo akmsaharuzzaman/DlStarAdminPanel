@@ -9,9 +9,9 @@ import { RemoveHostForm } from "@/components/forms/remove-host-form";
 import { SellCoinForm } from "@/components/forms/sell-coin-form";
 import { DashboardContent } from "@/components/pages/dashboard/dashboard";
 import { RoleContext } from "@/provider/role-provider";
-import { ModalContentConfig, ModalName, Role } from "@/types/pages/dashboard";
+import { ModalContentConfig, ModalName } from "@/types/pages/dashboard";
 import { FC, useContext, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 /**
  * modalContentConfig: All modal titles and content for each modal action.
@@ -61,7 +61,11 @@ const modalContentConfig: Record<ModalName, ModalContentConfig> = {
   },
 };
 export const DashboardPage: FC = () => {
-  const { role } = useContext(RoleContext);
+  const context = useContext(RoleContext);
+  if (!context) {
+    throw new Error("DashboardPage must be used within a RoleProvider");
+  }
+  const { role } = context;
   const [activeModal, setActiveModal] = useState<ModalName | null>(null);
 
   // Open/close modal handlers

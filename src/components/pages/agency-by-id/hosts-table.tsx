@@ -1,7 +1,7 @@
 import { Table } from "@/components/tables/table";
-import { renderUserRow } from "./user-row";
+import { renderHostRow } from "./host-row";
 
-export const UserTable = ({ data }: { data: any[] }) => {
+export const HostTable = ({ data }: { data: any[] }) => {
   const columns = [
     "User",
     "User ID",
@@ -11,7 +11,8 @@ export const UserTable = ({ data }: { data: any[] }) => {
     "Level",
     "Activity Zone",
     "Dates",
+    "Actions",
   ];
 
-  return <Table columns={columns} data={data} rowRenderer={renderUserRow} />;
+  return <Table columns={columns} data={data} rowRenderer={renderHostRow} />;
 };

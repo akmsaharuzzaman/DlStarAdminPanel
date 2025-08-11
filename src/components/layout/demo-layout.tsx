@@ -25,7 +25,7 @@ const DemoLayout = () => {
             <div className="flex items-center">
               <div>
                 {/* <h2 className="text-2xl font-semibold">{title}</h2> */}
-                <Link to="/" className="">
+                <Link to="/demo" className="">
                   <img
                     src="/logo.jpeg"
                     alt="Logo"

@@ -1,13 +1,13 @@
-import { userData } from "@/assets/data/user-data";
-import { UserTable } from "@/components/tables/user-table";
+// import { userData } from "@/assets/data/user-data";
+// import { UserTable } from "@/components/tables/user-table";
 
 
-function Demo() {
-  return <UserTable data={userData} />;
-}
+// function Demo() {
+//   return <UserTable data={userData} />;
+// }
 
 
-export default Demo;
+// export default Demo;
 
 // const UserTable = ({ users }) => {
 //   return (

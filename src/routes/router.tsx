@@ -18,6 +18,7 @@ import SubAdmin from "@/pages/Sub-admin";
 import DemoLayout from "@/components/layout/demo-layout";
 import Users from "@/pages/Users";
 import SubAdminById from "@/pages/SubAdminById";
+import AgencyById from "@/pages/AgencyById";
 // import App from "@/pages/Demo";
 
 const protectedChildren = [
@@ -60,8 +61,12 @@ const router = createBrowserRouter([
         element: <SubAdmin />,
       },
       {
-        path: "sub-admins/:subAdminId",
+        path: "sub-admins/:subAdminId", // show agency lists on table format
         element: <SubAdminById />,
+      },
+      {
+        path: "agencies/:agencyId", // show hosts lists in table
+        element: <AgencyById />,
       },
       {
         path: "users",

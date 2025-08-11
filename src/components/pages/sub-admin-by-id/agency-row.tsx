@@ -64,7 +64,7 @@ export const renderAgencyRow = (user: TUser) => (
     </td>
     <td className="px-6 py-5 text-right">
       <Link
-        to={`${ClientRoutes.Hosts}/${user?._id}`}
+        to={`${ClientRoutes.Agencies}/${user?._id}`}
         title="View Details"
         className="text-blue-500 hover:text-blue-700"
       >

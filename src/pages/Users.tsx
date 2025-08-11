@@ -2,51 +2,10 @@
 // Color palette & small helpers
 
 import { userData } from "@/assets/data/user-data";
-import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
-import { UserTable } from "@/components/pages/users/user-table"; 
+import { UserTable } from "@/components/pages/users/user-table";
+import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
-import { Dispatch, useMemo, useState } from "react";
-
-// const formatDate = (iso) => {
-//   try {
-//     return new Date(iso).toLocaleDateString();
-//   } catch (e) {
-//     return "—";
-//   }
-// };
-
-const SearchBar = ({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: Dispatch<React.SetStateAction<string>>;
-}) => (
-  <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-    <input
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder="Search users by name, email or uid..."
-      style={{
-        padding: "10px 12px",
-        borderRadius: 8,
-        border: "1px solid #E5E7EB",
-        width: 320,
-      }}
-    />
-    <button
-      style={{
-        padding: "9px 12px",
-        borderRadius: 8,
-        border: "1px solid #E5E7EB",
-        background: "white",
-        cursor: "pointer",
-      }}
-    >
-      🔎
-    </button>
-  </div>
-);
+import { useMemo, useState } from "react";
 
 const Users = () => {
   const [q, setQ] = useState("");
@@ -61,11 +20,7 @@ const Users = () => {
       }),
     [q]
   );
-  const onCreate = () => {
-    // Logic to handle user creation
-    console.log("Create User button clicked");
-    alert("Create User button clicked");
-  };
+
   return (
     <div>
       <div
@@ -76,12 +31,14 @@ const Users = () => {
           marginBottom: 18,
         }}
       >
-        <h3 style={{ margin: 0, color: colors.textPrimary }}>Users</h3>
+        <h3
+          className="text-lg font-semibold"
+          style={{ margin: 0, color: colors.textPrimary }}
+        >
+          All Users List
+        </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create User
-          </ActionTinyButton>
         </div>
       </div>
 
@@ -97,9 +54,6 @@ const Users = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No users matched your search.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create User
-          </ActionTinyButton>
         </div>
       ) : (
         <UserTable data={userData} />
