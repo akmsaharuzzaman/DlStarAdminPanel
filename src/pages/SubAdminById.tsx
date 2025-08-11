@@ -1,37 +1,119 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+// -----------------------------
+// Color palette & small helpers
 
-const parentDetails = [
-    { key: 'Name', value: 'John Doe' },
-    { key: 'Email', value: 'john.doe@example.com' },
-    { key: 'Role', value: 'Parent Admin' },
-    { key: 'Status', value: 'Active' },
-];
+import { agencyData } from "@/assets/data/agency-data";
+import { subAdminData } from "@/assets/data/sub-admin-data";
+import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
+import { AgencyTable } from "@/components/pages/sub-admin-by-id/agency-table";
+import { colors } from "@/constants/constant";
+import { Dispatch, useMemo, useState } from "react";
 
-const SubAdminById: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+// -----------------------------
 
-    return (
-        <div style={{ padding: '2rem' }}>
-            <h2>Parent Details for ID: {id}</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
-                <thead>
-                    <tr>
-                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Field</th>
-                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {parentDetails.map((detail) => (
-                        <tr key={detail.key}>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{detail.key}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{detail.value}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+// const formatDate = (iso) => {
+//   try {
+//     return new Date(iso).toLocaleDateString();
+//   } catch (e) {
+//     return "—";
+//   }
+// };
+
+const SearchBar = ({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: Dispatch<React.SetStateAction<string>>;
+}) => (
+  <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder="Search users by name, email or uid..."
+      style={{
+        padding: "10px 12px",
+        borderRadius: 8,
+        border: "1px solid #E5E7EB",
+        width: 320,
+      }}
+    />
+    <button
+      style={{
+        padding: "9px 12px",
+        borderRadius: 8,
+        border: "1px solid #E5E7EB",
+        background: "white",
+        cursor: "pointer",
+      }}
+    >
+      🔎
+    </button>
+  </div>
+);
+
+const SubAdminById = () => {
+  const [q, setQ] = useState("");
+  const filtered = useMemo(
+    () =>
+      subAdminData.filter((u) => {
+        const s = q.trim().toLowerCase();
+        if (!s) return true;
+        return [u.name, u.email, u.uid].some((v) =>
+          (v || "").toLowerCase().includes(s)
+        );
+      }),
+    [q]
+  );
+  const onCreate = () => {
+    // Logic to handle user creation
+    console.log("Create User button clicked");
+    alert("Create User button clicked");
+  };
+  return (
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 18,
+        }}
+      >
+        <h3
+          className="text-lg font-semibold"
+          style={{ margin: 0, color: colors.textPrimary }}
+        >
+          Agency List
+        </h3>
+        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <SearchBar value={q} onChange={setQ} />
+          <ActionTinyButton onClick={onCreate} variant="primary">
+            Create Agency
+          </ActionTinyButton>
         </div>
-    );
+      </div>
+
+      {filtered.length === 0 ? (
+        <div
+          style={{
+            padding: 48,
+            background: colors.card,
+            borderRadius: 12,
+            textAlign: "center",
+          }}
+        >
+          <p style={{ color: colors.textMuted, marginBottom: 16 }}>
+            No agency matched your search.
+          </p>
+          <ActionTinyButton onClick={onCreate} variant="primary">
+            Create Agency
+          </ActionTinyButton>
+        </div>
+      ) : (
+        <AgencyTable data={agencyData} />
+      )}
+    </div>
+  );
 };
 
 export default SubAdminById;

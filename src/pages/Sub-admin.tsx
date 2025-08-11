@@ -50,7 +50,7 @@ const SearchBar = ({
   </div>
 );
 
-const Users = () => {
+const SubAdmin = () => {
   const [q, setQ] = useState("");
   const filtered = useMemo(
     () =>
@@ -115,4 +115,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default SubAdmin;
