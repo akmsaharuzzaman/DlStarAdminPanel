@@ -1,5 +1,6 @@
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { DashboardCard } from "@/components/cards/dashboard-card";
+import { ClientRoutes } from "@/constants/route.enum";
 import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
 import { useGetUsersQuery } from "@/redux/api/user.api";
 import { ButtonProps } from "@/types/buttons";
@@ -47,15 +48,6 @@ interface DashboardConfig {
   stats: DashboardStat[];
   actions: DashboardAction[];
   lists?: { title: string; emptyText: string }[];
-}
-
-enum ClientRoutes {
-  Users = "/users",
-  SubAdmins = "/sub-admins",
-  Agencies = "/agencies",
-  Merchants = "/merchants",
-  Resellers = "/resellers",
-  Hosts = "/hosts",
 }
 
 /**
@@ -217,7 +209,13 @@ export const DashboardContent: FC<{
       ],
     },
     merchant: {
-      stats: [{ title: "Total Resellers", value: staticStatesData.totalReseller, link: ClientRoutes.Resellers }],
+      stats: [
+        {
+          title: "Total Resellers",
+          value: staticStatesData.totalReseller,
+          link: ClientRoutes.Resellers,
+        },
+      ],
       actions: [
         {
           label: "Sell Coin",
@@ -281,6 +279,7 @@ export const DashboardContent: FC<{
             key={stat.title}
             title={stat.title}
             value={stat.value}
+            link={stat.link}
           />
         ))}
       </div>

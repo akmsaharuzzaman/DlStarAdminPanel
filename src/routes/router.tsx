@@ -13,6 +13,11 @@ import {
   DashboardPage as DashboardRoute,
 } from "../pages";
 import { createBrowserRouter } from "react-router-dom";
+import SubAdmin from "@/pages/Sub-admin";
+// import Demo from "@/pages/Demo";
+import DemoLayout from "@/components/layout/demo-layout";
+import Users from "@/pages/Users";
+import SubAdminById from "@/pages/SubAdminById";
 // import App from "@/pages/Demo";
 
 const protectedChildren = [
@@ -20,6 +25,10 @@ const protectedChildren = [
   { path: "/user-lists", element: <UserListsPage /> },
   { path: "/agencies", element: <ModeratorListsPage /> },
   { path: "/gifts", element: <GiftListsPage /> },
+  {
+    path: "/sub-admins",
+    element: <SubAdmin />,
+  },
 ];
 
 const publicChildren = [
@@ -40,7 +49,25 @@ const router = createBrowserRouter([
   },
   {
     path: "/demo",
-    element: <DashboardRoute />,
+    element: <DemoLayout />,
+    children: [
+      {
+        path: "",
+        element: <DashboardRoute />,
+      },
+      {
+        path: "sub-admins",
+        element: <SubAdmin />,
+      },
+      {
+        path: "sub-admins/:subAdminId",
+        element: <SubAdminById />,
+      },
+      {
+        path: "users",
+        element: <Users />,
+      },
+    ],
   },
   { path: "*", element: <NotFound /> },
 ]);

@@ -133,7 +133,7 @@ export function UserTable({
                     </TableCell>
                     <TableCell className="px-2 md:px-4">
                       <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-[10px] md:text-xs">
-                        {user.stats?.level || 0}
+                        {user.stats?.levels || 0}
                       </span>
                     </TableCell>
                     <TableCell className="px-2 md:px-4">
@@ -144,7 +144,7 @@ export function UserTable({
                             : ""
                         }`}
                       >
-                        {user?.activityZone.zone}
+                        {user?.activityZone?.zone}
                       </span>
                     </TableCell>
                     <TableCell className="text-gray-700 text-xs md:text-sm px-2 md:px-4">

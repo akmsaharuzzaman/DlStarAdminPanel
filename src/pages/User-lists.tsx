@@ -2,6 +2,8 @@ import { useState } from "react";
 import { UserTable } from "@/components/tables";
 import { useGetUsersQuery } from "@/redux/api/user.api";
 import { ShadcnPagination } from "@/components/ui/shadcn-pagination";
+import { userData } from "@/assets/data/user-data";
+import { TUser } from "@/types/api/auth";
 
 const PAGE_LIMIT = 8;
 
@@ -13,14 +15,15 @@ export const UserListsPage = () => {
   });
 
   const totalPage = usersData?.result?.pagination?.totalPage || 1;
-  const users = usersData?.result?.users || [];
+  // const users = usersData?.result?.users || [];
+  const users = usersData?.result?.users || userData;
 
   return (
     <div className="p-4">
       <div className="mb-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">User Lists</h1>
       </div>
-      <UserTable usersData={users} isLoading={isLoading} />
+      <UserTable usersData={users as TUser[]} isLoading={isLoading} />
       <ShadcnPagination
         page={page}
         totalPages={totalPage}

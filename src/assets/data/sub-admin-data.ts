@@ -1,4 +1,4 @@
-export const userData = [
+export const subAdminData = [
   {
     _id: "687519fb77f45d43da7a31b0",
     email: "carulota442@gmail.com",
@@ -8,7 +8,7 @@ export const userData = [
       "https://res.cloudinary.com/df1cbfz3x/image/upload/v1753441079/user_profiles/user_profiles/5f17a5b201e067a88af3d7182f27bb6fc78d887b57c49de719cb6d4c76d35fe9.jpg",
     name: "ᒪαɗу ᗷσѕѕ",
     uid: "109516934439420311602",
-    userRole: "user",
+    userRole: "sub-admin",
     countryLanguages: ["Portugal"],
     isViewer: false,
     activityZone: {
@@ -40,7 +40,7 @@ export const userData = [
       "https://res.cloudinary.com/df1cbfz3x/image/upload/v1753195099/user_profiles/user_profiles/11928acd118ed8a1c0519a95a95438bf0fecf2158207fc9244e09b4cab82762b.jpg",
     name: "MR.D",
     uid: "104906722455012142566",
-    userRole: "user",
+    userRole: "sub-admin",
     countryLanguages: ["Portugal"],
     isViewer: false,
     activityZone: {
@@ -72,7 +72,7 @@ export const userData = [
       "https://lh3.googleusercontent.com/a/ACg8ocIfXhYCo8hnIG_ZXBkZ3u2hlYP2-4UDh7LkrMV1d5p-EOxPhA=s96-c",
     name: "Developer IT",
     uid: "103079684140079346130",
-    userRole: "user",
+    userRole: "sub-admin",
     countryLanguages: ["Bangladesh"],
     isViewer: false,
     activityZone: {
@@ -101,7 +101,7 @@ export const userData = [
     userPermissions: [],
     name: "IMTIAZ Hossain",
     uid: "113298258733581837794",
-    userRole: "user",
+    userRole: "sub-admin",
     countryLanguages: [],
     isViewer: false,
     activityZone: {
@@ -134,7 +134,7 @@ export const userData = [
       "https://lh3.googleusercontent.com/a/ACg8ocI0RV_RLDZhWaOt6WmYwaMt62XbLsdrQHd_GSkTYuJ_m0mgmac=s96-c",
     name: "Mahjabin Sheikh",
     uid: "108769551720063510636",
-    userRole: "user",
+    userRole: "sub-admin",
     countryLanguages: ["uganda"],
     isViewer: false,
     activityZone: {
@@ -163,7 +163,7 @@ export const userData = [
     userPermissions: [],
     name: "Nusrat Aeedeba Ruponty",
     uid: "45f64561f2",
-    userRole: "user",
+    userRole: "sub-admin",
     countryLanguages: [],
     isViewer: false,
     activityZone: {
@@ -190,7 +190,7 @@ export const userData = [
     userPermissions: [],
     name: "Khairuna Rehannum Rodoshi",
     uid: "123456",
-    userRole: "user",
+    userRole: "sub-admin",
     countryLanguages: [],
     isViewer: false,
     activityZone: {
@@ -219,7 +219,7 @@ export const userData = [
       "https://lh3.googleusercontent.com/a/ACg8ocKTM7PvjMsb6dSlqFKm_RW_0QKslWGnOXt2PrrArStHHccjkULv=s96-c",
     name: "akm Saharu (SGDSOFT)",
     uid: "100405988852616178510",
-    userRole: "user",
+    userRole: "sub-admin",
     countryLanguages: ["Bangladesh"],
     isViewer: false,
     activityZone: {
@@ -249,7 +249,7 @@ export const userData = [
     userPermissions: [],
     name: "Roman",
     uid: "110635915580944941193",
-    userRole: "user",
+    userRole: "sub-admin",
     countryLanguages: ["Bangladesh"],
     isViewer: false,
     activityZone: {
@@ -285,7 +285,7 @@ export const userData = [
       "https://lh3.googleusercontent.com/a/ACg8ocJnm25amXyAMaJDW6uKoyPaZBplfFl7JKHe0r57xHxjABym2rDHTw=s96-c",
     name: "Zaman Sheikh",
     uid: "116283805814511411781",
-    userRole: "user",
+    userRole: "sub-admin",
     countryLanguages: ["bd"],
     isViewer: false,
     activityZone: {

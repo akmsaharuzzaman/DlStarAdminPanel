@@ -8,16 +8,10 @@ import { CreateSubAdmin } from "@/components/forms/create-sub-admin";
 import { RemoveHostForm } from "@/components/forms/remove-host-form";
 import { SellCoinForm } from "@/components/forms/sell-coin-form";
 import { DashboardContent } from "@/components/pages/dashboard/dashboard";
+import { RoleContext } from "@/provider/role-provider";
 import { ModalContentConfig, ModalName, Role } from "@/types/pages/dashboard";
-import { FC, useState } from "react";
-import { Link } from "react-router-dom";
-const roleOptions: { value: Role; label: string }[] = [
-  { value: "admin", label: "Admin" },
-  { value: "sub-admin", label: "Sub-Admin" },
-  { value: "agency", label: "Agency" },
-  { value: "merchant", label: "Merchant" },
-  { value: "re-seller", label: "Re-Seller" },
-];
+import { FC, useContext, useState } from "react";
+import { Link, Outlet } from "react-router-dom";
 
 /**
  * modalContentConfig: All modal titles and content for each modal action.
@@ -47,11 +41,11 @@ const modalContentConfig: Record<ModalName, ModalContentConfig> = {
   },
   createHost: {
     title: "Create Host",
-    content: <CreateHostForm/>,
+    content: <CreateHostForm />,
   },
   removeHost: {
     title: "Remove Host",
-    content: <RemoveHostForm/>,
+    content: <RemoveHostForm />,
   },
   blockUser: {
     title: "Block User",
@@ -67,7 +61,7 @@ const modalContentConfig: Record<ModalName, ModalContentConfig> = {
   },
 };
 export const DashboardPage: FC = () => {
-  const [role, setRole] = useState<Role>("admin");
+  const { role } = useContext(RoleContext);
   const [activeModal, setActiveModal] = useState<ModalName | null>(null);
 
   // Open/close modal handlers
@@ -78,50 +72,8 @@ export const DashboardPage: FC = () => {
   const modalConfig = activeModal ? modalContentConfig[activeModal] : null;
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans">
-      {/* Header with role switcher */}
-      <header className="bg-white shadow-md sticky top-0 z-10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <div>
-                {/* <h2 className="text-2xl font-semibold">{title}</h2> */}
-                <Link to="/" className="">
-                  <img
-                    src="/logo.jpeg"
-                    alt="Logo"
-                    className="h-auto w-12 rounded-lg"
-                  />
-                </Link>
-              </div>
-              <span className="ml-3 text-2xl font-bold text-gray-800">
-                Dlstar
-              </span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="hidden sm:inline text-gray-600">
-                Viewing as:
-              </span>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value as Role)}
-                className="p-2 border rounded-md bg-gray-50 focus:ring-2 focus:ring-blue-500"
-              >
-                {roleOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main dashboard view */}
-      <main className="container mx-auto p-4 sm:p-6 lg:p-8">
-        <DashboardContent role={role} openModal={openModal} />
-      </main>
+    <>
+      <DashboardContent role={role} openModal={openModal} />
 
       {/* Modal for actions */}
       <ModalDialog
@@ -132,6 +84,24 @@ export const DashboardPage: FC = () => {
       >
         {modalConfig?.content}
       </ModalDialog>
-    </div>
+      <Outlet />
+    </>
   );
 };
+
+/**
+ * App: Main dashboard app. Handles role switching, modal state, and renders dashboard.
+ * - Role-based logic is handled by dashboardConfigs and Dashboard component.
+ * - Modal content is config-driven for easy extension.
+ */
+
+// =========================
+// 7. Explanations
+// =========================
+//
+// - All UI is config-driven: stats, actions, and lists for each role are defined in dashboardConfigs.
+// - The Dashboard component is fully reusable for any role, just by changing the config.
+// - Modal content is also config-driven, so adding new modals is easy and type-safe.
+// - All components are typed and reusable, with clear prop interfaces.
+// - Role-based logic is handled by switching the config and rendering accordingly.
+// - This approach makes the dashboard easy to extend, maintain, and test.
