@@ -36,7 +36,7 @@ const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       { email: string; page?: number; limit?: number }
     >({
       query: ({ email, page = 1, limit = 5 }) => ({
-        url: `/admin/users/search?email=${encodeURIComponent(
+        url: `/power-shared/users/search?email=${encodeURIComponent(
           email
         )}&page=${page}&limit=${limit}`,
         method: "GET",
