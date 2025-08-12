@@ -1,5 +1,4 @@
 import { merchantData } from "@/assets/data/merchant-data";
-import { subAdminData } from "@/assets/data/sub-admin-data";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { MerchantTable } from "@/components/pages/merchants/merchant-table";
 import { SearchBar } from "@/components/shared/search-bar";
@@ -10,7 +9,7 @@ const Merchant = () => {
   const [q, setQ] = useState("");
   const filtered = useMemo(
     () =>
-      subAdminData.filter((u) => {
+      merchantData.filter((u) => {
         const s = q.trim().toLowerCase();
         if (!s) return true;
         return [u.name, u.email, u.uid].some((v) =>

@@ -1,15 +1,14 @@
-import { countryAdminData } from "@/assets/data/country-admin";
-import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
-import { CountryAdminTable } from "@/components/pages/country-admin/table-list";
+import { resellerData } from "@/assets/data/reseller-data";
+import { MerchantByIdTable } from "@/components/pages/merchants-by-id/merchant-by-id-table";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
 import { useMemo, useState } from "react";
 
-const CountryAdmin = () => {
+const MerchantById = () => {
   const [q, setQ] = useState("");
   const filtered = useMemo(
     () =>
-      countryAdminData.filter((u) => {
+      resellerData.filter((u) => {
         const s = q.trim().toLowerCase();
         if (!s) return true;
         return [u.name, u.email, u.uid].some((v) =>
@@ -18,11 +17,7 @@ const CountryAdmin = () => {
       }),
     [q]
   );
-  const onCreate = () => {
-    // Logic to handle user creation
-    console.log("Create CountryAdmin User button clicked");
-    alert("Create CountryAdmin User button clicked");
-  };
+
   return (
     <div>
       <div
@@ -37,13 +32,10 @@ const CountryAdmin = () => {
           className="text-lg font-semibold"
           style={{ margin: 0, color: colors.textPrimary }}
         >
-          Country Admins List
+          All Resellers List
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Country Admin
-          </ActionTinyButton>
         </div>
       </div>
 
@@ -57,17 +49,14 @@ const CountryAdmin = () => {
           }}
         >
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
-            No Country Admin matched your search.
+            No reseller matched your search.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Country Admin
-          </ActionTinyButton>
         </div>
       ) : (
-        <CountryAdminTable data={countryAdminData} />
+        <MerchantByIdTable data={resellerData} />
       )}
     </div>
   );
 };
 
-export default CountryAdmin;
+export default MerchantById;

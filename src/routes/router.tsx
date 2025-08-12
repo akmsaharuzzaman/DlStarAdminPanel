@@ -19,8 +19,10 @@ import DemoLayout from "@/components/layout/demo-layout";
 import Users from "@/pages/Users";
 import SubAdminById from "@/pages/SubAdminById";
 import AgencyById from "@/pages/AgencyById";
-import Reseller from "@/pages/Reseller";
 import Merchant from "@/pages/Merchant";
+import MerchantById from "@/pages/MerchantById";
+import CountryAdmin from "@/pages/CountryAdmin";
+import CountryAdminById from "@/pages/CountryAdminById";
 // import App from "@/pages/Demo";
 
 const protectedChildren = [
@@ -80,7 +82,15 @@ const router = createBrowserRouter([
       },
       {
         path: "merchants/:merchantId", // show merchant details by merchantId
-        element: <Reseller />,
+        element: <MerchantById />,
+      },
+      {
+        path: "country-admin", // show all Country Admins
+        element: <CountryAdmin />,
+      },
+      {
+        path: "sub-country-admin/:countryAdminId", // show country-admin details by countryAdminId
+        element: <CountryAdminById />,
       },
     ],
   },
