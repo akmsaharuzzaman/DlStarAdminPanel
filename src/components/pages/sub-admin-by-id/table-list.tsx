@@ -1,7 +1,8 @@
 import { Table } from "@/components/tables/table";
-import { renderMerchantRow } from "./merchant-row";
+import { renderAgencyRow } from "./table-row";
 
-export const MerchantTable = ({ data }: { data: any[] }) => {
+
+export const AgencyTable = ({ data }: { data: any[] }) => {
   const columns = [
     "User",
     "User ID",
@@ -15,6 +16,6 @@ export const MerchantTable = ({ data }: { data: any[] }) => {
   ];
 
   return (
-    <Table columns={columns} data={data} rowRenderer={renderMerchantRow} />
+    <Table columns={columns} data={data} rowRenderer={renderAgencyRow} />
   );
 };

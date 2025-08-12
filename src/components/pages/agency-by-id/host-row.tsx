@@ -1,6 +1,4 @@
-import { ClientRoutes } from "@/constants/route.enum";
 import { TUser } from "@/types/api/auth";
-import { Link } from "react-router-dom";
 
 export const renderHostRow = (user: TUser) => (
   <>
@@ -62,7 +60,7 @@ export const renderHostRow = (user: TUser) => (
         ID: {user?._id}
       </div>
     </td>
-    <td className="px-6 py-5 text-right">
+    {/* <td className="px-6 py-5 text-right">
       <Link
         to={`${ClientRoutes.Hosts}/${user?._id}`}
         title="View Details"
@@ -89,6 +87,6 @@ export const renderHostRow = (user: TUser) => (
           />
         </svg>
       </Link>
-    </td>
+    </td> */}
   </>
 );

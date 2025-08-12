@@ -4,7 +4,7 @@
 import { agencyData } from "@/assets/data/agency-data";
 import { subAdminData } from "@/assets/data/sub-admin-data";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
-import { AgencyTable } from "@/components/pages/sub-admin-by-id/agency-table";
+import { AgencyTable } from "@/components/pages/sub-admin-by-id/table-list";
 import { colors } from "@/constants/constant";
 import { Dispatch, useMemo, useState } from "react";
 

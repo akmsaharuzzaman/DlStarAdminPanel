@@ -2,7 +2,7 @@
 // Color palette & small helpers
 
 import { userData } from "@/assets/data/user-data";
-import { UserTable } from "@/components/pages/users/user-table";
+import { UserTable } from "@/components/pages/users/table-list";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
 import { useMemo, useState } from "react";

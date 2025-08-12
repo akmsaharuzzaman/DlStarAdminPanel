@@ -1,5 +1,5 @@
 import { resellerData } from "@/assets/data/reseller-data";
-import { MerchantByIdTable } from "@/components/pages/merchants-by-id/merchant-by-id-table";
+import { MerchantByIdTable } from "@/components/pages/merchants-by-id/table-list";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
 import { useMemo, useState } from "react";

@@ -1,5 +1,5 @@
 import { Table } from "@/components/tables/table";
-import { renderMerchantByIdRow } from "./merchant-by-id-row";
+import { renderMerchantByIdRow } from "./table-row";
 
 export const MerchantByIdTable = ({ data }: { data: any[] }) => {
   const columns = [

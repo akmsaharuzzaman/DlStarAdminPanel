@@ -1,5 +1,5 @@
 import { Table } from "@/components/tables/table";
-import { renderUserRow } from "./user-row";
+import { renderUserRow } from "./table-row";
 
 export const UserTable = ({ data }: { data: any[] }) => {
   const columns = [

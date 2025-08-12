@@ -3,7 +3,7 @@
 
 import { subAdminData } from "@/assets/data/sub-admin-data";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
-import { SubAdminTable } from "@/components/pages/sub-admin/sub-admin-table";
+import { SubAdminTable } from "@/components/pages/sub-admin/table-list";
 import { colors } from "@/constants/constant";
 import { Dispatch, useMemo, useState } from "react";
 

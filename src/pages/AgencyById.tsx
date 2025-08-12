@@ -1,7 +1,7 @@
 import { hostData } from "@/assets/data/host-data";
 import { subAdminData } from "@/assets/data/sub-admin-data";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
-import { HostTable } from "@/components/pages/agency-by-id/hosts-table";
+import { HostTable } from "@/components/pages/agency-by-id/table-list";
 import { colors } from "@/constants/constant";
 import { Dispatch, useMemo, useState } from "react";
 

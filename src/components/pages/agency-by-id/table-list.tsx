@@ -11,7 +11,6 @@ export const HostTable = ({ data }: { data: any[] }) => {
     "Level",
     "Activity Zone",
     "Dates",
-    "Actions",
   ];
 
   return <Table columns={columns} data={data} rowRenderer={renderHostRow} />;

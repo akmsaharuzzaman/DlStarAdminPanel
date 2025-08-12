@@ -1,6 +1,6 @@
 import { merchantData } from "@/assets/data/merchant-data";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
-import { MerchantTable } from "@/components/pages/merchants/merchant-table";
+import { MerchantTable } from "@/components/pages/merchants/table-list";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
 import { useMemo, useState } from "react";

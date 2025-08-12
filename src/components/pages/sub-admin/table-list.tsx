@@ -1,5 +1,5 @@
 import { Table } from "@/components/tables/table";
-import { renderSubAdminRow } from "./sub-admin-row";
+import { renderSubAdminRow } from "./table-row";
 
 export const SubAdminTable = ({ data }: { data: any[] }) => {
   const columns = [
