@@ -19,6 +19,8 @@ import DemoLayout from "@/components/layout/demo-layout";
 import Users from "@/pages/Users";
 import SubAdminById from "@/pages/SubAdminById";
 import AgencyById from "@/pages/AgencyById";
+import Reseller from "@/pages/Reseller";
+import Merchant from "@/pages/Merchant";
 // import App from "@/pages/Demo";
 
 const protectedChildren = [
@@ -61,16 +63,24 @@ const router = createBrowserRouter([
         element: <SubAdmin />,
       },
       {
-        path: "sub-admins/:subAdminId", // show agency lists on table format
+        path: "sub-admins/:subAdminId", // show agency lists on table format by subAdminId
         element: <SubAdminById />,
       },
       {
-        path: "agencies/:agencyId", // show hosts lists in table
+        path: "agencies/:agencyId", // show hosts lists in table by agencyId
         element: <AgencyById />,
       },
       {
         path: "users",
         element: <Users />,
+      },
+      {
+        path: "merchants", // show all merchant
+        element: <Merchant />,
+      },
+      {
+        path: "merchants/:merchantId", // show merchant details by merchantId
+        element: <Reseller />,
       },
     ],
   },
