@@ -4,37 +4,32 @@ import DashboardPage from "@/components/pages/dashboard";
 import LoginPage from "@/components/pages/login";
 import {
   GiftListsPage,
-  Home,
   ModeratorListsPage,
   NotFound,
   PrivacyPolicy,
   TermsAndConditions,
   UserListsPage,
-  DashboardPage as DashboardRoute,
 } from "../pages";
 import { createBrowserRouter } from "react-router-dom";
 import SubAdmin from "@/pages/Sub-admin";
 // import Demo from "@/pages/Demo";
-import DemoLayout from "@/components/layout/demo-layout";
-import Users from "@/pages/Users";
-import SubAdminById from "@/pages/SubAdminById";
-import AgencyById from "@/pages/AgencyById";
-import Merchant from "@/pages/Merchant";
-import MerchantById from "@/pages/MerchantById";
-import CountryAdmin from "@/pages/CountryAdmin";
-import CountryAdminById from "@/pages/CountryAdminById";
-// import App from "@/pages/Demo";
+import DemoLayout from "@/components/layout/demo";
+import RootLayout from "@/components/layout/root";
+import { appRoutes } from "./app-routes";
+import UnauthorizedPage from "@/pages/Unauthorize";
 
 const protectedChildren = [
-  { path: "/", element: <DashboardPage /> },
-  { path: "/user-lists", element: <UserListsPage /> },
-  { path: "/agencies", element: <ModeratorListsPage /> },
-  { path: "/gifts", element: <GiftListsPage /> },
+  { path: "", element: <DashboardPage /> },
+  { path: "user-lists", element: <UserListsPage /> },
+  { path: "agencies", element: <ModeratorListsPage /> },
+  { path: "gifts", element: <GiftListsPage /> },
   {
-    path: "/sub-admins",
+    path: "sub-admins",
     element: <SubAdmin />,
   },
 ];
+
+
 
 const publicChildren = [
   { path: "/login", element: <LoginPage /> },
@@ -42,10 +37,28 @@ const publicChildren = [
   { path: "/terms-and-conditions", element: <TermsAndConditions /> },
 ];
 
+
+
+const protectedRoutes = appRoutes.map((route) => ({
+  path: route.path,
+  element: (
+    <ProtectedRoute allowedRoles={route.roles}>
+      {route.element}
+    </ProtectedRoute>
+  ),
+}));
+
 const router = createBrowserRouter([
   {
-    element: <ProtectedRoute allowedRoles={["admin", "moderator"]} />, // updated roles
-    children: [{ path: "/", element: <Home />, children: protectedChildren }],
+    path: "/",
+    element: <RootLayout/>,
+    children: [
+      ...protectedRoutes
+    ]
+  },
+  {
+    path: "/unauthorize",
+    element: <UnauthorizedPage />,
   },
   {
     path: "/",
@@ -55,44 +68,7 @@ const router = createBrowserRouter([
   {
     path: "/demo",
     element: <DemoLayout />,
-    children: [
-      {
-        path: "",
-        element: <DashboardRoute />,
-      },
-      {
-        path: "sub-admins",
-        element: <SubAdmin />,
-      },
-      {
-        path: "sub-admins/:subAdminId", // show agency lists on table format by subAdminId
-        element: <SubAdminById />,
-      },
-      {
-        path: "agencies/:agencyId", // show hosts lists in table by agencyId
-        element: <AgencyById />,
-      },
-      {
-        path: "users",
-        element: <Users />,
-      },
-      {
-        path: "merchants", // show all merchant
-        element: <Merchant />,
-      },
-      {
-        path: "merchants/:merchantId", // show merchant details by merchantId
-        element: <MerchantById />,
-      },
-      {
-        path: "country-admin", // show all Country Admins
-        element: <CountryAdmin />,
-      },
-      {
-        path: "sub-country-admin/:countryAdminId", // show country-admin details by countryAdminId
-        element: <CountryAdminById />,
-      },
-    ],
+    children: protectedChildren
   },
   { path: "*", element: <NotFound /> },
 ]);

@@ -1,8 +1,19 @@
 export enum ClientRoutes {
-  Users = "/demo/users",
-  SubAdmins = "/demo/sub-admins",
-  Agencies = "/demo/agencies",
-  Merchants = "/demo/merchants",
-  Resellers = "/demo/resellers",
-  Hosts = "/demo/hosts",
+  Users = "/users",
+  SubAdmins = "/sub-admins",
+  Agencies = "/agencies",
+  Merchants = "/merchants",
+  Resellers = "/resellers",
+  Hosts = "/hosts",
+}
+
+
+export enum Roles {
+  Admin = "admin",
+  SubAdmin = "sub-admin",
+  Agency = "agency",
+  Reseller = "re-seller",
+  Merchant = "merchant",
+  CountryAdmin = "country-admin",
+  SubCountryAdmin= "sub-country-admin"
 }
