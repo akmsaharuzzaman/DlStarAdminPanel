@@ -1,25 +1,40 @@
-// -----------------------------
-// Color palette & small helpers
-
-import { userData } from "@/assets/data/user-data";
 import { UserTable } from "@/components/pages/users/table-list";
+import { AppPagination } from "@/components/shared/pagination";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
+import { useGetUsersQuery } from "@/redux/api/user.api";
 import { useMemo, useState } from "react";
-
+const PAGE_LIMIT = 8;
+const initialPage = 1;
 const Users = () => {
+  const [currentPage, setCurrentPage] = useState<number>(initialPage);
   const [q, setQ] = useState("");
+
+  const { data: userResponse, isLoading } = useGetUsersQuery({
+    page: currentPage,
+    limit: PAGE_LIMIT,
+  });
+
+  const userData = userResponse?.result?.users || [];
   const filtered = useMemo(
     () =>
-      userData.filter((u) => {
+      userData?.filter((u) => {
         const s = q.trim().toLowerCase();
         if (!s) return true;
         return [u.name, u.email, u.uid].some((v) =>
           (v || "").toLowerCase().includes(s)
         );
       }),
-    [q]
+    [q, userData]
   );
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (!userResponse || !userResponse.result) {
+    return <div>No user data found.</div>;
+  }
+  console.log(userResponse, "userResponse");
 
   return (
     <div>
@@ -58,6 +73,14 @@ const Users = () => {
       ) : (
         <UserTable data={userData} />
       )}
+
+      <div className="w-full max-w-xl mx-auto mt-8">
+        <AppPagination
+          totalPages={userResponse.result?.pagination?.totalPage || 1}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
     </div>
   );
 };

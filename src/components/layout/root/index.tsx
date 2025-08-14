@@ -25,7 +25,7 @@ const RootLayout = () => {
             <div className="flex items-center">
               <div>
                 {/* <h2 className="text-2xl font-semibold">{title}</h2> */}
-                <Link to="/demo" className="">
+                <Link to="/" className="">
                   <img
                     src="/logo.jpeg"
                     alt="Logo"

@@ -5,7 +5,7 @@ import LoginPage from "@/components/pages/login";
 import {
   GiftListsPage,
   ModeratorListsPage,
-  NotFound,
+  NotFoundPage,
   PrivacyPolicy,
   TermsAndConditions,
   UserListsPage,
@@ -70,7 +70,7 @@ const router = createBrowserRouter([
     element: <DemoLayout />,
     children: protectedChildren
   },
-  { path: "*", element: <NotFound /> },
+  { path: "*", element: <NotFoundPage /> },
 ]);
 
 export default router;
