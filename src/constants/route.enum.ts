@@ -7,7 +7,6 @@ export enum ClientRoutes {
   Hosts = "/hosts",
 }
 
-
 export enum Roles {
   Admin = "admin",
   SubAdmin = "sub-admin",
@@ -15,5 +14,14 @@ export enum Roles {
   Reseller = "re-seller",
   Merchant = "merchant",
   CountryAdmin = "country-admin",
-  SubCountryAdmin= "sub-country-admin"
+  SubCountryAdmin = "sub-country-admin",
+}
+
+export enum Permissions {
+  CoinDistribution = "coin-distributor",
+  PromoteUser = "promote-user",
+  UpdateUser = "update-users",
+  BlockUser = "block-user",
+  DeviceBan = "device-ban",
+  LiveRoomClose = "live-room-close",
 }

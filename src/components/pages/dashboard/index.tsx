@@ -9,7 +9,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { useGetUsersQuery } from "@/redux/api/user.api";
 import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,6 +17,7 @@ import { useUpdateAdminMutation } from "@/redux/api/auth.api";
 import { toast } from "sonner";
 import { useState } from "react";
 import { SellCoinDialog } from "@/components/forms/sell-coin-dialog";
+import { useGetUsersQuery } from "@/redux/api/power-shared";
 
 export default function DashboardPage() {
   const [coinAmount, setCoinAmount] = useState("");
@@ -39,7 +39,7 @@ export default function DashboardPage() {
   };
 
   // const [activeTab, setActiveTab] = useState("All");
-  const { data: users } = useGetUsersQuery({ page: 1, limit: 9999 });
+  const { data: users } = useGetUsersQuery({ page: 1, limit: 99999 });
   const { data: moderators } = useGetAllModeratorUsersQuery(null);
   const staticStatesData = {
     totalUser: users?.result?.users?.length || 0,

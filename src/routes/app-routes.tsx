@@ -3,6 +3,7 @@ import { DashboardPage } from "@/pages";
 import AgencyById from "@/pages/AgencyById";
 import CountryAdmin from "@/pages/CountryAdmin";
 import CountryAdminById from "@/pages/CountryAdminById";
+import { GiftListsPage } from "@/pages/GiftLIsts";
 import Merchant from "@/pages/Merchant";
 import MerchantById from "@/pages/MerchantById";
 import SubAdmin from "@/pages/Sub-admin";
@@ -13,7 +14,14 @@ export const appRoutes = [
   {
     path: "/",
     element: <DashboardPage />,
-    roles: [Roles.Admin, Roles.SubAdmin, Roles.Agency, Roles.Merchant, Roles.Reseller, Roles.CountryAdmin],
+    roles: [
+      Roles.Admin,
+      Roles.SubAdmin,
+      Roles.Agency,
+      Roles.Merchant,
+      Roles.Reseller,
+      Roles.CountryAdmin,
+    ],
   },
   {
     path: "/agencies/:agencyId", // show hosts lists in table by agencyId
@@ -53,6 +61,11 @@ export const appRoutes = [
   {
     path: "/country-admin", // show all country-admin
     element: <CountryAdmin />,
+    roles: [Roles.Admin],
+  },
+  {
+    path: "/gifts",
+    element: <GiftListsPage />,
     roles: [Roles.Admin],
   },
 ];

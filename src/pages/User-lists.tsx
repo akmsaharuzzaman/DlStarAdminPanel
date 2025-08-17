@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { UserTable } from "@/components/tables";
-import { useGetUsersQuery } from "@/redux/api/user.api";
+
 import { ShadcnPagination } from "@/components/ui/shadcn-pagination";
 import { userData } from "@/assets/data/user-data";
 import { TUser } from "@/types/api/auth";
+import { useGetUsersQuery } from "@/redux/api/power-shared";
 
 const PAGE_LIMIT = 8;
 

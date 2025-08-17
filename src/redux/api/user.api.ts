@@ -46,8 +46,4 @@ const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetUsersQuery,
-  useAsignCoinToUserByIdMutation,
-  useSearchUsersByEmailQuery,
-} = userApi;
+// export const {} = userApi;

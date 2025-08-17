@@ -1,7 +1,4 @@
-import {
-  useAsignCoinToUserByIdMutation,
-  useSearchUsersByEmailQuery,
-} from "@/redux/api/user.api";
+
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -11,6 +8,7 @@ import z from "zod";
 import { useForm, UseFormSetValue } from "react-hook-form";
 import { toast } from "sonner";
 import { TUser } from "@/types/api/auth";
+import { useAsignCoinToUserByIdMutation, useSearchUsersByEmailQuery } from "@/redux/api/power-shared";
 
 const sellCoinSchema = z.object({
   userId: z.string().min(1, "User ID is required"),

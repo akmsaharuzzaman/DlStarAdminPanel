@@ -37,7 +37,22 @@ const RootLayout = () => {
                 Dlstar
               </span>
             </div>
+
             <div className="flex items-center space-x-4">
+              <div className="flex justify-center gap-x-4">
+                {/* <Link
+                  to="/dashboard"
+                  className="text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                  Dashboard
+                </Link> */}
+                <Link
+                  to="/gifts"
+                  className="text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                  Gifts
+                </Link>
+              </div>
               <span className="hidden sm:inline text-gray-600">
                 Viewing as:
               </span>

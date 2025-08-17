@@ -2,7 +2,7 @@ import { UserTable } from "@/components/pages/users/table-list";
 import { AppPagination } from "@/components/shared/pagination";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
-import { useGetUsersQuery } from "@/redux/api/user.api";
+import { useGetUsersQuery } from "@/redux/api/power-shared";
 import { useMemo, useState } from "react";
 const PAGE_LIMIT = 8;
 const initialPage = 1;

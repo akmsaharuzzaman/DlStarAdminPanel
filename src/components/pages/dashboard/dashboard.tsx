@@ -2,7 +2,8 @@ import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { DashboardCard } from "@/components/cards/dashboard-card";
 import { ClientRoutes } from "@/constants/route.enum";
 import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
-import { useGetUsersQuery } from "@/redux/api/user.api";
+import { useGetUsersQuery } from "@/redux/api/power-shared";
+
 import { ButtonProps } from "@/types/buttons";
 import { ModalName, Role } from "@/types/pages/dashboard";
 import {
