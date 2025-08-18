@@ -65,7 +65,7 @@ export const appRoutes = [
   },
   {
     path: "/gifts",
-    element: <GiftListsPage />,
+    element: <GiftListsPage backRoute={'/'} />,
     roles: [Roles.Admin],
   },
 ];

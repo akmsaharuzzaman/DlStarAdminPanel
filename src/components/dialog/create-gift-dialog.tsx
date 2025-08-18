@@ -157,9 +157,9 @@ export function CreateGiftDialog({ open, onClose }: CreateGiftDialogProps) {
               Category
             </label>
             <DropdownWithCreate
-              value={category}
-              onChange={(val) => setValue("category", val)}
-              error={errors.category?.message}
+
+     
+
             />
           </div>
           <div>

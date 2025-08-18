@@ -6,7 +6,7 @@ import { tagTypes } from "../tag.types";
 
 type TGetUserResponse = TResponse<{ pagination: Tpagination; users: TUser[] }>;
 type TAsignCoinToUserResponse = TResponse<TUserRewards>;
-const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
+export const userApi= onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     // TODO: need to remove this endpoint
 
