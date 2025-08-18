@@ -31,15 +31,14 @@ type CreateGiftFormProps = {
 };
 
 const giftSchema = z.object({
-  giftName: z.string(),
-  category: z.string(),
-  diamonds: z.string(), // <-- changed here
-  coinPrice: z.string(), // <-- changed here
+  giftName: z.string().min(1, "Gift name is required"),
+  category: z.string().min(1, "Category is required"),
+  diamonds: z.preprocess((val) => Number(val), z.number().min(1, "Diamonds required")),
+  coinPrice: z.preprocess((val) => Number(val), z.number().min(1, "Coin price required")),
   previewImage: z.instanceof(File, { message: "Preview image required" }),
   svgaImage: z.instanceof(File, { message: "SVGA image required" }),
 });
 
-type GiftFormValues = z.infer<typeof giftSchema>;
 
 export const CreateGiftForm: React.FC<
   CreateGiftFormProps & {
@@ -51,11 +50,11 @@ export const CreateGiftForm: React.FC<
   const [newCategoryName, setNewCategoryName] = useState("");
   const [createGift, { isLoading }] = useCreateGiftMutation();
 
-  const form = useForm<GiftFormValues>({
+  const form = useForm({
     resolver: zodResolver(giftSchema),
     defaultValues: {
       giftName: "",
-      category: categories[0] || "",
+      category: "",
       diamonds: "",
       coinPrice: "",
       previewImage: undefined,
@@ -88,25 +87,24 @@ export const CreateGiftForm: React.FC<
     //   onCreateGift(values);
     // }
     try {
-      const payload: TCreateGiftBody = {
-        giftName: values.giftName,
-        category: values.category,
-        coinPrice: Number(values.coinPrice),
-        diamonds: Number(values.diamonds),
-        previewImage: values.previewImage,
-        svgaImage: values.svgaImage,
-      };
       if (!values.previewImage || !values.svgaImage) {
         toast.error("Please upload both preview and SVGA images.");
         return;
       }
+      const payload: TCreateGiftBody = {
+        giftName: values.giftName,
+        category: values.category,
+        coinPrice: values.coinPrice,
+        diamonds: values.diamonds,
+        previewImage: values.previewImage,
+        svgaImage: values.svgaImage,
+      };
       console.log("Creating gift with payload:", payload);
       const response = await createGift(payload).unwrap();
       console.log("response", response);
       toast.success(response.message);
-
       setTimeout(() => {
-        onclose;
+        onSave();
         form.reset();
       }, 1500);
     } catch (error: any) {
@@ -196,7 +194,12 @@ export const CreateGiftForm: React.FC<
               <FormItem>
                 <FormLabel>Diamonds</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} placeholder="500" />
+                  <Input
+                    type="number"
+                    value={field.value ? String(field.value) : ""}
+                    onChange={(e) => field.onChange(e.target.value)}
+                    placeholder="500"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -209,7 +212,12 @@ export const CreateGiftForm: React.FC<
               <FormItem>
                 <FormLabel>Coin Price</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} placeholder="1000" />
+                  <Input
+                    type="number"
+                    value={field.value ? String(field.value) : ""}
+                    onChange={(e) => field.onChange(e.target.value)}
+                    placeholder="1000"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -237,7 +237,8 @@ export const GiftListsPage: React.FC<GiftListsPageProps> = ({
     console.log(initialCategories)
     const gifts = allGiftData?.result || []
   // const [gifts, setGifts] = useState<Gift[]>(initialGifts);
-  const [categories, setCategories] = useState<string[]>(initialCategories);
+  const [categories, setCategories] = useState<string[]>([...initialCategories]);
+  console.log(categories)
   const [isCreateModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
   const groupedGifts = gifts.reduce<Record<string, Gift[]>>((acc, gift) => {
