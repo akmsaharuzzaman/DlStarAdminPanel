@@ -9,6 +9,7 @@ import { ModalName, Role } from "@/types/pages/dashboard";
 import {
   Building,
   Coins,
+  Gift,
   History,
   ListX,
   LucideIcon,
@@ -19,6 +20,7 @@ import {
   UserX,
 } from "lucide-react";
 import { FC, ReactNode } from "react";
+import { Link } from "react-router-dom";
 import {
   Bar,
   BarChart,
@@ -296,6 +298,13 @@ export const DashboardContent: FC<{
             {action.label}
           </ActionTinyButton>
         ))}
+
+        <Link to={ClientRoutes.Gifts}>
+        <ActionTinyButton variant="info">
+          <Gift size={16} className="mr-2" />
+          Manage Gifts
+        </ActionTinyButton>
+        </Link>
       </div>
       {/* Data Lists (if any) */}
       {/* {config.lists && (

@@ -4,6 +4,7 @@ export const tagTypes = {
   user: "User",
   coin: "Coin",
   gift: "Gift",
+  giftCategory: "GiftCategory",
 };
 
 export const tagTypesList = [
@@ -12,4 +13,5 @@ export const tagTypesList = [
   tagTypes.user,
   tagTypes.coin,
   tagTypes.gift,
+  tagTypes.giftCategory,
 ];
