@@ -15,7 +15,7 @@ const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       { page?: number; limit?: number }
     >({
       query: ({ page = 1, limit = 10 } = {}) => ({
-        url: `/admin/users?page=${page}&limit=${limit}`,
+        url: `/power-shared/users?page=${page}&limit=${limit}`,
         method: "GET",
       }),
       providesTags: [tagTypes.user, tagTypes.coin],
@@ -25,7 +25,7 @@ const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       TAsignCoinToUserRequestBody
     >({
       query: (userInfo) => ({
-        url: "/admin/users/assign-coin",
+        url: "/power-shared/users/assign-coin",
         method: "PUT",
         body: userInfo,
       }),
@@ -36,7 +36,7 @@ const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       { email: string; page?: number; limit?: number }
     >({
       query: ({ email, page = 1, limit = 5 }) => ({
-        url: `/admin/users/search?email=${encodeURIComponent(
+        url: `/power-shared/users/search?email=${encodeURIComponent(
           email
         )}&page=${page}&limit=${limit}`,
         method: "GET",
@@ -46,8 +46,4 @@ const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetUsersQuery,
-  useAsignCoinToUserByIdMutation,
-  useSearchUsersByEmailQuery,
-} = userApi;
+// export const {} = userApi;

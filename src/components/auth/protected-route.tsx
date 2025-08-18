@@ -1,14 +1,21 @@
-import { useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
-import { RootState } from "@/redux/store";
+import { selectUser } from "@/redux/features/auth.slice";
+import { Navigate } from "react-router-dom";
+import { useAppSelector } from "@/redux/hooks";
 
-export default function ProtectedRoute({ allowedRoles }: { allowedRoles: string[] }) {
-  const {user, token} = useSelector((state: RootState) => state.auth);
-
-  if (!token || !user) return <Navigate to="/login" replace />;
-  if (!allowedRoles.includes(user.role)) {
-    // If user is not allowed, redirect to user-lists if normal user, or dashboard if admin
-    return user.role === "user" ? <Navigate to="/user-lists" replace /> : <Navigate to="/" replace />;
+export default function ProtectedRoute({
+  allowedRoles,
+  children,
+}: {
+  allowedRoles: string[];
+  children: React.ReactNode;
+}) {
+  const user = useAppSelector(selectUser);
+  if (!user) {
+    return <Navigate to="/login" replace />;
   }
-  return <Outlet />;
+
+  if (!allowedRoles.includes(user.role)) {
+    return <Navigate to="/unauthorize" replace />;
+  }
+  return <>{children}</>;
 }

@@ -1,4 +1,4 @@
-import { UserIcon, Users, HandCoins, Coins } from "lucide-react";
+import { UserIcon, Users, HandCoins, Coins, ContactIcon } from "lucide-react";
 import { StatsCard } from "@/components/cards";
 import {
   BarChart,
@@ -9,7 +9,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { useGetUsersQuery } from "@/redux/api/user.api";
 import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,10 +16,13 @@ import { Button } from "@/components/ui/button";
 import { useUpdateAdminMutation } from "@/redux/api/auth.api";
 import { toast } from "sonner";
 import { useState } from "react";
+import { SellCoinDialog } from "@/components/forms/sell-coin-dialog";
+import { useGetUsersQuery } from "@/redux/api/power-shared";
 
 export default function DashboardPage() {
   const [coinAmount, setCoinAmount] = useState("");
   const [updateAdmin, { isLoading }] = useUpdateAdminMutation();
+  const [sellCoinOpen, setSellCoinOpen] = useState(false);
 
   const handleAddCoin = async () => {
     if (!coinAmount || isNaN(Number(coinAmount)) || Number(coinAmount) <= 0) {
@@ -37,7 +39,7 @@ export default function DashboardPage() {
   };
 
   // const [activeTab, setActiveTab] = useState("All");
-  const { data: users } = useGetUsersQuery({ page: 1, limit: 9999 });
+  const { data: users } = useGetUsersQuery({ page: 1, limit: 99999 });
   const { data: moderators } = useGetAllModeratorUsersQuery(null);
   const staticStatesData = {
     totalUser: users?.result?.users?.length || 0,
@@ -54,9 +56,33 @@ export default function DashboardPage() {
       iconBg: "bg-pink-500",
     },
     {
+      value: staticStatesData.totalUser,
+      label: "Total Sub-admins",
+      icon: <Users className="w-6 h-6 text-white" />,
+      iconBg: "bg-pink-500",
+    },
+    {
       value: staticStatesData.totalAgency,
       label: "Total Agency",
       icon: <Users className="w-6 h-6 text-white" />,
+      iconBg: "bg-green-500",
+    },
+    {
+      value: staticStatesData.totalAgency,
+      label: "Total Merchant",
+      icon: <ContactIcon className="w-6 h-6 text-white" />,
+      iconBg: "bg-green-500",
+    },
+    {
+      value: staticStatesData.totalAgency,
+      label: "Total Country-admin (BD admin)",
+      icon: <ContactIcon className="w-6 h-6 text-white" />,
+      iconBg: "bg-green-500",
+    },
+    {
+      value: staticStatesData.totalAgency,
+      label: "Total Reseller",
+      icon: <ContactIcon className="w-6 h-6 text-white" />,
       iconBg: "bg-green-500",
     },
     {
@@ -78,6 +104,7 @@ export default function DashboardPage() {
     name: stat.label,
     value: stat.value,
   }));
+  // add dashboard page and related components. imlement dashboardpage with role-based content rendering. added dashboardcontent compoennt to display state and actions based on user role. - Created reusable action tinyButton and dashbaordcard compon
 
   return (
     <div className="p-2 sm:p-4 md:p-6">
@@ -85,34 +112,48 @@ export default function DashboardPage() {
         {stats.map((stat, idx) => (
           <StatsCard key={idx} {...stat} />
         ))}
-
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
         <Card className="bg-gray-50 border-none">
           <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Input
-                    placeholder="Amount"
-                    type="number"
-                    className=""
-                    value={coinAmount}
-                    onChange={(e) => setCoinAmount(e.target.value)}
-                    disabled={isLoading}
-                  />
-                  <Button onClick={handleAddCoin} disabled={isLoading}>
-                    {isLoading ? "Adding..." : "Add"}
-                  </Button>
-                </div>
-                <div className="text-gray-400 mt-1">
-                  {/* You can show a message here if needed */}
-                </div>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-2">
+                <Input
+                  placeholder="Amount"
+                  type="number"
+                  className=""
+                  value={coinAmount}
+                  onChange={(e) => setCoinAmount(e.target.value)}
+                  disabled={isLoading}
+                />
+                <Button onClick={handleAddCoin} disabled={isLoading}>
+                  {isLoading ? "Adding..." : "Add"}
+                </Button>
               </div>
-              {/* <div
-                className={`w-12 h-12 bg-red-400 rounded-lg flex items-center justify-center`}
-              >
-                <HandCoins className="w-6 h-6 text-white" />
-              </div> */}
+              <div className="text-gray-400 mt-1">
+                {/* You can show a message here if needed */}
+              </div>
             </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gray-50 border-none">
+          <CardContent className="p-6 flex flex-col items-center justify-center">
+            <h3 className="text-lg font-semibold mb-4 text-pink-500">
+              Sell Coin to User
+            </h3>
+            <Button
+              className="bg-pink-500 text-white hover:bg-pink-600 font-semibold w-full mb-2"
+              onClick={() => setSellCoinOpen(true)}
+            >
+              Sell Coin
+            </Button>
+            <SellCoinDialog
+              open={sellCoinOpen}
+              onClose={() => setSellCoinOpen(false)}
+            />
+            <p className="text-gray-400 text-sm mt-2 text-center">
+              Assign coins to users securely and instantly.
+            </p>
           </CardContent>
         </Card>
       </div>

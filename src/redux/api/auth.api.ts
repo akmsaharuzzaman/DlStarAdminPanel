@@ -1,8 +1,10 @@
 import { TResponse } from "@/types/api";
 import { onuliveCloneDashboardBaseApi } from "./base.api";
 import { TLoginBody, TUser } from "@/types/api/auth";
+import { tagTypes } from "../tag.types";
 
 type TLoginResponse = TResponse<TUser[]> & { access_token: string };
+type TGetGiftCategryResponse = TResponse<string[]>;
 const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<TLoginResponse, TLoginBody>({
@@ -28,27 +30,14 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         },
       }),
     }),
-    // resetPassword: builder.mutation({
-    //   query: (userInfo: TResetPassword) => ({
-    //     url: "/auth/reset-password",
-    //     method: "PATCH",
-    //     body: userInfo,
-    //   }),
-    // }),
-    // forgetPassword: builder.mutation({
-    //   query: (emailInfo: TForgetPassword) => ({
-    //     url: "/auth/forgot-password",
-    //     method: "POST",
-    //     body: emailInfo,
-    //   }),
-    // }),
-    // changePassword: builder.mutation({
-    //   query: (emailInfo: TChangePassword) => ({
-    //     url: "/auth/change-password",
-    //     method: "POST",
-    //     body: emailInfo,
-    //   }),
-    // }),
+    // gift category
+    getGiftCategories: builder.query<TGetGiftCategryResponse, undefined>({
+      query: () => ({
+        url: `/admin/gift-category`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.giftCategory],
+    }),
   }),
 });
 
@@ -56,4 +45,5 @@ export const {
   useLoginMutation,
   useAdminRegisterMutation,
   useUpdateAdminMutation,
+  useGetGiftCategoriesQuery,
 } = authApi;

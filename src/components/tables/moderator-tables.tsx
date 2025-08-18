@@ -98,7 +98,7 @@ export function ModeratorTable({
                     </TableCell>
                     <TableCell className="px-2 md:px-4">
                       <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-[10px] md:text-xs">
-                        {user.level}
+                        {user?.stats?.levels}
                       </span>
                     </TableCell>
                     <TableCell className="px-2 md:px-4">

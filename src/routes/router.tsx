@@ -4,21 +4,32 @@ import DashboardPage from "@/components/pages/dashboard";
 import LoginPage from "@/components/pages/login";
 import {
   GiftListsPage,
-  Home,
   ModeratorListsPage,
-  NotFound,
+  NotFoundPage,
   PrivacyPolicy,
   TermsAndConditions,
   UserListsPage,
 } from "../pages";
 import { createBrowserRouter } from "react-router-dom";
+import SubAdmin from "@/pages/Sub-admin";
+// import Demo from "@/pages/Demo";
+import DemoLayout from "@/components/layout/demo";
+import RootLayout from "@/components/layout/root";
+import { appRoutes } from "./app-routes";
+import UnauthorizedPage from "@/pages/Unauthorize";
 
 const protectedChildren = [
-  { path: "/", element: <DashboardPage /> },
-  { path: "/user-lists", element: <UserListsPage /> },
-  { path: "/agencies", element: <ModeratorListsPage /> },
-  { path: "/gifts", element: <GiftListsPage /> },
+  { path: "", element: <DashboardPage /> },
+  { path: "user-lists", element: <UserListsPage /> },
+  { path: "agencies", element: <ModeratorListsPage /> },
+  { path: "gifts", element: <GiftListsPage /> },
+  {
+    path: "sub-admins",
+    element: <SubAdmin />,
+  },
 ];
+
+
 
 const publicChildren = [
   { path: "/login", element: <LoginPage /> },
@@ -26,18 +37,40 @@ const publicChildren = [
   { path: "/terms-and-conditions", element: <TermsAndConditions /> },
 ];
 
+
+
+const protectedRoutes = appRoutes.map((route) => ({
+  path: route.path,
+  element: (
+    <ProtectedRoute allowedRoles={route.roles}>
+      {route.element}
+    </ProtectedRoute>
+  ),
+}));
+
 const router = createBrowserRouter([
   {
-    element: <ProtectedRoute allowedRoles={["admin", "moderator"]} />, // updated roles
-    children: [{ path: "/", element: <Home />, children: protectedChildren }],
+    path: "/",
+    element: <RootLayout/>,
+    children: [
+      ...protectedRoutes
+    ]
+  },
+  {
+    path: "/unauthorize",
+    element: <UnauthorizedPage />,
   },
   {
     path: "/",
     element: <PublicLayout />,
     children: publicChildren,
   },
-  { path: "*", element: <NotFound /> },
+  {
+    path: "/demo",
+    element: <DemoLayout />,
+    children: protectedChildren
+  },
+  { path: "*", element: <NotFoundPage /> },
 ]);
 
 export default router;
-

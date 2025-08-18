@@ -136,7 +136,7 @@ export function CreateGiftDialog({ open, onClose }: CreateGiftDialogProps) {
               </p>
             )}
           </div>
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Category
             </label>
@@ -150,6 +150,17 @@ export function CreateGiftDialog({ open, onClose }: CreateGiftDialogProps) {
                 {errors.category.message}
               </p>
             )}
+          </div> */}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Category
+            </label>
+            <DropdownWithCreate
+              value={category}
+              onChange={(val) => setValue("category", val)}
+              error={errors.category?.message}
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -214,3 +225,91 @@ export function CreateGiftDialog({ open, onClose }: CreateGiftDialogProps) {
     </div>
   );
 }
+
+import React, { useRef } from "react";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select"; // from shadcn/ui
+import { PlusCircle } from "lucide-react"; // lucide icons
+
+interface Item {
+  label: string;
+  value: string;
+}
+
+const DropdownWithCreate: React.FC = () => {
+  const [items, setItems] = useState<Item[]>([
+    { label: "Apple", value: "apple" },
+    { label: "Banana", value: "banana" },
+  ]);
+  const [selected, setSelected] = useState<string>("");
+  const [creating, setCreating] = useState(false);
+  const [newText, setNewText] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const onValueChange = (val: string) => {
+    if (val === "__create__") {
+      setCreating(true);
+      setTimeout(() => inputRef.current?.focus(), 100);
+    } else {
+      setSelected(val);
+      setCreating(false);
+    }
+  };
+
+  const onNewKey = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && newText.trim()) {
+      const newItem = {
+        label: newText.trim(),
+        value: newText.trim().toLowerCase().replace(/\s+/g, "-"),
+      };
+      setItems([...items, newItem]);
+      setSelected(newItem.value);
+      setNewText("");
+      setCreating(false);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-xs">
+      <Select
+        value={creating ? "__create__" : selected}
+        onValueChange={onValueChange}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select or create…" />
+        </SelectTrigger>
+        <SelectContent className="w-full md:w-64">
+          {items.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+          <SelectItem
+            value="__create__"
+            className="flex items-center text-blue-600 hover:bg-blue-50"
+          >
+            <PlusCircle className="w-4 h-4 mr-2 shrink-0" />
+            Create new…
+          </SelectItem>
+        </SelectContent>
+      </Select>
+
+      {creating && (
+        <input
+          ref={inputRef}
+          type="text"
+          className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Type new item and hit Enter"
+          value={newText}
+          onChange={(e) => setNewText(e.target.value)}
+          onKeyDown={onNewKey}
+        />
+      )}
+    </div>
+  );
+};

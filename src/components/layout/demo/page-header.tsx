@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut, selectUser } from "@/redux/features/auth.slice";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import { Activity, BarChart3, Gift, UserIcon, UsersRound } from "lucide-react";
+import { Activity, BarChart3, Contact, Gift, UserIcon, Users, UsersRound } from "lucide-react";
 
 export function PageHeader() {
   const user = useSelector(selectUser);
@@ -39,6 +39,9 @@ export function PageHeader() {
     { icon: UserIcon, label: "User", link: "/user-lists", hasSubmenu: false },
     { icon: BarChart3, label: "Agency", link: "/agencies", hasSubmenu: false },
     { icon: UsersRound, label: "Reseler", link: "/reseler", hasSubmenu: false },
+    { icon: Contact, label: "Merchant", link: "/merchant", hasSubmenu: false },
+    { icon: Users, label: "Sub-admin", link: "/sub-admin", hasSubmenu: false },
+
     { icon: Gift, label: "Gifts", link: "/gifts", hasSubmenu: false },
   ];
 
