@@ -1,33 +1,13 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 
-import {
-
-  Coins,
- 
-  Gift,
-  PlusCircle,
-  ArrowLeft,
-
-  Sparkles,
-} from "lucide-react";
+import { PlusCircle, ArrowLeft } from "lucide-react";
 import { useGetAllGiftsQuery } from "@/redux/api/gift.api";
 
 import { useGetGiftCategoriesQuery } from "@/redux/api/auth.api";
 import { Link } from "react-router-dom";
 import { CreateGiftForm } from "@/components/forms/create-gift-form";
-
-// Types
-type Gift = {
-  _id: string;
-  name: string;
-  category: string;
-  diamonds: number;
-  coinPrice: number;
-  previewImage: string;
-  svgaImage: string;
-  createdAt: string;
-  updatedAt: string;
-};
+import { GiftCard } from "@/components/cards";
+import { TGift } from "@/types/api/gift";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary" | "danger" | "success" | "info" | "ghost";
@@ -41,13 +21,6 @@ type DialogProps = {
 };
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
-
-
-type GiftCardProps = {
-  gift: Gift;
-};
-
-
 
 type GiftListsPageProps = {
   backRoute: string;
@@ -100,8 +73,6 @@ type GiftListsPageProps = {
 //     updatedAt: "2024-08-17T09:00:00Z",
 //   },
 // ];
-
-
 
 // Helper & UI Components (shadcn/ui inspired)
 const Button: React.FC<ButtonProps> = ({
@@ -192,56 +163,25 @@ Input.displayName = "Input";
 // );
 
 // Gift Management Components
-const GiftCard: React.FC<GiftCardProps> = ({ gift }) => (
-  <div className="bg-white rounded-lg shadow-md overflow-hidden group transform hover:-translate-y-1 transition-transform duration-300">
-    <img
-      src={gift.previewImage}
-      alt={gift.name}
-      className="w-full h-32 object-cover"
-      onError={(e) => {
-        (e.target as HTMLImageElement).onerror = null;
-        (e.target as HTMLImageElement).src =
-          "https://placehold.co/100x100/cccccc/ffffff?text=Error";
-      }}
-    />
-    <div className="p-4">
-      <h4 className="text-lg font-semibold text-gray-800">{gift.name}</h4>
-      <div className="flex items-center text-gray-600 mt-1">
-        <Coins size={14} className="mr-1 text-yellow-500" />
-        <span>{gift.coinPrice}</span>
-      </div>
-      <div className="flex items-center text-gray-600 mt-1">
-        <Sparkles size={14} className="mr-1 text-blue-500" />
-        <span>{gift.diamonds} Diamonds</span>
-      </div>
-    </div>
-    <div className="p-2 bg-gray-50 flex justify-end">
-      <Button variant="secondary" className="py-1 px-2 text-xs">
-        Edit
-      </Button>
-    </div>
-  </div>
-);
-
-
 
 export const GiftListsPage: React.FC<GiftListsPageProps> = ({
   backRoute = "/",
 }) => {
   const { data: giftCategories, isLoading: getCategoryLoading } =
     useGetGiftCategoriesQuery(undefined);
-  const {data:allGiftData, isLoading} = useGetAllGiftsQuery(undefined)
-    
+  const { data: allGiftData, isLoading } = useGetAllGiftsQuery(undefined);
 
-    const initialCategories: string[] = giftCategories?.result || [];
-    console.log(initialCategories)
-    const gifts = allGiftData?.result || []
+  const initialCategories: string[] = giftCategories?.result || [];
+  console.log(initialCategories);
+  const gifts = allGiftData?.result || [];
   // const [gifts, setGifts] = useState<Gift[]>(initialGifts);
-  const [categories, setCategories] = useState<string[]>([...initialCategories]);
-  console.log(categories)
+  const [categories, setCategories] = useState<string[]>([
+    ...initialCategories,
+  ]);
+  console.log(categories);
   const [isCreateModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
-  const groupedGifts = gifts.reduce<Record<string, Gift[]>>((acc, gift) => {
+  const groupedGifts = gifts.reduce<Record<string, TGift[]>>((acc, gift) => {
     (acc[gift.category] = acc[gift.category] || []).push(gift);
     return acc;
   }, {});
@@ -252,8 +192,7 @@ export const GiftListsPage: React.FC<GiftListsPageProps> = ({
     }
   };
 
-
-  if(isLoading) return <p>Hello Loading</p>
+  if (isLoading) return <p>Hello Loading</p>;
 
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
