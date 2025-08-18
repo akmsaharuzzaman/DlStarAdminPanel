@@ -1,15 +1,5 @@
-import React, { FormEvent, useState } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import React, {  useState } from "react";
+
 import {
 
   Coins,
@@ -20,11 +10,11 @@ import {
 
   Sparkles,
 } from "lucide-react";
-import { useCreateGiftMutation } from "@/redux/api/gift.api";
-import { TCreateGiftBody } from "@/types/api/gift";
-import { toast } from "sonner";
+import { useGetAllGiftsQuery } from "@/redux/api/gift.api";
+
 import { useGetGiftCategoriesQuery } from "@/redux/api/auth.api";
 import { Link } from "react-router-dom";
+import { CreateGiftForm } from "@/components/forms/create-gift-form";
 
 // Types
 type Gift = {
@@ -52,75 +42,66 @@ type DialogProps = {
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
-type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>;
-
-type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
-  children: React.ReactNode;
-};
 
 type GiftCardProps = {
   gift: Gift;
 };
 
-type CreateGiftFormProps = {
-  onSave: (e?: FormEvent) => void;
-  categories: string[];
-  addCategory: (cat: string) => void;
-};
+
 
 type GiftListsPageProps = {
   backRoute: string;
 };
 
 // Mock Data
-const initialGifts: Gift[] = [
-  {
-    _id: "1",
-    name: "Rose",
-    category: "Popular",
-    diamonds: 50,
-    coinPrice: 100,
-    previewImage: "https://placehold.co/100x100/f87171/ffffff?text=Rose",
-    svgaImage: "rose.svga",
-    createdAt: "2024-08-15T10:00:00Z",
-    updatedAt: "2024-08-15T10:00:00Z",
-  },
-  {
-    _id: "2",
-    name: "Diamond Ring",
-    category: "Luxury",
-    diamonds: 5000,
-    coinPrice: 10000,
-    previewImage: "https://placehold.co/100x100/38bdf8/ffffff?text=Ring",
-    svgaImage: "ring.svga",
-    createdAt: "2024-08-15T11:00:00Z",
-    updatedAt: "2024-08-15T11:00:00Z",
-  },
-  {
-    _id: "3",
-    name: "Teddy Bear",
-    category: "Popular",
-    diamonds: 200,
-    coinPrice: 400,
-    previewImage: "https://placehold.co/100x100/facc15/ffffff?text=Bear",
-    svgaImage: "bear.svga",
-    createdAt: "2024-08-16T14:00:00Z",
-    updatedAt: "2024-08-16T14:00:00Z",
-  },
-  {
-    _id: "4",
-    name: "Sports Car",
-    category: "Luxury",
-    diamonds: 50000,
-    coinPrice: 100000,
-    previewImage: "https://placehold.co/100x100/e11d48/ffffff?text=Car",
-    svgaImage: "car.svga",
-    createdAt: "2024-08-17T09:00:00Z",
-    updatedAt: "2024-08-17T09:00:00Z",
-  },
-];
+// const initialGifts: Gift[] = [
+//   {
+//     _id: "1",
+//     name: "Rose",
+//     category: "Popular",
+//     diamonds: 50,
+//     coinPrice: 100,
+//     previewImage: "https://placehold.co/100x100/f87171/ffffff?text=Rose",
+//     svgaImage: "rose.svga",
+//     createdAt: "2024-08-15T10:00:00Z",
+//     updatedAt: "2024-08-15T10:00:00Z",
+//   },
+//   {
+//     _id: "2",
+//     name: "Diamond Ring",
+//     category: "Luxury",
+//     diamonds: 5000,
+//     coinPrice: 10000,
+//     previewImage: "https://placehold.co/100x100/38bdf8/ffffff?text=Ring",
+//     svgaImage: "ring.svga",
+//     createdAt: "2024-08-15T11:00:00Z",
+//     updatedAt: "2024-08-15T11:00:00Z",
+//   },
+//   {
+//     _id: "3",
+//     name: "Teddy Bear",
+//     category: "Popular",
+//     diamonds: 200,
+//     coinPrice: 400,
+//     previewImage: "https://placehold.co/100x100/facc15/ffffff?text=Bear",
+//     svgaImage: "bear.svga",
+//     createdAt: "2024-08-16T14:00:00Z",
+//     updatedAt: "2024-08-16T14:00:00Z",
+//   },
+//   {
+//     _id: "4",
+//     name: "Sports Car",
+//     category: "Luxury",
+//     diamonds: 50000,
+//     coinPrice: 100000,
+//     previewImage: "https://placehold.co/100x100/e11d48/ffffff?text=Car",
+//     svgaImage: "car.svga",
+//     createdAt: "2024-08-17T09:00:00Z",
+//     updatedAt: "2024-08-17T09:00:00Z",
+//   },
+// ];
 
-const initialCategories: string[] = ["Popular", "Luxury", "Fun"];
+
 
 // Helper & UI Components (shadcn/ui inspired)
 const Button: React.FC<ButtonProps> = ({
@@ -186,29 +167,29 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 Input.displayName = "Input";
 
-const Label: React.FC<LabelProps> = ({ children, ...props }) => (
-  <label
-    className="text-sm font-medium text-gray-700 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-    {...props}
-  >
-    {children}
-  </label>
-);
+// const Label: React.FC<LabelProps> = ({ children, ...props }) => (
+//   <label
+//     className="text-sm font-medium text-gray-700 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+//     {...props}
+//   >
+//     {children}
+//   </label>
+// );
 
-const Select: React.FC<SelectProps> = ({
-  children,
-  value,
-  onChange,
-  className,
-}) => (
-  <select
-    value={value}
-    onChange={onChange}
-    className={`flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-  >
-    {children}
-  </select>
-);
+// const Select: React.FC<SelectProps> = ({
+//   children,
+//   value,
+//   onChange,
+//   className,
+// }) => (
+//   <select
+//     value={value}
+//     onChange={onChange}
+//     className={`flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+//   >
+//     {children}
+//   </select>
+// );
 
 // Gift Management Components
 const GiftCard: React.FC<GiftCardProps> = ({ gift }) => (
@@ -242,220 +223,20 @@ const GiftCard: React.FC<GiftCardProps> = ({ gift }) => (
   </div>
 );
 
-const giftSchema = z.object({
-  giftName: z.string().min(2, "Gift name required"),
-  category: z.string().min(1, "Category required"),
-  diamonds: z.coerce.number().min(1, "Diamonds required"),
-  coinPrice: z.coerce.number().min(1, "Coin price required"),
-  previewImage: z.file(),
-  svgaImage: z.file(),
-});
 
-type GiftFormValues = z.infer<typeof giftSchema>;
-
-const CreateGiftForm: React.FC<
-  CreateGiftFormProps & {
-    // onCreateGift?: (body: any) => void;
-    isLoading?: boolean;
-  }
-> = ({ onSave, categories, addCategory }) => {
-  const [isCreatingCategory, setIsCreatingCategory] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState("");
-  const [createGift, { isLoading }] = useCreateGiftMutation();
-  const { data: giftCategories, isLoading: getCategoryLoading } =
-    useGetGiftCategoriesQuery(undefined);
-  console.log("giftCategories", giftCategories);
-  const form = useForm<z.infer<typeof giftSchema>>({
-    resolver: zodResolver(giftSchema),
-    defaultValues: {
-      giftName: "",
-      category: categories[0] || "",
-      diamonds: 0,
-      coinPrice: 0,
-      previewImage: undefined,
-      svgaImage: undefined,
-    },
-  });
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "create_new") {
-      setIsCreatingCategory(true);
-    } else {
-      form.setValue("category", e.target.value);
-      setIsCreatingCategory(false);
-    }
-  };
-
-  const handleCreateCategory = () => {
-    if (newCategoryName.trim()) {
-      addCategory(newCategoryName.trim());
-      form.setValue("category", newCategoryName.trim());
-      setIsCreatingCategory(false);
-      setNewCategoryName("");
-    }
-  };
-
-  const onSubmit = form.handleSubmit(async (values) => {
-    console.log({ values });
-    // if (onCreateGift) {
-    //   console.log("Hello")
-    //   onCreateGift(values);
-    // }
-    try {
-      const payload: TCreateGiftBody = {
-        giftName: values.giftName,
-        category: values.category,
-        coinPrice: values.coinPrice,
-        diamonds: values.diamonds,
-        previewImage: values.previewImage,
-        svgaImage: values.svgaImage,
-      };
-      if (!values.previewImage || !values.svgaImage) {
-        toast.error("Please upload both preview and SVGA images.");
-        return;
-      }
-      console.log("Creating gift with payload:", payload);
-      const response = await createGift(payload).unwrap();
-      console.log("response", response);
-      toast.success(response.message);
-
-      setTimeout(() => {
-        onclose;
-        form.reset();
-      }, 1500);
-    } catch (error: any) {
-      console.log(error);
-      toast.error(
-        error?.data?.message || "Failed to create gift. Please try again."
-      );
-    }
-  });
-
-  return (
-    <Form {...form}>
-      <form onSubmit={onSubmit} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="giftName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Gift Name</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="e.g., Golden Crown" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormItem>
-          <FormLabel>Category</FormLabel>
-          <FormControl>
-            <Select
-              value={form.watch("category")}
-              onChange={handleCategoryChange}
-              className="flex-grow"
-            >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-              <option value="create_new">+ Create New Category</option>
-            </Select>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-        {isCreatingCategory && (
-          <div className="flex gap-2 mt-2">
-            <Input
-              value={newCategoryName}
-              onChange={(e) => setNewCategoryName(e.target.value)}
-              placeholder="New category name"
-            />
-            <Button type="button" onClick={handleCreateCategory}>
-              Add
-            </Button>
-          </div>
-        )}
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="diamonds"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Diamonds</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} placeholder="500" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="coinPrice"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Coin Price</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} placeholder="1000" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <FormField
-          control={form.control}
-          name="previewImage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Preview Image</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => field.onChange(e.target.files?.[0])}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="svgaImage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>SVGA Image</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  accept=".svga"
-                  onChange={(e) => field.onChange(e.target.files?.[0])}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end gap-3 pt-4">
-          <Button type="button" variant="secondary" onClick={onSave}>
-            Cancel
-          </Button>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Creating..." : "Create Gift"}
-          </Button>
-        </div>
-      </form>
-    </Form>
-  );
-};
 
 export const GiftListsPage: React.FC<GiftListsPageProps> = ({
   backRoute = "/",
 }) => {
-  const [gifts, setGifts] = useState<Gift[]>(initialGifts);
+  const { data: giftCategories, isLoading: getCategoryLoading } =
+    useGetGiftCategoriesQuery(undefined);
+  const {data:allGiftData, isLoading} = useGetAllGiftsQuery(undefined)
+    
+
+    const initialCategories: string[] = giftCategories?.result || [];
+    console.log(initialCategories)
+    const gifts = allGiftData?.result || []
+  // const [gifts, setGifts] = useState<Gift[]>(initialGifts);
   const [categories, setCategories] = useState<string[]>(initialCategories);
   const [isCreateModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
@@ -469,6 +250,9 @@ export const GiftListsPage: React.FC<GiftListsPageProps> = ({
       setCategories((prev) => [...prev, newCategory]);
     }
   };
+
+
+  if(isLoading) return <p>Hello Loading</p>
 
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
@@ -509,6 +293,7 @@ export const GiftListsPage: React.FC<GiftListsPageProps> = ({
           onSave={() => setCreateModalOpen(false)}
           categories={categories}
           addCategory={addCategory}
+          getCategoryLoading={getCategoryLoading}
         />
       </Dialog>
     </div>

@@ -7,4 +7,5 @@ export interface ButtonProps {
   variant?: "primary" | "secondary" | "danger" | "success" | "info";
   className?: string;
   type?: "button" | "submit";
+  disabled?: boolean;
 }
