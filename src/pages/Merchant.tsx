@@ -1,12 +1,18 @@
-import { merchantData } from "@/assets/data/merchant-data";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { MerchantTable } from "@/components/pages/merchants/table-list";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
+import { useGetMerchantsQuery } from "@/redux/api/power-shared";
 import { useMemo, useState } from "react";
 
 const Merchant = () => {
   const [q, setQ] = useState("");
+
+  const { data: merchantRes, isLoading } = useGetMerchantsQuery({
+    page: 1,
+    limit: 200,
+  });
+  const merchantData = merchantRes?.result?.data || [];
   const filtered = useMemo(
     () =>
       merchantData.filter((u) => {
@@ -16,8 +22,10 @@ const Merchant = () => {
           (v || "").toLowerCase().includes(s)
         );
       }),
-    [q]
+    [merchantData, q]
   );
+
+  if (isLoading) return <div>Loading...</div>;
   const onCreate = () => {
     // Logic to handle user creation
     console.log("Create Merchant User button clicked");
@@ -47,7 +55,25 @@ const Merchant = () => {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {merchantData.length === 0 ? (
+        <div
+          style={{
+            padding: 48,
+            background: colors.card,
+            borderRadius: 12,
+            textAlign: "center",
+          }}
+        >
+          <p style={{ color: colors.textMuted, marginBottom: 16 }}>
+            No merchant found.
+            <br />
+            Please create a merchant to manage your platform.
+          </p>
+          <ActionTinyButton onClick={onCreate} variant="primary">
+            Create Merchant
+          </ActionTinyButton>
+        </div>
+      ) : filtered.length === 0 ? (
         <div
           style={{
             padding: 48,

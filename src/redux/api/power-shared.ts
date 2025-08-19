@@ -43,6 +43,37 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
+    getSubAdmins: builder.query<
+      TResponse<{ pagination: Tpagination; data: TUser[] }>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page = 1, limit = 10 } = {}) => ({
+        url: `/power-shared/portal/sub-admin?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
+    getMerchants: builder.query<
+      TResponse<{ pagination: Tpagination; data: TUser[] }>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page = 1, limit = 10 } = {}) => ({
+        url: `/power-shared/portal/merchant?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
+    getCountryAdmin: builder.query<
+      TResponse<{ pagination: Tpagination; data: TUser[] }>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page = 1, limit = 10 } = {}) => ({
+        url: `/power-shared/portal/country-admin?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
+    
   }),
 });
 
@@ -50,4 +81,7 @@ export const {
   useGetUsersQuery,
   useAsignCoinToUserByIdMutation,
   useSearchUsersByEmailQuery,
+  useGetSubAdminsQuery,
+  useGetMerchantsQuery,
+  useGetCountryAdminQuery,
 } = sharedPowerApi;

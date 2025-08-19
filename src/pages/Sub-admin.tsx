@@ -1,10 +1,10 @@
 // -----------------------------
 // Color palette & small helpers
 
-import { subAdminData } from "@/assets/data/sub-admin-data";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { SubAdminTable } from "@/components/pages/sub-admin/table-list";
 import { colors } from "@/constants/constant";
+import { useGetSubAdminsQuery } from "@/redux/api/power-shared";
 import { Dispatch, useMemo, useState } from "react";
 
 // -----------------------------
@@ -52,6 +52,12 @@ const SearchBar = ({
 
 const SubAdmin = () => {
   const [q, setQ] = useState("");
+  const { data: subAdminRes, isLoading } = useGetSubAdminsQuery({
+    page: 1,
+    limit: 200,
+  });
+  const subAdminData = subAdminRes?.result?.data || [];
+
   const filtered = useMemo(
     () =>
       subAdminData.filter((u) => {
@@ -61,8 +67,12 @@ const SubAdmin = () => {
           (v || "").toLowerCase().includes(s)
         );
       }),
-    [q]
+    [subAdminData, q]
   );
+
+  if (isLoading) {
+    return <div>Loading...</div>; // You can replace this with a spinner or skeleton loader
+  }
   const onCreate = () => {
     // Logic to handle user creation
     console.log("Create User button clicked");
@@ -92,7 +102,25 @@ const SubAdmin = () => {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {subAdminData.length === 0 ? (
+        <div
+          style={{
+            padding: 48,
+            background: colors.card,
+            borderRadius: 12,
+            textAlign: "center",
+          }}
+        >
+          <p style={{ color: colors.textMuted, marginBottom: 16 }}>
+            No sub-admins found.
+            <br />
+            Please create a sub-admin to manage your platform.
+          </p>
+          <ActionTinyButton onClick={onCreate} variant="primary">
+            Create Sub-admin
+          </ActionTinyButton>
+        </div>
+      ) : filtered.length === 0 ? (
         <div
           style={{
             padding: 48,

@@ -97,11 +97,11 @@ export const DashboardContent: FC<{
           value: staticStatesData.totalSubAdmin || 0,
           link: ClientRoutes.SubAdmins,
         },
-        {
-          title: "Total Agencies",
-          value: staticStatesData.totalAgency || 0,
-          link: ClientRoutes.Agencies,
-        },
+        // {
+        //   title: "Total Agencies",
+        //   value: staticStatesData.totalAgency || 0,
+        //   link: ClientRoutes.Agencies,
+        // },
         {
           title: "Total Merchants",
           value: staticStatesData.totalMerchant || 0,
@@ -157,11 +157,11 @@ export const DashboardContent: FC<{
           value: staticStatesData.totalUser,
           link: ClientRoutes.Users,
         },
-        {
-          title: "Total Agencies",
-          value: staticStatesData.totalAgency,
-          link: ClientRoutes.Agencies,
-        },
+        // {
+        //   title: "Total Agencies",
+        //   value: staticStatesData.totalAgency,
+        //   link: ClientRoutes.Agencies,
+        // },
         {
           title: "Total Resellers",
           value: staticStatesData.totalReseller,
