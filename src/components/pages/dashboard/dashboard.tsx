@@ -1,6 +1,6 @@
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { DashboardCard } from "@/components/cards/dashboard-card";
-import { ClientRoutes } from "@/constants/route.enum";
+import { ClientRoutes, Roles } from "@/constants/route.enum";
 import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
 import { useGetUsersQuery } from "@/redux/api/power-shared";
 
@@ -73,8 +73,12 @@ export const DashboardContent: FC<{
     totalMerchant:
       users?.result?.users.filter((user) => user.userRole === "merchant")
         .length || 0,
+    totalCountryAdmin:
+      users?.result?.users.filter(
+        (user) => user.userRole === Roles.CountryAdmin
+      ).length || 0,
     totalReseller:
-      users?.result?.users.filter((user) => user.userRole === "re-seller")
+      users?.result?.users.filter((user) => user.userRole === Roles.Reseller)
         .length || 0,
     totalCoin: 100,
     totalSpendCoin: 1,
@@ -108,10 +112,15 @@ export const DashboardContent: FC<{
           link: ClientRoutes.Merchants,
         },
         {
-          title: "Total Resellers",
-          value: staticStatesData.totalReseller || 0,
-          link: ClientRoutes.Resellers,
+          title: "Total Country Admins",
+          value: staticStatesData.totalCountryAdmin || 0,
+          link: ClientRoutes.CountryAdmins,
         },
+        // {
+        //   title: "Total Resellers",
+        //   value: staticStatesData.totalReseller || 0,
+        //   link: ClientRoutes.Resellers,
+        // },
       ],
       actions: [
         {
@@ -274,7 +283,7 @@ export const DashboardContent: FC<{
       {/* Stats Cards */}
       <div
         className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ${
-          role === "admin" ? "xl:grid-cols-5" : ""
+          role === Roles.Admin ? "xl:grid-cols-5" : ""
         } gap-6 mb-8`}
       >
         {config.stats.map((stat) => (
@@ -299,12 +308,14 @@ export const DashboardContent: FC<{
           </ActionTinyButton>
         ))}
 
-        <Link to={ClientRoutes.Gifts}>
-        <ActionTinyButton variant="info">
-          <Gift size={16} className="mr-2" />
-          Manage Gifts
-        </ActionTinyButton>
-        </Link>
+        {role === Roles.Admin && (
+          <Link to={ClientRoutes.Gifts}>
+            <ActionTinyButton variant="info">
+              <Gift size={16} className="mr-2" />
+              Manage Gifts
+            </ActionTinyButton>
+          </Link>
+        )}
       </div>
       {/* Data Lists (if any) */}
       {/* {config.lists && (

@@ -1,12 +1,17 @@
-import { countryAdminData } from "@/assets/data/country-admin";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { CountryAdminTable } from "@/components/pages/country-admin/table-list";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
+import { useGetMerchantsQuery } from "@/redux/api/power-shared";
 import { useMemo, useState } from "react";
 
 const CountryAdmin = () => {
   const [q, setQ] = useState("");
+  const { data: countryAdminRes, isLoading } = useGetMerchantsQuery({
+    page: 1,
+    limit: 200,
+  });
+  const countryAdminData = countryAdminRes?.result?.data || [];
   const filtered = useMemo(
     () =>
       countryAdminData.filter((u) => {
@@ -16,8 +21,11 @@ const CountryAdmin = () => {
           (v || "").toLowerCase().includes(s)
         );
       }),
-    [q]
+    [countryAdminData, q]
   );
+
+  if (isLoading) return <div>Loading...</div>;
+
   const onCreate = () => {
     // Logic to handle user creation
     console.log("Create CountryAdmin User button clicked");
@@ -47,7 +55,25 @@ const CountryAdmin = () => {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {countryAdminData.length === 0 ? (
+        <div
+          style={{
+            padding: 48,
+            background: colors.card,
+            borderRadius: 12,
+            textAlign: "center",
+          }}
+        >
+          <p style={{ color: colors.textMuted, marginBottom: 16 }}>
+            No country-admins found.
+            <br />
+            Please create a country-admin to manage your platform.
+          </p>
+          <ActionTinyButton onClick={onCreate} variant="primary">
+            Create country-admin
+          </ActionTinyButton>
+        </div>
+      ) : filtered.length === 0 ? (
         <div
           style={{
             padding: 48,

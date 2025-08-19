@@ -6,6 +6,7 @@ export enum ClientRoutes {
   Resellers = "/resellers",
   Hosts = "/hosts",
   Gifts = "/gifts",
+  CountryAdmins = "/country-admin",
 }
 
 export enum Roles {
