@@ -1,6 +1,6 @@
 import { TResponse } from "@/types/api";
 import { onuliveCloneDashboardBaseApi } from "./base.api";
-import { TLoginBody, TUser } from "@/types/api/auth";
+import { TCreatePortalRoleBody, TLoginBody, TUser } from "@/types/api/auth";
 import { tagTypes } from "../tag.types";
 
 type TLoginResponse = TResponse<TUser[]> & { access_token: string };
@@ -38,6 +38,16 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.giftCategory],
     }),
+
+    // creating portal user with role and permissions also
+    createPortalUser: builder.mutation({
+      query: (portalUserInfo: TCreatePortalRoleBody) => ({
+        url: "/admin/create-role",
+        method: "POST",
+        body: portalUserInfo,
+      }),
+      invalidatesTags: [tagTypes.user],
+    }),
   }),
 });
 
@@ -46,4 +56,5 @@ export const {
   useAdminRegisterMutation,
   useUpdateAdminMutation,
   useGetGiftCategoriesQuery,
+  useCreatePortalUserMutation
 } = authApi;

@@ -4,6 +4,7 @@ import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
 import { useGetMerchantsQuery } from "@/redux/api/power-shared";
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Merchant = () => {
   const [q, setQ] = useState("");
@@ -26,11 +27,7 @@ const Merchant = () => {
   );
 
   if (isLoading) return <div>Loading...</div>;
-  const onCreate = () => {
-    // Logic to handle user creation
-    console.log("Create Merchant User button clicked");
-    alert("Create Merchant User button clicked");
-  };
+
   return (
     <div>
       <div
@@ -49,9 +46,11 @@ const Merchant = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Merchant
-          </ActionTinyButton>
+          <Link to="/create-merchant">
+            <ActionTinyButton variant="primary">
+              Create Merchant
+            </ActionTinyButton>
+          </Link>
         </div>
       </div>
 
@@ -69,9 +68,11 @@ const Merchant = () => {
             <br />
             Please create a merchant to manage your platform.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Merchant
-          </ActionTinyButton>
+          <Link to="/create-merchant">
+            <ActionTinyButton variant="primary">
+              Create Merchant
+            </ActionTinyButton>
+          </Link>
         </div>
       ) : filtered.length === 0 ? (
         <div
@@ -85,9 +86,11 @@ const Merchant = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No merchant matched your search.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Merchant
-          </ActionTinyButton>
+          <Link to="/create-merchant">
+            <ActionTinyButton variant="primary">
+              Create Merchant
+            </ActionTinyButton>
+          </Link>
         </div>
       ) : (
         <MerchantTable data={merchantData} />

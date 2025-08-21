@@ -6,6 +6,7 @@ import { SubAdminTable } from "@/components/pages/sub-admin/table-list";
 import { colors } from "@/constants/constant";
 import { useGetSubAdminsQuery } from "@/redux/api/power-shared";
 import { Dispatch, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 // -----------------------------
 
@@ -73,11 +74,11 @@ const SubAdmin = () => {
   if (isLoading) {
     return <div>Loading...</div>; // You can replace this with a spinner or skeleton loader
   }
-  const onCreate = () => {
-    // Logic to handle user creation
-    console.log("Create User button clicked");
-    alert("Create User button clicked");
-  };
+  // const onCreate = () => {
+  //   // Logic to handle user creation
+  //   console.log("Create User button clicked");
+  //   alert("Create User button clicked");
+  // };
   return (
     <div>
       <div
@@ -96,9 +97,11 @@ const SubAdmin = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <ActionTinyButton onClick={onCreate} variant="primary">
+          <Link to="/create-sub-admin">
+          <ActionTinyButton variant="primary">
             Create Sub-admin
           </ActionTinyButton>
+          </Link>
         </div>
       </div>
 
@@ -116,9 +119,11 @@ const SubAdmin = () => {
             <br />
             Please create a sub-admin to manage your platform.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
+           <Link to="/create-sub-admin">
+          <ActionTinyButton variant="primary">
             Create Sub-admin
           </ActionTinyButton>
+          </Link>
         </div>
       ) : filtered.length === 0 ? (
         <div
@@ -132,9 +137,11 @@ const SubAdmin = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No sub-admin matched your search.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
+           <Link to="/create-sub-admin">
+          <ActionTinyButton variant="primary">
             Create Sub-admin
           </ActionTinyButton>
+          </Link>
         </div>
       ) : (
         <SubAdminTable data={subAdminData} />

@@ -2,12 +2,13 @@ import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { CountryAdminTable } from "@/components/pages/country-admin/table-list";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
-import { useGetMerchantsQuery } from "@/redux/api/power-shared";
+import { useGetCountryAdminQuery } from "@/redux/api/power-shared";
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 const CountryAdmin = () => {
   const [q, setQ] = useState("");
-  const { data: countryAdminRes, isLoading } = useGetMerchantsQuery({
+  const { data: countryAdminRes, isLoading } = useGetCountryAdminQuery({
     page: 1,
     limit: 200,
   });
@@ -26,11 +27,6 @@ const CountryAdmin = () => {
 
   if (isLoading) return <div>Loading...</div>;
 
-  const onCreate = () => {
-    // Logic to handle user creation
-    console.log("Create CountryAdmin User button clicked");
-    alert("Create CountryAdmin User button clicked");
-  };
   return (
     <div>
       <div
@@ -49,9 +45,11 @@ const CountryAdmin = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Country Admin
-          </ActionTinyButton>
+          <Link to="/create-country-admin">
+            <ActionTinyButton variant="primary">
+              Create Country Admin
+            </ActionTinyButton>
+          </Link>
         </div>
       </div>
 
@@ -69,9 +67,11 @@ const CountryAdmin = () => {
             <br />
             Please create a country-admin to manage your platform.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create country-admin
-          </ActionTinyButton>
+          <Link to="/create-country-admin">
+            <ActionTinyButton variant="primary">
+              Create Country Admin
+            </ActionTinyButton>
+          </Link>
         </div>
       ) : filtered.length === 0 ? (
         <div
@@ -85,9 +85,11 @@ const CountryAdmin = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No Country Admin matched your search.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Country Admin
-          </ActionTinyButton>
+          <Link to="/create-country-admin">
+            <ActionTinyButton variant="primary">
+              Create Country Admin
+            </ActionTinyButton>
+          </Link>
         </div>
       ) : (
         <CountryAdminTable data={countryAdminData} />

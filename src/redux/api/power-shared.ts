@@ -43,6 +43,8 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
+
+    // top portal management
     getSubAdmins: builder.query<
       TResponse<{ pagination: Tpagination; data: TUser[] }>,
       { page?: number; limit?: number }
@@ -73,7 +75,29 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
-    
+
+    // mid portal management
+    getAgenciesBySubAdminId: builder.query<
+      TResponse<{ pagination: Tpagination; data: TUser[] }>,
+      { subAdminId: string; page?: number; limit?: number }
+    >({
+      query: ({ subAdminId, page = 1, limit = 10 }) => ({
+        url: `/power-shared/portal/mid/agency/${subAdminId}?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
+
+    // getSubCountryAdminsByCountryAdminId: builder.query<
+    //   TResponse<{ pagination: Tpagination; data: TUser[] }>,
+    //   { merchantId:string, page?: number; limit?: number }
+    // >({
+    //   query: ({ merchantId, page = 1, limit = 10 }) => ({
+    //     url: `/power-shared/portal/mid/agency/${merchantId}?page=${page}&limit=${limit}`,
+    //     method: "GET",
+    //   }),
+    //   providesTags: [tagTypes.user],
+    // }),
   }),
 });
 
@@ -84,4 +108,5 @@ export const {
   useGetSubAdminsQuery,
   useGetMerchantsQuery,
   useGetCountryAdminQuery,
+  useGetAgenciesBySubAdminIdQuery,
 } = sharedPowerApi;

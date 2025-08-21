@@ -3,6 +3,8 @@ import { DashboardPage } from "@/pages";
 import AgencyById from "@/pages/AgencyById";
 import CountryAdmin from "@/pages/CountryAdmin";
 import CountryAdminById from "@/pages/CountryAdminById";
+import { CreateMerchantPage } from "@/pages/CreateMerchant";
+import { CreateSubAdminPage } from "@/pages/CreateSubAdmin";
 import { GiftListsPage } from "@/pages/GiftLIsts";
 import Merchant from "@/pages/Merchant";
 import MerchantById from "@/pages/MerchantById";
@@ -44,6 +46,16 @@ export const appRoutes = [
     roles: [Roles.Admin, Roles.CountryAdmin],
   },
   {
+    path: "/create-sub-admin",
+    element: <CreateSubAdminPage backRoute={"/"} />,
+    roles: [Roles.Admin],
+  },
+  {
+    path: "/create-merchant",
+    element: <CreateMerchantPage backRoute={"/"} />,
+    roles: [Roles.Admin],
+  },
+  {
     path: "/sub-admins",
     element: <SubAdmin />,
     roles: [Roles.Admin],
@@ -65,7 +77,7 @@ export const appRoutes = [
   },
   {
     path: "/gifts",
-    element: <GiftListsPage backRoute={'/'} />,
+    element: <GiftListsPage backRoute={"/"} />,
     roles: [Roles.Admin],
   },
 ];

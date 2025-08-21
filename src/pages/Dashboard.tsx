@@ -2,7 +2,7 @@ import { ModalDialog } from "@/components/dialog/modal-dialog";
 import { BlockUserForm } from "@/components/forms/block-user-form";
 import { CreateAgencyForm } from "@/components/forms/create-agency-form";
 import { CreateHostForm } from "@/components/forms/create-host-form";
-import { CreateMerchangeForm } from "@/components/forms/create-merchant-form";
+import { CreateMerchantForm } from "@/components/forms/create-merchant-form";
 import { CreateReselerForm } from "@/components/forms/create-reseler-form";
 import { CreateSubAdmin } from "@/components/forms/create-sub-admin";
 import { RemoveHostForm } from "@/components/forms/remove-host-form";
@@ -29,7 +29,7 @@ const modalContentConfig: Record<ModalName, ModalContentConfig> = {
   },
   createMerchant: {
     title: "Create Merchant",
-    content: <CreateMerchangeForm />,
+    content: <CreateMerchantForm />,
   },
   createReseller: {
     title: "Create Reseller",
