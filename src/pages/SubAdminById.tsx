@@ -1,13 +1,13 @@
 // -----------------------------
 // Color palette & small helpers
 
-import { agencyData } from "@/assets/data/agency-data";
-import { subAdminData } from "@/assets/data/sub-admin-data";
+
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { AgencyTable } from "@/components/pages/sub-admin-by-id/table-list";
 import { colors } from "@/constants/constant";
+import { useGetAgenciesBySubAdminIdQuery } from "@/redux/api/power-shared";
 import { Dispatch, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // -----------------------------
 
@@ -53,7 +53,15 @@ const SearchBar = ({
 );
 
 const SubAdminById = () => {
+  const { subAdminId } = useParams();
+
   const [q, setQ] = useState("");
+
+  const { data: subAdminRes, isLoading } = useGetAgenciesBySubAdminIdQuery({
+    subAdminId: subAdminId!,
+  });
+
+  const subAdminData = subAdminRes?.result?.data || [];
   const filtered = useMemo(
     () =>
       subAdminData.filter((u) => {
@@ -66,6 +74,10 @@ const SubAdminById = () => {
     [q]
   );
 
+  if (!subAdminId) {
+    return <div>Sub Admin ID is required</div>;
+  }
+  if (isLoading) return <div> Agency Lists is Loading...</div>;
   return (
     <div>
       <div
@@ -84,7 +96,7 @@ const SubAdminById = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <Link to="/create-agency">
+          <Link to={`/create-agency/${subAdminId}`}>
             <ActionTinyButton variant="primary">Create Agency</ActionTinyButton>
           </Link>
         </div>
@@ -102,12 +114,12 @@ const SubAdminById = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No agency matched your search.
           </p>
-          <Link to="/create-agency">
+          <Link to={`/create-agency/${subAdminId}`}>
             <ActionTinyButton variant="primary">Create Agency</ActionTinyButton>
           </Link>
         </div>
       ) : (
-        <AgencyTable data={agencyData} />
+        <AgencyTable data={filtered} />
       )}
     </div>
   );

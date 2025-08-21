@@ -7,10 +7,10 @@ export type Role = "admin" | "sub-admin" | "agency" | "merchant" | "re-seller";
 // Extend this as you add more modals
 export type ModalName =
   | "sellCoin"
-  | "createSubAdmin"
-  | "createMerchant"
+  // | "createSubAdmin"
+  // | "createMerchant"
   | "createReseller"
-  | "createAgency"
+  // | "createAgency"
   | "createHost"
   | "removeHost"
   | "blockUser"

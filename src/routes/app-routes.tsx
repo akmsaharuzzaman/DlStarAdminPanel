@@ -3,6 +3,7 @@ import { DashboardPage } from "@/pages";
 import AgencyById from "@/pages/AgencyById";
 import CountryAdmin from "@/pages/CountryAdmin";
 import CountryAdminById from "@/pages/CountryAdminById";
+import { CreateAgencyPage } from "@/pages/CreateAgency";
 import { CreateCountryAdminPage } from "@/pages/CreateCountryAdmin";
 import { CreateMerchantPage } from "@/pages/CreateMerchant";
 import { CreateSubAdminPage } from "@/pages/CreateSubAdmin";
@@ -31,6 +32,7 @@ export const appRoutes = [
     element: <AgencyById />,
     roles: [Roles.Admin, Roles.SubAdmin, Roles.Agency],
   },
+  // Admin and sub-admin's routes
   {
     path: "/sub-admins/:subAdminId", // show agency lists on table format by subAdminId
     element: <SubAdminById />,
@@ -41,6 +43,13 @@ export const appRoutes = [
     element: <Users />,
     roles: [Roles.Admin, Roles.SubAdmin],
   },
+   {
+    path: "/create-agency/:subAdminId",
+    element: <CreateAgencyPage backRoute={"/"} />,
+    roles: [Roles.Admin, Roles.SubAdmin],
+  },
+
+  // Admin and Country-admin's routes
   {
     path: "/sub-country-admin/:countryAdminId", // show country-admin details by countryAdminId
     element: <CountryAdminById />,
