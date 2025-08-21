@@ -7,6 +7,7 @@ import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { AgencyTable } from "@/components/pages/sub-admin-by-id/table-list";
 import { colors } from "@/constants/constant";
 import { Dispatch, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 // -----------------------------
 
@@ -64,11 +65,7 @@ const SubAdminById = () => {
       }),
     [q]
   );
-  const onCreate = () => {
-    // Logic to handle user creation
-    console.log("Create User button clicked");
-    alert("Create User button clicked");
-  };
+
   return (
     <div>
       <div
@@ -87,9 +84,9 @@ const SubAdminById = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Agency
-          </ActionTinyButton>
+          <Link to="/create-agency">
+            <ActionTinyButton variant="primary">Create Agency</ActionTinyButton>
+          </Link>
         </div>
       </div>
 
@@ -105,9 +102,9 @@ const SubAdminById = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No agency matched your search.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Agency
-          </ActionTinyButton>
+          <Link to="/create-agency">
+            <ActionTinyButton variant="primary">Create Agency</ActionTinyButton>
+          </Link>
         </div>
       ) : (
         <AgencyTable data={agencyData} />
