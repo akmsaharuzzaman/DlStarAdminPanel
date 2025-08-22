@@ -1,10 +1,5 @@
 import { ModalDialog } from "@/components/dialog/modal-dialog";
-import { BlockUserForm } from "@/components/forms/block-user-form";
 
-import { CreateHostForm } from "@/components/forms/create-host-form";
-import { CreateReselerForm } from "@/components/forms/create-reseler-form";
-
-import { RemoveHostForm } from "@/components/forms/remove-host-form";
 import { SellCoinForm } from "@/components/forms/sell-coin-form";
 import { DashboardContent } from "@/components/pages/dashboard/dashboard";
 import { RoleContext } from "@/provider/role-provider";
@@ -30,34 +25,34 @@ const modalContentConfig: Record<ModalName, ModalContentConfig> = {
   //   title: "Create Merchant",
   //   content: <CreateMerchantForm />,
   // },
-  createReseller: {
-    title: "Create Reseller",
-    content: <CreateReselerForm />,
-  },
+  // createReseller: {
+  //   title: "Create Reseller",
+  //   content: <CreateReselerForm />,
+  // },
   // createAgency: {
   //   title: "Create Agency",
   //   content: <CreateAgencyForm />,
   // },
-  createHost: {
-    title: "Create Host",
-    content: <CreateHostForm />,
-  },
-  removeHost: {
-    title: "Remove Host",
-    content: <RemoveHostForm />,
-  },
-  blockUser: {
-    title: "Block User",
-    content: <BlockUserForm />,
-  },
-  blockedUsers: {
-    title: "Blocked Users",
-    content: <p>List of blocked users.</p>,
-  },
-  history: {
-    title: "Transaction History",
-    content: <p>Display coin send and receive history.</p>,
-  },
+  // createHost: {
+  //   title: "Create Host",
+  //   content: <CreateHostForm />,
+  // },
+  // removeHost: {
+  //   title: "Remove Host",
+  //   content: <RemoveHostForm />,
+  // },
+  // blockUser: {
+  //   title: "Block User",
+  //   content: <BlockUserForm />,
+  // },
+  // blockedUsers: {
+  //   title: "Blocked Users",
+  //   content: <p>List of blocked users.</p>,
+  // },
+  // history: {
+  //   title: "Transaction History",
+  //   content: <p>Display coin send and receive history.</p>,
+  // },
 };
 export const DashboardPage: FC = () => {
   const context = useContext(RoleContext);

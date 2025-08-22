@@ -6,17 +6,7 @@ import { useGetUsersQuery } from "@/redux/api/power-shared";
 
 import { ButtonProps } from "@/types/buttons";
 import { ModalName, Role } from "@/types/pages/dashboard";
-import {
-  Coins,
-  Gift,
-  History,
-  ListX,
-  LucideIcon,
-  UserCog,
-  UserMinus,
-  UserPlus,
-  UserX,
-} from "lucide-react";
+import { Coins, Gift, LucideIcon } from "lucide-react";
 import { FC, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -129,25 +119,25 @@ export const DashboardContent: FC<{
         },
         // { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
         // { label: "Create Merchant", icon: Store, modal: "createMerchant" },
-        { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
-        {
-          label: "Block User",
-          icon: UserX,
-          variant: "danger",
-          modal: "blockUser",
-        },
-        {
-          label: "History",
-          icon: History,
-          variant: "secondary",
-          modal: "history",
-        },
-        {
-          label: "Blocked Users",
-          icon: ListX,
-          variant: "secondary",
-          modal: "blockedUsers",
-        },
+        // { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
+        // {
+        //   label: "Block User",
+        //   icon: UserX,
+        //   variant: "danger",
+        //   modal: "blockUser",
+        // },
+        // {
+        //   label: "History",
+        //   icon: History,
+        //   variant: "secondary",
+        //   modal: "history",
+        // },
+        // {
+        //   label: "Blocked Users",
+        //   icon: ListX,
+        //   variant: "secondary",
+        //   modal: "blockedUsers",
+        // },
       ],
       lists: [
         { title: "User List", emptyText: "User data would appear here." },
@@ -183,18 +173,18 @@ export const DashboardContent: FC<{
           modal: "sellCoin",
         },
         // { label: "Create Agency", icon: Building, modal: "createAgency" },
-        {
-          label: "Block User",
-          icon: UserX,
-          variant: "danger",
-          modal: "blockUser",
-        },
-        {
-          label: "History",
-          icon: History,
-          variant: "secondary",
-          modal: "history",
-        },
+        // {
+        //   label: "Block User",
+        //   icon: UserX,
+        //   variant: "danger",
+        //   modal: "blockUser",
+        // },
+        // {
+        //   label: "History",
+        //   icon: History,
+        //   variant: "secondary",
+        //   modal: "history",
+        // },
       ],
       lists: [
         { title: "User List", emptyText: "User data would appear here." },
@@ -206,13 +196,13 @@ export const DashboardContent: FC<{
         { title: "Total Hosts", value: "150", link: ClientRoutes.Hosts },
       ],
       actions: [
-        { label: "Create Host", icon: UserPlus, modal: "createHost" },
-        {
-          label: "Remove Host",
-          icon: UserMinus,
-          variant: "danger",
-          modal: "removeHost",
-        },
+        // { label: "Create Host", icon: UserPlus, modal: "createHost" },
+        // {
+        //   label: "Remove Host",
+        //   icon: UserMinus,
+        //   variant: "danger",
+        //   modal: "removeHost",
+        // },
       ],
       lists: [
         { title: "Host List", emptyText: "Host data would appear here." },
@@ -233,13 +223,13 @@ export const DashboardContent: FC<{
           variant: "success",
           modal: "sellCoin",
         },
-        { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
-        {
-          label: "History",
-          icon: History,
-          variant: "secondary",
-          modal: "history",
-        },
+        // { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
+        // {
+        //   label: "History",
+        //   icon: History,
+        //   variant: "secondary",
+        // modal: "history",
+        // },
       ],
       lists: [
         {
@@ -260,12 +250,12 @@ export const DashboardContent: FC<{
           variant: "success",
           modal: "sellCoin",
         },
-        {
-          label: "History",
-          icon: History,
-          variant: "secondary",
-          modal: "history",
-        },
+        // {
+        //   label: "History",
+        //   icon: History,
+        //   variant: "secondary",
+        //   modal: "history",
+        // },
       ],
       // No lists for re-seller
     },

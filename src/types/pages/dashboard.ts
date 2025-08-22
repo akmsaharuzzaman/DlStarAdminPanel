@@ -9,13 +9,13 @@ export type ModalName =
   | "sellCoin"
   // | "createSubAdmin"
   // | "createMerchant"
-  | "createReseller"
+  // | "createReseller"
   // | "createAgency"
-  | "createHost"
-  | "removeHost"
-  | "blockUser"
-  | "blockedUsers"
-  | "history";
+  // | "createHost"
+  // | "removeHost"
+  // | "blockUser"
+  // | "blockedUsers"
+  // | "history";
 
 // Modal content config
 export interface ModalContentConfig {
