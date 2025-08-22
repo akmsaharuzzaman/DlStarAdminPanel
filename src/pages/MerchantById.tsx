@@ -1,23 +1,28 @@
-import { resellerData } from "@/assets/data/reseller-data";
+import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { MerchantByIdTable } from "@/components/pages/merchants-by-id/table-list";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
-import { useMemo, useState } from "react";
+import { ClientRoutes, Roles } from "@/constants/route.enum";
+import { useGetMidPortalManagementQuery } from "@/redux/api/power-shared";
+import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 const MerchantById = () => {
   const [q, setQ] = useState("");
-  const filtered = useMemo(
-    () =>
-      resellerData.filter((u) => {
-        const s = q.trim().toLowerCase();
-        if (!s) return true;
-        return [u.name, u.email, u.uid].some((v) =>
-          (v || "").toLowerCase().includes(s)
-        );
-      }),
-    [q]
-  );
 
+  const { merchantId } = useParams();
+  const {
+    data: resellerRes,
+    error,
+    isLoading,
+  } = useGetMidPortalManagementQuery({
+    type: Roles.Reseller,
+    id: merchantId!,
+    searchTerm: q,
+  });
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error occurred: {(error as any).message}</div>;
+  const resellerData = resellerRes?.result?.data || [];
   return (
     <div>
       <div
@@ -36,10 +41,15 @@ const MerchantById = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
+          <Link to={`${ClientRoutes.CreateReseller}${merchantId}`}>
+            <ActionTinyButton variant="primary">
+              Create Reseller
+            </ActionTinyButton>
+          </Link>
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {resellerData.length === 0 ? (
         <div
           style={{
             padding: 48,
@@ -49,8 +59,16 @@ const MerchantById = () => {
           }}
         >
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
-            No reseller matched your search.
+            <p className="w-1/2 mx-auto">
+              "No resellers matched your search. You can create a new reseller
+              by clicking the button below."
+            </p>
           </p>
+          <Link to={`${ClientRoutes.CreateReseller}/${merchantId}`}>
+            <ActionTinyButton variant="primary">
+              Create Reseller
+            </ActionTinyButton>
+          </Link>
         </div>
       ) : (
         <MerchantByIdTable data={resellerData} />

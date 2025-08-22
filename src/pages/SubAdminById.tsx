@@ -4,7 +4,7 @@
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { AgencyTable } from "@/components/pages/sub-admin-by-id/table-list";
 import { colors } from "@/constants/constant";
-import { Roles } from "@/constants/route.enum";
+import { ClientRoutes, Roles } from "@/constants/route.enum";
 import { useGetMidPortalManagementQuery } from "@/redux/api/power-shared";
 import { Dispatch, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -98,7 +98,7 @@ const SubAdminById = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <Link to={`/create-agency/${subAdminId}`}>
+          <Link to={`${ClientRoutes.CreateAgency}/${subAdminId}`}>
             <ActionTinyButton variant="primary">Create Agency</ActionTinyButton>
           </Link>
         </div>
@@ -116,7 +116,7 @@ const SubAdminById = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No agency matched your search.
           </p>
-          <Link to={`/create-agency/${subAdminId}`}>
+          <Link to={`${ClientRoutes.CreateAgency}/${subAdminId}`}>
             <ActionTinyButton variant="primary">Create Agency</ActionTinyButton>
           </Link>
         </div>
