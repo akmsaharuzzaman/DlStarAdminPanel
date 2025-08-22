@@ -3,6 +3,7 @@ import { onuliveCloneDashboardBaseApi } from "./base.api";
 import { TUser } from "@/types/api/auth";
 import { TAsignCoinToUserRequestBody, TUserRewards } from "@/types/api/user";
 import { tagTypes } from "../tag.types";
+import { Roles } from "@/constants/route.enum";
 
 type TGetUserResponse = TResponse<{ pagination: Tpagination; users: TUser[] }>;
 type TAsignCoinToUserResponse = TResponse<TUserRewards>;
@@ -77,14 +78,28 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
     }),
 
     // mid portal management
-    getAgenciesBySubAdminId: builder.query<
-      TResponse<{ pagination: Tpagination; data: TUser[] }>,
-      { subAdminId: string; page?: number; limit?: number }
+    getMidPortalManagement: builder.query<
+      TResponse<{ data: TUser[]; pagination: Tpagination }>,
+      {
+        type: Roles;
+        id: string;
+        searchTerm?: string;
+        page?: number;
+        limit?: number;
+      }
     >({
-      query: ({ subAdminId, page = 1, limit = 10 }) => ({
-        url: `/power-shared/portal/mid/agency/${subAdminId}?page=${page}&limit=${limit}`,
-        method: "GET",
-      }),
+      query: ({ type, id, searchTerm, page = 1, limit = 200 }) => {
+        const url = `/power-shared/portal/mid/${type}/${id}`;
+        const params = new URLSearchParams();
+
+        if (searchTerm) {
+          params.append("searchTerm", searchTerm);
+        }
+        return {
+          url: `${url}?${params.toString()}&page=${page}&limit=${limit}`,
+          method: "GET",
+        };
+      },
       providesTags: [tagTypes.user],
     }),
 
@@ -108,5 +123,5 @@ export const {
   useGetSubAdminsQuery,
   useGetMerchantsQuery,
   useGetCountryAdminQuery,
-  useGetAgenciesBySubAdminIdQuery,
+  useGetMidPortalManagementQuery,
 } = sharedPowerApi;

@@ -7,13 +7,11 @@ import { useGetUsersQuery } from "@/redux/api/power-shared";
 import { ButtonProps } from "@/types/buttons";
 import { ModalName, Role } from "@/types/pages/dashboard";
 import {
-  Building,
   Coins,
   Gift,
   History,
   ListX,
   LucideIcon,
-  Store,
   UserCog,
   UserMinus,
   UserPlus,
@@ -129,8 +127,8 @@ export const DashboardContent: FC<{
           variant: "success",
           modal: "sellCoin",
         },
-        { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
-        { label: "Create Merchant", icon: Store, modal: "createMerchant" },
+        // { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
+        // { label: "Create Merchant", icon: Store, modal: "createMerchant" },
         { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
         {
           label: "Block User",
@@ -184,7 +182,7 @@ export const DashboardContent: FC<{
           variant: "success",
           modal: "sellCoin",
         },
-        { label: "Create Agency", icon: Building, modal: "createAgency" },
+        // { label: "Create Agency", icon: Building, modal: "createAgency" },
         {
           label: "Block User",
           icon: UserX,

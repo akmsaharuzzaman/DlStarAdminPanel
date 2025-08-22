@@ -1,12 +1,12 @@
 // -----------------------------
 // Color palette & small helpers
 
-
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { AgencyTable } from "@/components/pages/sub-admin-by-id/table-list";
 import { colors } from "@/constants/constant";
-import { useGetAgenciesBySubAdminIdQuery } from "@/redux/api/power-shared";
-import { Dispatch, useMemo, useState } from "react";
+import { Roles } from "@/constants/route.enum";
+import { useGetMidPortalManagementQuery } from "@/redux/api/power-shared";
+import { Dispatch, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 // -----------------------------
@@ -57,22 +57,24 @@ const SubAdminById = () => {
 
   const [q, setQ] = useState("");
 
-  const { data: subAdminRes, isLoading } = useGetAgenciesBySubAdminIdQuery({
-    subAdminId: subAdminId!,
+  const { data: subAdminRes, isLoading } = useGetMidPortalManagementQuery({
+    type: Roles.Agency,
+    id: subAdminId!,
+    searchTerm: q,
   });
 
   const subAdminData = subAdminRes?.result?.data || [];
-  const filtered = useMemo(
-    () =>
-      subAdminData.filter((u) => {
-        const s = q.trim().toLowerCase();
-        if (!s) return true;
-        return [u.name, u.email, u.uid].some((v) =>
-          (v || "").toLowerCase().includes(s)
-        );
-      }),
-    [q]
-  );
+  // const filtered = useMemo(
+  //   () =>
+  //     subAdminData.filter((u) => {
+  //       const s = q.trim().toLowerCase();
+  //       if (!s) return true;
+  //       return [u.name, u.email, u.uid].some((v) =>
+  //         (v || "").toLowerCase().includes(s)
+  //       );
+  //     }),
+  //   [q]
+  // );
 
   if (!subAdminId) {
     return <div>Sub Admin ID is required</div>;
@@ -102,7 +104,7 @@ const SubAdminById = () => {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {subAdminData.length === 0 ? (
         <div
           style={{
             padding: 48,
@@ -119,7 +121,7 @@ const SubAdminById = () => {
           </Link>
         </div>
       ) : (
-        <AgencyTable data={filtered} />
+        <AgencyTable data={subAdminData} />
       )}
     </div>
   );
