@@ -6,11 +6,15 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { TUser } from "@/types/api/auth";
-import { useAsignCoinToUserByIdMutation, useSearchUsersByEmailQuery } from "@/redux/api/power-shared";
+import {
+  useAsignCoinToUserByIdMutation,
+  useSearchUsersByEmailQuery,
+} from "@/redux/api/power-shared";
 
 const sellCoinSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
   coinAmount: z.number().min(1, "Amount must be at least 1"),
+  userRole: z.string().min(1, "User role is required"), // This will be set internally
 });
 
 type SellCoinFormValues = z.infer<typeof sellCoinSchema>;
@@ -64,6 +68,7 @@ export function SellCoinDialog({ open, onClose }: SellCoinDialogProps) {
       const payload = {
         userId: data.userId,
         coins: data.coinAmount,
+        userRole: data.userRole || "user", // Default to "user" if not set
       };
 
       const response = await asignCoinToUser(payload).unwrap();
@@ -130,6 +135,7 @@ export function SellCoinDialog({ open, onClose }: SellCoinDialogProps) {
                         onClick={() => {
                           setValue("userId", user._id);
                           setSearchName(user.name);
+                          setValue("userRole", user.userRole); // Set the user role here
                         }}
                       >
                         {user.avatar ? (
