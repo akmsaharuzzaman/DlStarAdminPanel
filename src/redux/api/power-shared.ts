@@ -50,7 +50,7 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       TResponse<{ pagination: Tpagination; data: TUser[] }>,
       { page?: number; limit?: number }
     >({
-      query: ({ page = 1, limit = 10 } = {}) => ({
+      query: ({ page = 1, limit = 9999 } = {}) => ({
         url: `/power-shared/portal/sub-admin?page=${page}&limit=${limit}`,
         method: "GET",
       }),
@@ -60,7 +60,7 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       TResponse<{ pagination: Tpagination; data: TUser[] }>,
       { page?: number; limit?: number }
     >({
-      query: ({ page = 1, limit = 10 } = {}) => ({
+      query: ({ page = 1, limit = 9999 } = {}) => ({
         url: `/power-shared/portal/merchant?page=${page}&limit=${limit}`,
         method: "GET",
       }),
@@ -70,7 +70,7 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       TResponse<{ pagination: Tpagination; data: TUser[] }>,
       { page?: number; limit?: number }
     >({
-      query: ({ page = 1, limit = 10 } = {}) => ({
+      query: ({ page = 1, limit = 9999 } = {}) => ({
         url: `/power-shared/portal/country-admin?page=${page}&limit=${limit}`,
         method: "GET",
       }),
@@ -88,7 +88,7 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         limit?: number;
       }
     >({
-      query: ({ type, id, searchTerm, page = 1, limit = 200 }) => {
+      query: ({ type, id, searchTerm, page = 1, limit = 9999 }) => {
         const url = `/power-shared/portal/mid/${type}/${id}`;
         const params = new URLSearchParams();
 

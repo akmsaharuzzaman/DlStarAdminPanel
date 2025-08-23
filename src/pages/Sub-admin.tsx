@@ -53,10 +53,7 @@ const SearchBar = ({
 
 const SubAdmin = () => {
   const [q, setQ] = useState("");
-  const { data: subAdminRes, isLoading } = useGetSubAdminsQuery({
-    page: 1,
-    limit: 200,
-  });
+  const { data: subAdminRes, isLoading } = useGetSubAdminsQuery({});
   const subAdminData = subAdminRes?.result?.data || [];
 
   const filtered = useMemo(
@@ -98,9 +95,9 @@ const SubAdmin = () => {
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
           <Link to="/create-sub-admin">
-          <ActionTinyButton variant="primary">
-            Create Sub-admin
-          </ActionTinyButton>
+            <ActionTinyButton variant="primary">
+              Create Sub-admin
+            </ActionTinyButton>
           </Link>
         </div>
       </div>
@@ -119,10 +116,10 @@ const SubAdmin = () => {
             <br />
             Please create a sub-admin to manage your platform.
           </p>
-           <Link to="/create-sub-admin">
-          <ActionTinyButton variant="primary">
-            Create Sub-admin
-          </ActionTinyButton>
+          <Link to="/create-sub-admin">
+            <ActionTinyButton variant="primary">
+              Create Sub-admin
+            </ActionTinyButton>
           </Link>
         </div>
       ) : filtered.length === 0 ? (
@@ -137,10 +134,10 @@ const SubAdmin = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No sub-admin matched your search.
           </p>
-           <Link to="/create-sub-admin">
-          <ActionTinyButton variant="primary">
-            Create Sub-admin
-          </ActionTinyButton>
+          <Link to="/create-sub-admin">
+            <ActionTinyButton variant="primary">
+              Create Sub-admin
+            </ActionTinyButton>
           </Link>
         </div>
       ) : (

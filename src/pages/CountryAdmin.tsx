@@ -8,10 +8,7 @@ import { Link } from "react-router-dom";
 
 const CountryAdmin = () => {
   const [q, setQ] = useState("");
-  const { data: countryAdminRes, isLoading } = useGetCountryAdminQuery({
-    page: 1,
-    limit: 200,
-  });
+  const { data: countryAdminRes, isLoading } = useGetCountryAdminQuery({});
   const countryAdminData = countryAdminRes?.result?.data || [];
   const filtered = useMemo(
     () =>

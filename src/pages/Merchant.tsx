@@ -9,10 +9,7 @@ import { Link } from "react-router-dom";
 const Merchant = () => {
   const [q, setQ] = useState("");
 
-  const { data: merchantRes, isLoading } = useGetMerchantsQuery({
-    page: 1,
-    limit: 200,
-  });
+  const { data: merchantRes, isLoading } = useGetMerchantsQuery({});
   const merchantData = merchantRes?.result?.data || [];
   const filtered = useMemo(
     () =>
