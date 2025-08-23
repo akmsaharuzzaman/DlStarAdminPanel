@@ -5,13 +5,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import {
   Form,
   FormControl,
   FormField,
@@ -30,7 +23,7 @@ const formSchema = z.object({
   userId: z.string().min(2, "Email/User ID is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   designation: z.string().min(2, "Designation is required"),
-  parentCreator: z.string().optional(),
+  // parentCreator: z.string().optional(),
   userRole: z.string().min(2, "User Role is required"),
   userPermissions: z.array(z.string()).optional(),
 });
@@ -46,7 +39,7 @@ export function CreateSubAdmin() {
       userId: "",
       password: "",
       designation: "",
-      parentCreator: "",
+      // parentCreator: "",
       userRole: Roles.SubAdmin,
       userPermissions: [],
     },
@@ -62,12 +55,12 @@ export function CreateSubAdmin() {
         password: values.password,
         designation: values.designation,
         userRole: values.userRole,
-        parentCreator: values.parentCreator,
+        // parentCreator: values.parentCreator,
         userPermissions: values.userPermissions,
       };
-      if(values.parentCreator===""){
-        delete body.parentCreator
-      }
+      // if (values.parentCreator === "") {
+      //   delete body.parentCreator;
+      // }
 
       const res = await createPortalUser(body);
       if (res.error) {
@@ -156,7 +149,7 @@ export function CreateSubAdmin() {
             />
 
             {/* Parent Creator (Select) */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="parentCreator"
               render={({ field }) => (
@@ -168,7 +161,7 @@ export function CreateSubAdmin() {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select parent creator" />
+                        <SelectValue placeholder="Skip parent creator" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -182,10 +175,10 @@ export function CreateSubAdmin() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* User Role (disabled) */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="userRole"
               render={({ field }) => (
@@ -197,7 +190,7 @@ export function CreateSubAdmin() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* Permissions (full-width row) */}
             <div className="md:col-span-2">
