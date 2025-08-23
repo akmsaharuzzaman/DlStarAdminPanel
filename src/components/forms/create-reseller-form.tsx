@@ -38,7 +38,11 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 // TODO: change the directive name of "Merchant"
-export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
+export function CreateResellerForm({
+  parentCreator,
+}: {
+  parentCreator: string;
+}) {
   const [createPortalUser, { isLoading }] = useCreatePortalUserMutation();
 
   const form = useForm<FormValues>({
@@ -49,7 +53,7 @@ export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
       password: "",
       designation: "",
       parentCreator: parentCreator || "",
-      userRole: Roles.Agency,
+      userRole: Roles.Reseller,
       userPermissions: [],
     },
   });
@@ -79,14 +83,14 @@ export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
         throw res.error;
       }
       // TODO: change the directive name of "Merchant"
-      toast.success(res?.data?.message || "Merchant created successfully");
+      toast.success(res?.data?.message || "Reseller created successfully");
 
       form.reset();
     } catch (error: any) {
-      // TODO: change the directive name of "Merchant"
+      // TODO: change the directive name of "Reseller"
 
       toast.error(
-        error.data.message || error.message || "Failed to create merchant"
+        error.data.message || error.message || "Failed to create reseller"
       );
     }
   };
@@ -290,7 +294,7 @@ export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
               >
                 {/* TODO: change the directive name of "Merchant" */}
 
-                {isLoading ? "Creating..." : "Create Agency"}
+                {isLoading ? "Creating..." : "Create Reseller"}
               </ActionTinyButton>
             </div>
           </form>

@@ -3,6 +3,11 @@ import { DashboardPage } from "@/pages";
 import AgencyById from "@/pages/AgencyById";
 import CountryAdmin from "@/pages/CountryAdmin";
 import CountryAdminById from "@/pages/CountryAdminById";
+import { CreateAgencyPage } from "@/pages/CreateAgency";
+import { CreateCountryAdminPage } from "@/pages/CreateCountryAdmin";
+import { CreateMerchantPage } from "@/pages/CreateMerchant";
+import { CreateResellerPage } from "@/pages/CreateReseller";
+import { CreateSubAdminPage } from "@/pages/CreateSubAdmin";
 import { GiftListsPage } from "@/pages/GiftLIsts";
 import Merchant from "@/pages/Merchant";
 import MerchantById from "@/pages/MerchantById";
@@ -28,6 +33,7 @@ export const appRoutes = [
     element: <AgencyById />,
     roles: [Roles.Admin, Roles.SubAdmin, Roles.Agency],
   },
+  // Admin and sub-admin's routes
   {
     path: "/sub-admins/:subAdminId", // show agency lists on table format by subAdminId
     element: <SubAdminById />,
@@ -38,10 +44,37 @@ export const appRoutes = [
     element: <Users />,
     roles: [Roles.Admin, Roles.SubAdmin],
   },
+   {
+    path: "/create-agency/:subAdminId",
+    element: <CreateAgencyPage backRoute={"/"} />,
+    roles: [Roles.Admin, Roles.SubAdmin],
+  },
+
+  // Admin and Country-admin's routes
   {
     path: "/sub-country-admin/:countryAdminId", // show country-admin details by countryAdminId
     element: <CountryAdminById />,
     roles: [Roles.Admin, Roles.CountryAdmin],
+  },
+  {
+    path: "/create-sub-admin",
+    element: <CreateSubAdminPage backRoute={"/"} />,
+    roles: [Roles.Admin],
+  },
+  {
+    path: "/create-merchant",
+    element: <CreateMerchantPage backRoute={"/"} />,
+    roles: [Roles.Admin],
+  },
+  {
+    path: "/create-country-admin",
+    element: <CreateCountryAdminPage backRoute={"/"} />,
+    roles: [Roles.Admin],
+  },
+   {
+    path: "/create-reseller/:merchantId",
+    element: <CreateResellerPage backRoute={"/"} />,
+    roles: [Roles.Admin],
   },
   {
     path: "/sub-admins",
@@ -65,7 +98,7 @@ export const appRoutes = [
   },
   {
     path: "/gifts",
-    element: <GiftListsPage backRoute={'/'} />,
+    element: <GiftListsPage backRoute={"/"} />,
     roles: [Roles.Admin],
   },
 ];

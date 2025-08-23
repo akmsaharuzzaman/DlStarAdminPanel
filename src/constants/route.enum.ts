@@ -6,12 +6,22 @@ export enum ClientRoutes {
   Resellers = "/resellers",
   Hosts = "/hosts",
   Gifts = "/gifts",
+  CountryAdmins = "/country-admin",
+
+  // creating pages
+  CreateSubAdmin = "/create-sub-admin",
+  CreateAgency = "/create-agency",
+  CreateMerchant = "/create-merchant",
+  CreateReseller = "/create-reseller",
+  CreateHost = "/create-host",
+  CreateCountryAdmin = "/create-country-admin",
 }
 
 export enum Roles {
   Admin = "admin",
   SubAdmin = "sub-admin",
   Agency = "agency",
+  Host = "host",
   Reseller = "re-seller",
   Merchant = "merchant",
   CountryAdmin = "country-admin",

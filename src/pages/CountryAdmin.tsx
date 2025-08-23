@@ -1,12 +1,15 @@
-import { countryAdminData } from "@/assets/data/country-admin";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { CountryAdminTable } from "@/components/pages/country-admin/table-list";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
+import { useGetCountryAdminQuery } from "@/redux/api/power-shared";
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 const CountryAdmin = () => {
   const [q, setQ] = useState("");
+  const { data: countryAdminRes, isLoading } = useGetCountryAdminQuery({});
+  const countryAdminData = countryAdminRes?.result?.data || [];
   const filtered = useMemo(
     () =>
       countryAdminData.filter((u) => {
@@ -16,13 +19,11 @@ const CountryAdmin = () => {
           (v || "").toLowerCase().includes(s)
         );
       }),
-    [q]
+    [countryAdminData, q]
   );
-  const onCreate = () => {
-    // Logic to handle user creation
-    console.log("Create CountryAdmin User button clicked");
-    alert("Create CountryAdmin User button clicked");
-  };
+
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <div>
       <div
@@ -41,13 +42,35 @@ const CountryAdmin = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Country Admin
-          </ActionTinyButton>
+          <Link to="/create-country-admin">
+            <ActionTinyButton variant="primary">
+              Create Country Admin
+            </ActionTinyButton>
+          </Link>
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {countryAdminData.length === 0 ? (
+        <div
+          style={{
+            padding: 48,
+            background: colors.card,
+            borderRadius: 12,
+            textAlign: "center",
+          }}
+        >
+          <p style={{ color: colors.textMuted, marginBottom: 16 }}>
+            No country-admins found.
+            <br />
+            Please create a country-admin to manage your platform.
+          </p>
+          <Link to="/create-country-admin">
+            <ActionTinyButton variant="primary">
+              Create Country Admin
+            </ActionTinyButton>
+          </Link>
+        </div>
+      ) : filtered.length === 0 ? (
         <div
           style={{
             padding: 48,
@@ -59,9 +82,11 @@ const CountryAdmin = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No Country Admin matched your search.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Country Admin
-          </ActionTinyButton>
+          <Link to="/create-country-admin">
+            <ActionTinyButton variant="primary">
+              Create Country Admin
+            </ActionTinyButton>
+          </Link>
         </div>
       ) : (
         <CountryAdminTable data={countryAdminData} />

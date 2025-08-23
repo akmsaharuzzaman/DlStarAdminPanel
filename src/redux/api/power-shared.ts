@@ -3,6 +3,7 @@ import { onuliveCloneDashboardBaseApi } from "./base.api";
 import { TUser } from "@/types/api/auth";
 import { TAsignCoinToUserRequestBody, TUserRewards } from "@/types/api/user";
 import { tagTypes } from "../tag.types";
+import { Roles } from "@/constants/route.enum";
 
 type TGetUserResponse = TResponse<{ pagination: Tpagination; users: TUser[] }>;
 type TAsignCoinToUserResponse = TResponse<TUserRewards>;
@@ -43,6 +44,75 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
+
+    // top portal management
+    getSubAdmins: builder.query<
+      TResponse<{ pagination: Tpagination; data: TUser[] }>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page = 1, limit = 9999 } = {}) => ({
+        url: `/power-shared/portal/sub-admin?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
+    getMerchants: builder.query<
+      TResponse<{ pagination: Tpagination; data: TUser[] }>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page = 1, limit = 9999 } = {}) => ({
+        url: `/power-shared/portal/merchant?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
+    getCountryAdmin: builder.query<
+      TResponse<{ pagination: Tpagination; data: TUser[] }>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ page = 1, limit = 9999 } = {}) => ({
+        url: `/power-shared/portal/country-admin?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
+
+    // mid portal management
+    getMidPortalManagement: builder.query<
+      TResponse<{ data: TUser[]; pagination: Tpagination }>,
+      {
+        type: Roles;
+        id: string;
+        searchTerm?: string;
+        page?: number;
+        limit?: number;
+      }
+    >({
+      query: ({ type, id, searchTerm, page = 1, limit = 9999 }) => {
+        const url = `/power-shared/portal/mid/${type}/${id}`;
+        const params = new URLSearchParams();
+
+        if (searchTerm) {
+          params.append("searchTerm", searchTerm);
+        }
+        return {
+          url: `${url}?${params.toString()}&page=${page}&limit=${limit}`,
+          method: "GET",
+        };
+      },
+      providesTags: [tagTypes.user],
+    }),
+
+    // getSubCountryAdminsByCountryAdminId: builder.query<
+    //   TResponse<{ pagination: Tpagination; data: TUser[] }>,
+    //   { merchantId:string, page?: number; limit?: number }
+    // >({
+    //   query: ({ merchantId, page = 1, limit = 10 }) => ({
+    //     url: `/power-shared/portal/mid/agency/${merchantId}?page=${page}&limit=${limit}`,
+    //     method: "GET",
+    //   }),
+    //   providesTags: [tagTypes.user],
+    // }),
   }),
 });
 
@@ -50,4 +120,8 @@ export const {
   useGetUsersQuery,
   useAsignCoinToUserByIdMutation,
   useSearchUsersByEmailQuery,
+  useGetSubAdminsQuery,
+  useGetMerchantsQuery,
+  useGetCountryAdminQuery,
+  useGetMidPortalManagementQuery,
 } = sharedPowerApi;

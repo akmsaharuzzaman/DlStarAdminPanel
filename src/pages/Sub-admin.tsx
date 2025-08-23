@@ -1,11 +1,12 @@
 // -----------------------------
 // Color palette & small helpers
 
-import { subAdminData } from "@/assets/data/sub-admin-data";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { SubAdminTable } from "@/components/pages/sub-admin/table-list";
 import { colors } from "@/constants/constant";
+import { useGetSubAdminsQuery } from "@/redux/api/power-shared";
 import { Dispatch, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 // -----------------------------
 
@@ -52,6 +53,9 @@ const SearchBar = ({
 
 const SubAdmin = () => {
   const [q, setQ] = useState("");
+  const { data: subAdminRes, isLoading } = useGetSubAdminsQuery({});
+  const subAdminData = subAdminRes?.result?.data || [];
+
   const filtered = useMemo(
     () =>
       subAdminData.filter((u) => {
@@ -61,13 +65,17 @@ const SubAdmin = () => {
           (v || "").toLowerCase().includes(s)
         );
       }),
-    [q]
+    [subAdminData, q]
   );
-  const onCreate = () => {
-    // Logic to handle user creation
-    console.log("Create User button clicked");
-    alert("Create User button clicked");
-  };
+
+  if (isLoading) {
+    return <div>Loading...</div>; // You can replace this with a spinner or skeleton loader
+  }
+  // const onCreate = () => {
+  //   // Logic to handle user creation
+  //   console.log("Create User button clicked");
+  //   alert("Create User button clicked");
+  // };
   return (
     <div>
       <div
@@ -86,13 +94,35 @@ const SubAdmin = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Sub-admin
-          </ActionTinyButton>
+          <Link to="/create-sub-admin">
+            <ActionTinyButton variant="primary">
+              Create Sub-admin
+            </ActionTinyButton>
+          </Link>
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {subAdminData.length === 0 ? (
+        <div
+          style={{
+            padding: 48,
+            background: colors.card,
+            borderRadius: 12,
+            textAlign: "center",
+          }}
+        >
+          <p style={{ color: colors.textMuted, marginBottom: 16 }}>
+            No sub-admins found.
+            <br />
+            Please create a sub-admin to manage your platform.
+          </p>
+          <Link to="/create-sub-admin">
+            <ActionTinyButton variant="primary">
+              Create Sub-admin
+            </ActionTinyButton>
+          </Link>
+        </div>
+      ) : filtered.length === 0 ? (
         <div
           style={{
             padding: 48,
@@ -104,9 +134,11 @@ const SubAdmin = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No sub-admin matched your search.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Sub-admin
-          </ActionTinyButton>
+          <Link to="/create-sub-admin">
+            <ActionTinyButton variant="primary">
+              Create Sub-admin
+            </ActionTinyButton>
+          </Link>
         </div>
       ) : (
         <SubAdminTable data={subAdminData} />

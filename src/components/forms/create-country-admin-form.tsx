@@ -37,10 +37,8 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-// TODO: change the directive name of "Merchant"
-export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
+export function CreateCountryAdminForm() {
   const [createPortalUser, { isLoading }] = useCreatePortalUserMutation();
-
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,15 +46,12 @@ export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
       userId: "",
       password: "",
       designation: "",
-      parentCreator: parentCreator || "",
-      userRole: Roles.Agency,
+      parentCreator: "",
+      userRole: Roles.CountryAdmin,
       userPermissions: [],
     },
   });
 
-  if (!parentCreator) {
-    return <div>Parent Creator is required</div>;
-  }
   const onSubmit = async (values: FormValues) => {
     console.log("Submitted Values:", values);
     // TODO: integrate with API
@@ -70,23 +65,20 @@ export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
         parentCreator: values.parentCreator,
         userPermissions: values.userPermissions,
       };
-      if (values.parentCreator === "") {
-        delete body.parentCreator;
+      if(values.parentCreator===""){
+        delete body.parentCreator
       }
 
       const res = await createPortalUser(body);
       if (res.error) {
         throw res.error;
       }
-      // TODO: change the directive name of "Merchant"
-      toast.success(res?.data?.message || "Merchant created successfully");
+      toast.success(res?.data?.message || "Country-admin created successfully");
 
       form.reset();
     } catch (error: any) {
-      // TODO: change the directive name of "Merchant"
-
       toast.error(
-        error.data.message || error.message || "Failed to create merchant"
+        error.data.message || error.message || "Failed to create country admin"
       );
     }
   };
@@ -173,8 +165,6 @@ export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    value={field.value}
-                    disabled={!!parentCreator} // Disable if parentCreator is provided
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -288,9 +278,7 @@ export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
                 className="w-full md:w-auto"
                 disabled={isLoading}
               >
-                {/* TODO: change the directive name of "Merchant" */}
-
-                {isLoading ? "Creating..." : "Create Agency"}
+                {isLoading ? "Creating..." : "Create Country Admin"}
               </ActionTinyButton>
             </div>
           </form>

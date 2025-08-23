@@ -1,9 +1,10 @@
-import { hostData } from "@/assets/data/host-data";
-import { subAdminData } from "@/assets/data/sub-admin-data";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { HostTable } from "@/components/pages/agency-by-id/table-list";
 import { colors } from "@/constants/constant";
-import { Dispatch, useMemo, useState } from "react";
+import { ClientRoutes, Roles } from "@/constants/route.enum";
+import { useGetMidPortalManagementQuery } from "@/redux/api/power-shared";
+import { Dispatch, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 const SearchBar = ({
   value,
@@ -40,22 +41,19 @@ const SearchBar = ({
 
 const AgencyById = () => {
   const [q, setQ] = useState("");
-  const filtered = useMemo(
-    () =>
-      subAdminData.filter((u) => {
-        const s = q.trim().toLowerCase();
-        if (!s) return true;
-        return [u.name, u.email, u.uid].some((v) =>
-          (v || "").toLowerCase().includes(s)
-        );
-      }),
-    [q]
-  );
-  const onCreate = () => {
-    // Logic to handle user creation
-    console.log("Create host button clicked");
-    alert("Create Host button clicked");
-  };
+  const { agencyId } = useParams();
+  const {
+    data: subAdminRes,
+    error,
+    isLoading,
+  } = useGetMidPortalManagementQuery({
+    type: Roles.Host,
+    id: agencyId!,
+    searchTerm: q,
+  });
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error occurred: {(error as any).message}</div>;
+  const hostData = subAdminRes?.result?.data || [];
   return (
     <div>
       <div
@@ -67,20 +65,20 @@ const AgencyById = () => {
         }}
       >
         <h3
-          className="text-lg font-semibold"
-          style={{ margin: 0, color: colors.textPrimary }}
+          className="text-lg font-semibold m-0"
+          style={{ color: colors.textPrimary }}
         >
           Host List
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Host
-          </ActionTinyButton>
+          <Link to={ClientRoutes.Hosts}>
+            <ActionTinyButton variant="primary">Create Host</ActionTinyButton>
+          </Link>
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {hostData.length === 0 ? (
         <div
           style={{
             padding: 48,
@@ -92,9 +90,9 @@ const AgencyById = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No hosts matched your search.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Host
-          </ActionTinyButton>
+          <Link to={ClientRoutes.Hosts}>
+            <ActionTinyButton variant="primary">Create Host</ActionTinyButton>
+          </Link>
         </div>
       ) : (
         <HostTable data={hostData} />

@@ -82,3 +82,13 @@ export type TUser = {
     updatedAt: string;
   };
 };
+
+export type TCreatePortalRoleBody = {
+  name: string;
+  userId: string;
+  password: string;
+  designation: string;
+  userRole: string;
+  parentCreator?: string;
+  userPermissions?: string[];
+};

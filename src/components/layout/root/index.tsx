@@ -1,21 +1,45 @@
-import { RoleContext } from "@/provider/role-provider";
-import { Role } from "@/types/pages/dashboard";
-import { useContext } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useMyProfileQuery } from "@/redux/api/auth.api";
+import { logOut } from "@/redux/features/auth.slice";
+import { useAppDispatch } from "@/redux/hooks";
+import { LogOut, Settings, User } from "lucide-react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
-const roleOptions: { value: Role; label: string }[] = [
-  { value: "admin", label: "Admin" },
-  { value: "sub-admin", label: "Sub-Admin" },
-  { value: "agency", label: "Agency" },
-  { value: "merchant", label: "Merchant" },
-  { value: "re-seller", label: "Re-Seller" },
-];
+// const roleOptions: { value: Role; label: string }[] = [
+//   { value: "admin", label: "Admin" },
+//   { value: "sub-admin", label: "Sub-Admin" },
+//   { value: "agency", label: "Agency" },
+//   { value: "merchant", label: "Merchant" },
+//   { value: "re-seller", label: "Re-Seller" },
+// ];
 const RootLayout = () => {
-  const context = useContext(RoleContext);
-  if (!context) {
-    throw new Error("DemoLayout must be used within a RoleProvider");
-  }
-  const { role, setRole } = context;
+  // const context = useContext(RoleContext);
+  // if (!context) {
+  //   throw new Error("DemoLayout must be used within a RoleProvider");
+  // }
+  // const { role, setRole } = context;
+  // const user = useAppSelector(selectUser);
+  const { data: profileRes } = useMyProfileQuery();
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    dispatch(logOut());
+    navigate("/login");
+  };
+
+  const profile = profileRes?.result;
+  const fallbackName = profile?.name
+    ? profile.name.charAt(0).toUpperCase()
+    : "U";
   return (
     <div className="min-h-screen bg-gray-100 font-sans">
       {/* Header with role switcher */}
@@ -38,14 +62,51 @@ const RootLayout = () => {
               </span>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <div className="flex justify-center gap-x-4">
-                {/* <Link
-                  to="/dashboard"
-                  className="text-gray-600 hover:text-blue-500 transition-colors"
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center space-x-3 focus:outline-none">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage
+                    src={
+                      profile?.avatar ||
+                      "https://dovercourt.org/wp-content/uploads/2019/11/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.jpg"
+                    }
+                    alt="User"
+                  />
+                  <AvatarFallback>{fallbackName}</AvatarFallback>
+                </Avatar>
+                {/* <div className="hidden sm:flex flex-col text-left">
+                  <span className="text-sm font-medium text-gray-800">
+                    John
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    john@example.com
+                  </span>
+                </div> */}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-red-600"
+                  onClick={handleLogout}
                 >
-                  Dashboard
-                </Link> */}
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* <div className="flex items-center space-x-4">
+              <div className="flex justify-center gap-x-4">
                 <Link
                   to="/gifts"
                   className="text-gray-600 hover:text-blue-500 transition-colors"
@@ -67,7 +128,7 @@ const RootLayout = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>

@@ -1,24 +1,12 @@
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { DashboardCard } from "@/components/cards/dashboard-card";
-import { ClientRoutes } from "@/constants/route.enum";
+import { ClientRoutes, Roles } from "@/constants/route.enum";
 import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
 import { useGetUsersQuery } from "@/redux/api/power-shared";
 
 import { ButtonProps } from "@/types/buttons";
 import { ModalName, Role } from "@/types/pages/dashboard";
-import {
-  Building,
-  Coins,
-  Gift,
-  History,
-  ListX,
-  LucideIcon,
-  Store,
-  UserCog,
-  UserMinus,
-  UserPlus,
-  UserX,
-} from "lucide-react";
+import { Coins, Gift, LucideIcon } from "lucide-react";
 import { FC, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -73,8 +61,12 @@ export const DashboardContent: FC<{
     totalMerchant:
       users?.result?.users.filter((user) => user.userRole === "merchant")
         .length || 0,
+    totalCountryAdmin:
+      users?.result?.users.filter(
+        (user) => user.userRole === Roles.CountryAdmin
+      ).length || 0,
     totalReseller:
-      users?.result?.users.filter((user) => user.userRole === "re-seller")
+      users?.result?.users.filter((user) => user.userRole === Roles.Reseller)
         .length || 0,
     totalCoin: 100,
     totalSpendCoin: 1,
@@ -97,21 +89,26 @@ export const DashboardContent: FC<{
           value: staticStatesData.totalSubAdmin || 0,
           link: ClientRoutes.SubAdmins,
         },
-        {
-          title: "Total Agencies",
-          value: staticStatesData.totalAgency || 0,
-          link: ClientRoutes.Agencies,
-        },
+        // {
+        //   title: "Total Agencies",
+        //   value: staticStatesData.totalAgency || 0,
+        //   link: ClientRoutes.Agencies,
+        // },
         {
           title: "Total Merchants",
           value: staticStatesData.totalMerchant || 0,
           link: ClientRoutes.Merchants,
         },
         {
-          title: "Total Resellers",
-          value: staticStatesData.totalReseller || 0,
-          link: ClientRoutes.Resellers,
+          title: "Total Country Admins",
+          value: staticStatesData.totalCountryAdmin || 0,
+          link: ClientRoutes.CountryAdmins,
         },
+        // {
+        //   title: "Total Resellers",
+        //   value: staticStatesData.totalReseller || 0,
+        //   link: ClientRoutes.Resellers,
+        // },
       ],
       actions: [
         {
@@ -120,27 +117,27 @@ export const DashboardContent: FC<{
           variant: "success",
           modal: "sellCoin",
         },
-        { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
-        { label: "Create Merchant", icon: Store, modal: "createMerchant" },
-        { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
-        {
-          label: "Block User",
-          icon: UserX,
-          variant: "danger",
-          modal: "blockUser",
-        },
-        {
-          label: "History",
-          icon: History,
-          variant: "secondary",
-          modal: "history",
-        },
-        {
-          label: "Blocked Users",
-          icon: ListX,
-          variant: "secondary",
-          modal: "blockedUsers",
-        },
+        // { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
+        // { label: "Create Merchant", icon: Store, modal: "createMerchant" },
+        // { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
+        // {
+        //   label: "Block User",
+        //   icon: UserX,
+        //   variant: "danger",
+        //   modal: "blockUser",
+        // },
+        // {
+        //   label: "History",
+        //   icon: History,
+        //   variant: "secondary",
+        //   modal: "history",
+        // },
+        // {
+        //   label: "Blocked Users",
+        //   icon: ListX,
+        //   variant: "secondary",
+        //   modal: "blockedUsers",
+        // },
       ],
       lists: [
         { title: "User List", emptyText: "User data would appear here." },
@@ -157,11 +154,11 @@ export const DashboardContent: FC<{
           value: staticStatesData.totalUser,
           link: ClientRoutes.Users,
         },
-        {
-          title: "Total Agencies",
-          value: staticStatesData.totalAgency,
-          link: ClientRoutes.Agencies,
-        },
+        // {
+        //   title: "Total Agencies",
+        //   value: staticStatesData.totalAgency,
+        //   link: ClientRoutes.Agencies,
+        // },
         {
           title: "Total Resellers",
           value: staticStatesData.totalReseller,
@@ -175,19 +172,19 @@ export const DashboardContent: FC<{
           variant: "success",
           modal: "sellCoin",
         },
-        { label: "Create Agency", icon: Building, modal: "createAgency" },
-        {
-          label: "Block User",
-          icon: UserX,
-          variant: "danger",
-          modal: "blockUser",
-        },
-        {
-          label: "History",
-          icon: History,
-          variant: "secondary",
-          modal: "history",
-        },
+        // { label: "Create Agency", icon: Building, modal: "createAgency" },
+        // {
+        //   label: "Block User",
+        //   icon: UserX,
+        //   variant: "danger",
+        //   modal: "blockUser",
+        // },
+        // {
+        //   label: "History",
+        //   icon: History,
+        //   variant: "secondary",
+        //   modal: "history",
+        // },
       ],
       lists: [
         { title: "User List", emptyText: "User data would appear here." },
@@ -199,13 +196,13 @@ export const DashboardContent: FC<{
         { title: "Total Hosts", value: "150", link: ClientRoutes.Hosts },
       ],
       actions: [
-        { label: "Create Host", icon: UserPlus, modal: "createHost" },
-        {
-          label: "Remove Host",
-          icon: UserMinus,
-          variant: "danger",
-          modal: "removeHost",
-        },
+        // { label: "Create Host", icon: UserPlus, modal: "createHost" },
+        // {
+        //   label: "Remove Host",
+        //   icon: UserMinus,
+        //   variant: "danger",
+        //   modal: "removeHost",
+        // },
       ],
       lists: [
         { title: "Host List", emptyText: "Host data would appear here." },
@@ -226,13 +223,13 @@ export const DashboardContent: FC<{
           variant: "success",
           modal: "sellCoin",
         },
-        { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
-        {
-          label: "History",
-          icon: History,
-          variant: "secondary",
-          modal: "history",
-        },
+        // { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
+        // {
+        //   label: "History",
+        //   icon: History,
+        //   variant: "secondary",
+        // modal: "history",
+        // },
       ],
       lists: [
         {
@@ -253,12 +250,12 @@ export const DashboardContent: FC<{
           variant: "success",
           modal: "sellCoin",
         },
-        {
-          label: "History",
-          icon: History,
-          variant: "secondary",
-          modal: "history",
-        },
+        // {
+        //   label: "History",
+        //   icon: History,
+        //   variant: "secondary",
+        //   modal: "history",
+        // },
       ],
       // No lists for re-seller
     },
@@ -274,7 +271,7 @@ export const DashboardContent: FC<{
       {/* Stats Cards */}
       <div
         className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ${
-          role === "admin" ? "xl:grid-cols-5" : ""
+          role === Roles.Admin ? "xl:grid-cols-5" : ""
         } gap-6 mb-8`}
       >
         {config.stats.map((stat) => (
@@ -299,12 +296,14 @@ export const DashboardContent: FC<{
           </ActionTinyButton>
         ))}
 
-        <Link to={ClientRoutes.Gifts}>
-        <ActionTinyButton variant="info">
-          <Gift size={16} className="mr-2" />
-          Manage Gifts
-        </ActionTinyButton>
-        </Link>
+        {role === Roles.Admin && (
+          <Link to={ClientRoutes.Gifts}>
+            <ActionTinyButton variant="info">
+              <Gift size={16} className="mr-2" />
+              Manage Gifts
+            </ActionTinyButton>
+          </Link>
+        )}
       </div>
       {/* Data Lists (if any) */}
       {/* {config.lists && (

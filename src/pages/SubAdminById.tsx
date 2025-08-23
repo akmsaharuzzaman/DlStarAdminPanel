@@ -1,12 +1,13 @@
 // -----------------------------
 // Color palette & small helpers
 
-import { agencyData } from "@/assets/data/agency-data";
-import { subAdminData } from "@/assets/data/sub-admin-data";
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { AgencyTable } from "@/components/pages/sub-admin-by-id/table-list";
 import { colors } from "@/constants/constant";
-import { Dispatch, useMemo, useState } from "react";
+import { ClientRoutes, Roles } from "@/constants/route.enum";
+import { useGetMidPortalManagementQuery } from "@/redux/api/power-shared";
+import { Dispatch, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 // -----------------------------
 
@@ -52,23 +53,33 @@ const SearchBar = ({
 );
 
 const SubAdminById = () => {
+  const { subAdminId } = useParams();
+
   const [q, setQ] = useState("");
-  const filtered = useMemo(
-    () =>
-      subAdminData.filter((u) => {
-        const s = q.trim().toLowerCase();
-        if (!s) return true;
-        return [u.name, u.email, u.uid].some((v) =>
-          (v || "").toLowerCase().includes(s)
-        );
-      }),
-    [q]
-  );
-  const onCreate = () => {
-    // Logic to handle user creation
-    console.log("Create User button clicked");
-    alert("Create User button clicked");
-  };
+
+  const { data: subAdminRes, isLoading } = useGetMidPortalManagementQuery({
+    type: Roles.Agency,
+    id: subAdminId!,
+    searchTerm: q,
+  });
+
+  const subAdminData = subAdminRes?.result?.data || [];
+  // const filtered = useMemo(
+  //   () =>
+  //     subAdminData.filter((u) => {
+  //       const s = q.trim().toLowerCase();
+  //       if (!s) return true;
+  //       return [u.name, u.email, u.uid].some((v) =>
+  //         (v || "").toLowerCase().includes(s)
+  //       );
+  //     }),
+  //   [q]
+  // );
+
+  if (!subAdminId) {
+    return <div>Sub Admin ID is required</div>;
+  }
+  if (isLoading) return <div> Agency Lists is Loading...</div>;
   return (
     <div>
       <div
@@ -87,13 +98,13 @@ const SubAdminById = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Agency
-          </ActionTinyButton>
+          <Link to={`${ClientRoutes.CreateAgency}/${subAdminId}`}>
+            <ActionTinyButton variant="primary">Create Agency</ActionTinyButton>
+          </Link>
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {subAdminData.length === 0 ? (
         <div
           style={{
             padding: 48,
@@ -105,12 +116,12 @@ const SubAdminById = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No agency matched your search.
           </p>
-          <ActionTinyButton onClick={onCreate} variant="primary">
-            Create Agency
-          </ActionTinyButton>
+          <Link to={`${ClientRoutes.CreateAgency}/${subAdminId}`}>
+            <ActionTinyButton variant="primary">Create Agency</ActionTinyButton>
+          </Link>
         </div>
       ) : (
-        <AgencyTable data={agencyData} />
+        <AgencyTable data={subAdminData} />
       )}
     </div>
   );

@@ -17,4 +17,5 @@ export type TUserRewards = {
 export type TAsignCoinToUserRequestBody = {
   userId: string;
   coins: number;
+  userRole: string; // Changed to string to match backend enum
 };

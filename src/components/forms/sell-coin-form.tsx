@@ -1,4 +1,3 @@
-
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -8,11 +7,15 @@ import z from "zod";
 import { useForm, UseFormSetValue } from "react-hook-form";
 import { toast } from "sonner";
 import { TUser } from "@/types/api/auth";
-import { useAsignCoinToUserByIdMutation, useSearchUsersByEmailQuery } from "@/redux/api/power-shared";
+import {
+  useAsignCoinToUserByIdMutation,
+  useSearchUsersByEmailQuery,
+} from "@/redux/api/power-shared";
 
 const sellCoinSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
   coinAmount: z.number().min(1, "Amount must be at least 1"),
+  userRole: z.string().min(1, "User role is required"), // This will be set internally
 });
 type SellCoinFormValues = z.infer<typeof sellCoinSchema>;
 
@@ -49,7 +52,7 @@ export const SellCoinForm = () => {
     reset,
   } = useForm<SellCoinFormValues>({
     resolver: zodResolver(sellCoinSchema),
-    defaultValues: { userId: "", coinAmount: 1 },
+    defaultValues: { userId: "", coinAmount: 1, userRole: "" },
   });
 
   const onSubmit = async (data: SellCoinFormValues) => {
@@ -57,6 +60,7 @@ export const SellCoinForm = () => {
       const payload = {
         userId: data.userId,
         coins: data.coinAmount,
+        userRole: data.userRole || "user", // Default to "user" if not set
       };
 
       const response = await asignCoinToUser(payload).unwrap();
@@ -170,6 +174,7 @@ const SearchingResultAppear = ({
   setValue: UseFormSetValue<{
     userId: string;
     coinAmount: number;
+    userRole: string;
   }>;
   setSearchName: (name: string) => void;
 }) => {
@@ -179,6 +184,7 @@ const SearchingResultAppear = ({
       onClick={() => {
         setValue("userId", user._id);
         setSearchName(user.name);
+        setValue("userRole", user.userRole);
       }}
     >
       {user.avatar ? (
