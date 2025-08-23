@@ -48,6 +48,13 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.user],
     }),
+    myProfile: builder.query<TResponse<TUser>, void>({
+      query: () => ({
+        url: "/auth/my-profile",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
   }),
 });
 
@@ -56,5 +63,6 @@ export const {
   useAdminRegisterMutation,
   useUpdateAdminMutation,
   useGetGiftCategoriesQuery,
-  useCreatePortalUserMutation
+  useCreatePortalUserMutation,
+  useMyProfileQuery,
 } = authApi;

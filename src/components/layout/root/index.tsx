@@ -7,6 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useMyProfileQuery } from "@/redux/api/auth.api";
 import { logOut } from "@/redux/features/auth.slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { LogOut, Settings, User } from "lucide-react";
@@ -26,12 +27,19 @@ const RootLayout = () => {
   // }
   // const { role, setRole } = context;
   // const user = useAppSelector(selectUser);
+  const { data: profileRes } = useMyProfileQuery();
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
     dispatch(logOut());
     navigate("/login");
   };
+
+  const profile = profileRes?.result;
+  const fallbackName = profile?.name
+    ? profile.name.charAt(0).toUpperCase()
+    : "U";
   return (
     <div className="min-h-screen bg-gray-100 font-sans">
       {/* Header with role switcher */}
@@ -57,17 +65,23 @@ const RootLayout = () => {
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center space-x-3 focus:outline-none">
                 <Avatar className="h-9 w-9">
-                  <AvatarImage src="/images/avatar.png" alt="User" />
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarImage
+                    src={
+                      profile?.avatar ||
+                      "https://dovercourt.org/wp-content/uploads/2019/11/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.jpg"
+                    }
+                    alt="User"
+                  />
+                  <AvatarFallback>{fallbackName}</AvatarFallback>
                 </Avatar>
-                <div className="hidden sm:flex flex-col text-left">
+                {/* <div className="hidden sm:flex flex-col text-left">
                   <span className="text-sm font-medium text-gray-800">
                     John
                   </span>
                   <span className="text-xs text-gray-500">
                     john@example.com
                   </span>
-                </div>
+                </div> */}
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
