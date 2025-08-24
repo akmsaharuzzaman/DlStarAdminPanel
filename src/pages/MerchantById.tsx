@@ -40,7 +40,7 @@ const MerchantById = () => {
           All Resellers List
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <SearchBar value={q} onChange={setQ} />
+          <SearchBar onChange={setQ} />
           <Link to={`${ClientRoutes.CreateReseller}${merchantId}`}>
             <ActionTinyButton variant="primary">
               Create Reseller
