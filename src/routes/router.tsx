@@ -1,7 +1,6 @@
 import ProtectedRoute from "@/components/auth/protected-route";
 import { PublicLayout } from "@/components/layout/public-layout";
 import DashboardPage from "@/components/pages/dashboard";
-import LoginPage from "@/components/pages/login";
 import {
   GiftListsPage,
   ModeratorListsPage,
@@ -17,6 +16,9 @@ import DemoLayout from "@/components/layout/demo";
 import RootLayout from "@/components/layout/root";
 import { appRoutes } from "./app-routes";
 import UnauthorizedPage from "@/pages/Unauthorize";
+import AdminLoginPage from "@/components/pages/login/admin-login";
+import PortalLoginPage from "@/components/pages/login/portal-login";
+import LoginPage from "@/pages/Login";
 
 const protectedChildren = [
   { path: "", element: <DashboardPage /> },
@@ -29,32 +31,26 @@ const protectedChildren = [
   },
 ];
 
-
-
 const publicChildren = [
   { path: "/login", element: <LoginPage /> },
+  { path: "/login/admin-login", element: <AdminLoginPage /> },
+  { path: "/login/portal-login", element: <PortalLoginPage /> },
   { path: "/privacy-policy", element: <PrivacyPolicy /> },
   { path: "/terms-and-conditions", element: <TermsAndConditions /> },
 ];
 
-
-
 const protectedRoutes = appRoutes.map((route) => ({
   path: route.path,
   element: (
-    <ProtectedRoute allowedRoles={route.roles}>
-      {route.element}
-    </ProtectedRoute>
+    <ProtectedRoute allowedRoles={route.roles}>{route.element}</ProtectedRoute>
   ),
 }));
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout/>,
-    children: [
-      ...protectedRoutes
-    ]
+    element: <RootLayout />,
+    children: [...protectedRoutes],
   },
   {
     path: "/unauthorize",
@@ -68,7 +64,7 @@ const router = createBrowserRouter([
   {
     path: "/demo",
     element: <DemoLayout />,
-    children: protectedChildren
+    children: protectedChildren,
   },
   { path: "*", element: <NotFoundPage /> },
 ]);

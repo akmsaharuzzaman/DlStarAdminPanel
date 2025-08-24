@@ -4,19 +4,28 @@ import { TUser } from "@/types/api/auth";
 import { TAsignCoinToUserRequestBody, TUserRewards } from "@/types/api/user";
 import { tagTypes } from "../tag.types";
 import { Roles } from "@/constants/route.enum";
+import { TPortalLoginBody } from "@/types/api/power-shared";
 
 type TGetUserResponse = TResponse<{ pagination: Tpagination; users: TUser[] }>;
 type TAsignCoinToUserResponse = TResponse<TUserRewards>;
+type TPortalLoginResponse = TResponse<TUser[]> & { access_token: string };
 const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // TODO: need to remove this endpoint
-
+    portalLogin: builder.mutation<TPortalLoginResponse, TPortalLoginBody>({
+      query: (userInfo) => ({
+        url: "/power-shared/auth",
+        method: "POST",
+        body: userInfo,
+      }),
+    }),
     getUsers: builder.query<
       TGetUserResponse,
-      { page?: number; limit?: number }
+      { page?: number; limit?: number; searchTerm?: string }
     >({
-      query: ({ page = 1, limit = 10 } = {}) => ({
-        url: `/power-shared/users?page=${page}&limit=${limit}`,
+      query: ({ page = 1, limit = 10, searchTerm } = {}) => ({
+        url: `/power-shared/users?page=${page}&limit=${limit}&searchTerm=${
+          searchTerm || ""
+        }`,
         method: "GET",
       }),
       providesTags: [tagTypes.user, tagTypes.coin],
@@ -117,6 +126,7 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
 });
 
 export const {
+  usePortalLoginMutation,
   useGetUsersQuery,
   useAsignCoinToUserByIdMutation,
   useSearchUsersByEmailQuery,

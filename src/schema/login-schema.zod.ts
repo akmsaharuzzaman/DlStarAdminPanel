@@ -6,3 +6,11 @@ export const loginSchema = z.object({
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
+
+
+export const portalLoginSchema = z.object({
+  userID: z.string("Field cannot be empty"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+export type PortalLoginFormValues = z.infer<typeof portalLoginSchema>;
