@@ -8,7 +8,7 @@ import { TPortalLoginBody } from "@/types/api/power-shared";
 
 type TGetUserResponse = TResponse<{ pagination: Tpagination; users: TUser[] }>;
 type TAsignCoinToUserResponse = TResponse<TUserRewards>;
-type TPortalLoginResponse = TResponse<TUser[]> & { access_token: string };
+type TPortalLoginResponse = TResponse<TUser> & { access_token: string };
 const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     portalLogin: builder.mutation<TPortalLoginResponse, TPortalLoginBody>({
@@ -17,6 +17,13 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         method: "POST",
         body: userInfo,
       }),
+    }),
+    getPortalProfile: builder.query<TResponse<TUser>, void>({
+      query: () => ({
+        url: "/power-shared/auth",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
     }),
     getUsers: builder.query<
       TGetUserResponse,
@@ -127,6 +134,7 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
 
 export const {
   usePortalLoginMutation,
+  useGetPortalProfileQuery,
   useGetUsersQuery,
   useAsignCoinToUserByIdMutation,
   useSearchUsersByEmailQuery,

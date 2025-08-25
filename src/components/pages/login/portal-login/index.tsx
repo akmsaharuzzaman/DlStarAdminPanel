@@ -24,7 +24,7 @@ export default function PortalLoginPage() {
       const response = await portalLogin(body).unwrap();
       // handle success (e.g., store token in localStorage, update redux state)
       // or call your API and handle redux state
-      const user = response.result?.[0];
+      const user = response.result;
       const token = response.access_token;
 
       if (user && token) {
@@ -34,7 +34,7 @@ export default function PortalLoginPage() {
               id: user._id,
               name: user.name,
               email: user.email,
-              uid: user.uid,
+              uid: user?.userId,
               role: user.userRole,
             },
             token,

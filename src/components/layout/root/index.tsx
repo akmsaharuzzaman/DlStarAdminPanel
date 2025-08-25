@@ -7,10 +7,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useMyProfileQuery } from "@/redux/api/auth.api";
+import { RoleContext } from "@/provider/role-provider";
 import { logOut } from "@/redux/features/auth.slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { LogOut, Settings, User } from "lucide-react";
+import { useContext } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 // const roleOptions: { value: Role; label: string }[] = [
@@ -21,13 +22,20 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 //   { value: "re-seller", label: "Re-Seller" },
 // ];
 const RootLayout = () => {
+  const context = useContext(RoleContext);
+  if (!context) {
+    throw new Error("DashboardPage must be used within a RoleProvider");
+  }
+  const { role } = context;
   // const context = useContext(RoleContext);
   // if (!context) {
   //   throw new Error("DemoLayout must be used within a RoleProvider");
   // }
   // const { role, setRole } = context;
   // const user = useAppSelector(selectUser);
-  const { data: profileRes } = useMyProfileQuery();
+  // const isAdmin = role === Roles.Admin;
+  // const { data: profileRes } = useMyProfileQuery(undefined, {skip: isAdmin});
+  // const {data: portalProfileRes} = useGetPortalProfileQuery(undefined, {skip: !isAdmin});
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -35,11 +43,12 @@ const RootLayout = () => {
     dispatch(logOut());
     navigate("/login");
   };
-
-  const profile = profileRes?.result;
-  const fallbackName = profile?.name
-    ? profile.name.charAt(0).toUpperCase()
-    : "U";
+  console.log(role, "current role in root layout");
+  // const profile = role !== Roles.Admin ? portalProfileRes?.result : profileRes?.result;
+  // const fallbackName = profile?.name
+  //   ? profile.name.charAt(0).toUpperCase()
+  //   : "U";
+  const fallbackName = "U";
   return (
     <div className="min-h-screen bg-gray-100 font-sans">
       {/* Header with role switcher */}
@@ -67,7 +76,7 @@ const RootLayout = () => {
                 <Avatar className="h-9 w-9">
                   <AvatarImage
                     src={
-                      profile?.avatar ||
+                      // profile?.avatar ||
                       "https://dovercourt.org/wp-content/uploads/2019/11/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.jpg"
                     }
                     alt="User"
