@@ -18,6 +18,13 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         body: userInfo,
       }),
     }),
+    getPortalProfile: builder.query<TResponse<TUser>, void>({
+      query: () => ({
+        url: "/power-shared/auth",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
     getUsers: builder.query<
       TGetUserResponse,
       { page?: number; limit?: number; searchTerm?: string }
@@ -127,6 +134,7 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
 
 export const {
   usePortalLoginMutation,
+  useGetPortalProfileQuery,
   useGetUsersQuery,
   useAsignCoinToUserByIdMutation,
   useSearchUsersByEmailQuery,

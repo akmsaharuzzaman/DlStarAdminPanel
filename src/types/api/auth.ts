@@ -60,6 +60,7 @@ export type TUser = {
   avatar: string;
   name: string;
   uid: string;
+  userId: string;
   userRole: string;
   country?: string;
   countryLanguages: string[];

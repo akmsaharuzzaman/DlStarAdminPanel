@@ -37,8 +37,8 @@ export function PortalLoginForm({ onSubmit, isLoading }: PortalLoginFormProps) {
           type="text"
           {...register("userID")}
           className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-500 focus:border-pink-400 focus:ring-pink-400"
-          placeholder="Enter your username"
-          autoComplete="username"
+          placeholder="Enter your userId"
+          autoComplete="userId"
         />
         {errors.userID && (
           <p className="text-xs text-red-500 mt-1">{errors.userID.message}</p>

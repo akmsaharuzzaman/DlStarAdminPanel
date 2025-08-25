@@ -34,7 +34,7 @@ export default function PortalLoginPage() {
               id: user._id,
               name: user.name,
               email: user.email,
-              uid: user.uid,
+              uid: user?.userId,
               role: user.userRole,
             },
             token,
