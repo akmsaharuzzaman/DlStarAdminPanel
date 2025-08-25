@@ -1,3 +1,5 @@
+import { selectUser } from "@/redux/features/auth.slice";
+import { useAppSelector } from "@/redux/hooks";
 import { Role } from "@/types/pages/dashboard";
 import { createContext, ReactNode, useState } from "react";
 
@@ -11,7 +13,9 @@ export const RoleContext = createContext<RoleContextType | undefined>(
 );
 
 export const RoleProvider = ({ children }: { children: ReactNode }) => {
-  const [role, setRole] = useState<Role>("admin");
+  const user = useAppSelector(selectUser);
+  console.log(user, "current user in role provider");
+  const [role, setRole] = useState<Role>(user?.role as Role);
   return (
     <RoleContext.Provider value={{ role, setRole }}>
       {children}
