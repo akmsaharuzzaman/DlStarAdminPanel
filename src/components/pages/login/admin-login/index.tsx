@@ -3,10 +3,10 @@ import { useLoginMutation } from "@/redux/api/auth.api";
 import { setUser } from "@/redux/features/auth.slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { LoginFormValues } from "@/schema/login-schema.zod";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -98,8 +98,10 @@ export default function LoginPage() {
         <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-8 border border-slate-700/50">
           {/* Logo/Brand */}
           <div className="text-center mb-8">
+           <Link to="/" className="text-center mb-8">
             <img src="/logo.jpeg" alt="Logo" className="h-16 w-16 mx-auto mb-4 rounded-lg" />
             <h1 className="text-3xl font-bold text-primary mb-4">DlStar</h1>
+           </Link>
             <p className="text-slate-300 text-sm leading-relaxed">
               Enter your email address and password to
               <br />

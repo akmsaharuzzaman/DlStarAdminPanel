@@ -41,7 +41,7 @@ const CountryAdmin = () => {
           Country Admins List
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <SearchBar value={q} onChange={setQ} />
+          <SearchBar onChange={setQ} />
           <Link to="/create-country-admin">
             <ActionTinyButton variant="primary">
               Create Country Admin

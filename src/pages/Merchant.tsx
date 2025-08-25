@@ -42,7 +42,7 @@ const Merchant = () => {
           Merchants List
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <SearchBar value={q} onChange={setQ} />
+          <SearchBar onChange={setQ} />
           <Link to="/create-merchant">
             <ActionTinyButton variant="primary">
               Create Merchant

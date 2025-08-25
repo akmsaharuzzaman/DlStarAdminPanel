@@ -3,8 +3,8 @@ import { AppPagination } from "@/components/shared/pagination";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
 import { useGetUsersQuery } from "@/redux/api/power-shared";
-import { useMemo, useState } from "react";
-const PAGE_LIMIT = 8;
+import {  useState } from "react";
+const PAGE_LIMIT = 10;
 const initialPage = 1;
 const Users = () => {
   const [currentPage, setCurrentPage] = useState<number>(initialPage);
@@ -13,21 +13,11 @@ const Users = () => {
   const { data: userResponse, isLoading } = useGetUsersQuery({
     page: currentPage,
     limit: PAGE_LIMIT,
+    searchTerm: q,
   });
 
   const userData = userResponse?.result?.users || [];
-  const filtered = useMemo(
-    () =>
-      userData?.filter((u) => {
-        const s = q.trim().toLowerCase();
-        if (!s) return true;
-        return [u.name, u.email, u.uid].some((v) =>
-          (v || "").toLowerCase().includes(s)
-        );
-      }),
-    [q, userData]
-  );
-
+  
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -53,11 +43,11 @@ const Users = () => {
           All Users List
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <SearchBar value={q} onChange={setQ} />
+          <SearchBar onChange={setQ} />
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {userData.length === 0 ? (
         <div
           style={{
             padding: 48,
