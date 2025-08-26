@@ -45,6 +45,7 @@ export default function PortalLoginPage() {
       // Redirect based on role
 
       navigate("/");
+      // window.location.reload();
 
       toast.success(response.message);
       // redirect after login

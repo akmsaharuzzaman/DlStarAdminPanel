@@ -100,7 +100,7 @@ export default function DashboardPage() {
   ];
 
   // Prepare data for the chart
-  const chartData = stats.map((stat) => ({
+  const chartData = stats?.map((stat) => ({
     name: stat.label,
     value: stat.value,
   }));
@@ -109,7 +109,7 @@ export default function DashboardPage() {
   return (
     <div className="p-2 sm:p-4 md:p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
-        {stats.map((stat, idx) => (
+        {stats?.map((stat, idx) => (
           <StatsCard key={idx} {...stat} />
         ))}
       </div>

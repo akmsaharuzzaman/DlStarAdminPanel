@@ -193,7 +193,7 @@ export const DashboardContent: FC<{
     agency: {
       stats: [
         { title: "Current Salary", value: "Future Feature" },
-        { title: "Total Hosts", value: "150", link: ClientRoutes.Hosts },
+        { title: "Total Hosts", value: "150", link: "" },
       ],
       actions: [
         // { label: "Create Host", icon: UserPlus, modal: "createHost" },
@@ -262,7 +262,7 @@ export const DashboardContent: FC<{
   };
   const config = dashboardConfigs[role];
   // Prepare data for the chart
-  const chartData = dashboardConfigs[role].stats.map((stat) => ({
+  const chartData = dashboardConfigs[role]?.stats?.map((stat) => ({
     name: stat.title,
     value: stat.value,
   }));
@@ -274,7 +274,7 @@ export const DashboardContent: FC<{
           role === Roles.Admin ? "xl:grid-cols-5" : ""
         } gap-6 mb-8`}
       >
-        {config.stats.map((stat) => (
+        {config?.stats?.map((stat) => (
           <DashboardCard
             key={stat.title}
             title={stat.title}
@@ -285,7 +285,7 @@ export const DashboardContent: FC<{
       </div>
       {/* Action Buttons */}
       <div className="flex flex-wrap gap-4 mb-8">
-        {config.actions.map((action) => (
+        {config?.actions?.map((action) => (
           <ActionTinyButton
             key={action.label}
             variant={action.variant}
