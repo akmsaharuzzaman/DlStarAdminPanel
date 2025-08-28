@@ -119,6 +119,32 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       providesTags: [tagTypes.user],
     }),
 
+     // lower portal management
+    lowerPortalManagement: builder.query<
+      TResponse<{ data: TUser[]; pagination: Tpagination }>,
+      {
+        // type: Roles;
+        id: string;
+        searchTerm?: string;
+        page?: number;
+        limit?: number;
+      }
+    >({
+      query: ({ id, searchTerm, page = 1, limit = 9999 }) => {
+        const url = `/power-shared/portal/lower/${id}`;
+        const params = new URLSearchParams();
+
+        if (searchTerm) {
+          params.append("searchTerm", searchTerm);
+        }
+        return {
+          url: `${url}?${params.toString()}&page=${page}&limit=${limit}`,
+          method: "GET",
+        };
+      },
+      providesTags: [tagTypes.user],
+    }),
+
     // getSubCountryAdminsByCountryAdminId: builder.query<
     //   TResponse<{ pagination: Tpagination; data: TUser[] }>,
     //   { merchantId:string, page?: number; limit?: number }
@@ -142,4 +168,5 @@ export const {
   useGetMerchantsQuery,
   useGetCountryAdminQuery,
   useGetMidPortalManagementQuery,
+  useLowerPortalManagementQuery
 } = sharedPowerApi;

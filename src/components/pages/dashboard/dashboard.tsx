@@ -1,8 +1,6 @@
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { DashboardCard } from "@/components/cards/dashboard-card";
 import { ClientRoutes, Roles } from "@/constants/route.enum";
-import { useGetAllModeratorUsersQuery } from "@/redux/api/moderator.api";
-import { useGetUsersQuery } from "@/redux/api/power-shared";
 
 import { ButtonProps } from "@/types/buttons";
 import { ModalName, Role } from "@/types/pages/dashboard";
@@ -50,24 +48,14 @@ export const DashboardContent: FC<{
   openModal: (modal: ModalName) => void;
 }> = ({ role, openModal }) => {
   // fetching data from server
-  const { data: users } = useGetUsersQuery({ page: 1, limit: 10000 });
-  const { data: moderators } = useGetAllModeratorUsersQuery(null);
+
   const staticStatesData = {
-    totalUser: users?.result?.users?.length || 0,
-    totalSubAdmin: users?.result?.users.filter(
-      (user) => user.userRole === "sub-admin"
-    ).length,
-    totalAgency: moderators?.result?.users.length || 0,
-    totalMerchant:
-      users?.result?.users.filter((user) => user.userRole === "merchant")
-        .length || 0,
-    totalCountryAdmin:
-      users?.result?.users.filter(
-        (user) => user.userRole === Roles.CountryAdmin
-      ).length || 0,
-    totalReseller:
-      users?.result?.users.filter((user) => user.userRole === Roles.Reseller)
-        .length || 0,
+    totalUser: 100,
+    totalSubAdmin: 50,
+    totalAgency: 20,
+    totalMerchant: 10,
+    totalCountryAdmin: 50,
+    totalReseller: 30,
     totalCoin: 100,
     totalSpendCoin: 1,
   };

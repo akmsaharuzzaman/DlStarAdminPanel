@@ -1,8 +1,10 @@
 import { PortalLoginForm } from "@/components/forms/portal-login-form";
+import { RoleContext } from "@/provider/role-provider";
 import { usePortalLoginMutation } from "@/redux/api/power-shared";
 import { setUser } from "@/redux/features/auth.slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { PortalLoginFormValues } from "@/schema/login-schema.zod";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -10,6 +12,11 @@ export default function PortalLoginPage() {
   const [portalLogin, { isLoading }] = usePortalLoginMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const context = useContext(RoleContext);
+  if (!context) {
+    throw new Error("DashboardPage must be used within a RoleProvider");
+  }
+  const { setRole } = context;
 
   // Replace this with your actual login logic (API call + redux dispatch)
   const handleLogin = async (values: PortalLoginFormValues) => {
@@ -40,6 +47,8 @@ export default function PortalLoginPage() {
             token,
           })
         );
+        // change the user role state in context explicitely. that will update the role based rendering
+        setRole(user.userRole as any);
       }
 
       // Redirect based on role
