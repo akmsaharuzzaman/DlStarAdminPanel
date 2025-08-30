@@ -84,6 +84,9 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         subAdmins: number;
         merchants: number;
         countryAdmins: number;
+        agencies: number;
+        hosts: number;
+        resellers: number;
       }>,
       void
     >({
