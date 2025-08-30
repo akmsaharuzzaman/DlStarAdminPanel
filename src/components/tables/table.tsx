@@ -25,3 +25,5 @@ export const Table = ({
     </div>
   </div>
 );
+
+

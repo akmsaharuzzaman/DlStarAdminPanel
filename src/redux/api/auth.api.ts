@@ -71,8 +71,8 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       // providesTags: [tagTypes],
     }),
     updateRole: builder.mutation({
-      query: ({ userId }: { userId: string }) => ({
-        url: "/admin/create-role",
+      query: ({ userId, newRole }: { userId: string; newRole: string }) => ({
+        url: `/admin/user/asign-role/${newRole}`,
         method: "PUT",
         body: { userId },
       }),
