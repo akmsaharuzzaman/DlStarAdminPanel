@@ -7,6 +7,9 @@ export enum ClientRoutes {
   Hosts = "/hosts",
   Gifts = "/gifts",
   CountryAdmins = "/country-admin",
+  WithdrawHistory = "/withdraw-history",
+  AgencyWithdrawHistory = "/agency-withdraw-history",
+  hostWithdrawHistory = "/host-withdraw-history",
 
   // creating pages
   CreateSubAdmin = "/create-sub-admin",

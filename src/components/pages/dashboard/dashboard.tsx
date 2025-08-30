@@ -4,7 +4,7 @@ import { ClientRoutes, Roles } from "@/constants/route.enum";
 
 import { ButtonProps } from "@/types/buttons";
 import { ModalName, Role } from "@/types/pages/dashboard";
-import { Coins, Gift, LucideIcon } from "lucide-react";
+import { Coins, DollarSign, Gift, LucideIcon } from "lucide-react";
 import { FC, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -22,7 +22,8 @@ interface DashboardAction {
   label: string;
   icon: LucideIcon;
   variant?: ButtonProps["variant"];
-  modal: ModalName;
+  modal?: ModalName;
+  link?: string;
 }
 
 // Dashboard card config
@@ -105,6 +106,18 @@ export const DashboardContent: FC<{
           variant: "success",
           modal: "sellCoin",
         },
+        {
+          label: "Agnecy Withdraw History",
+          icon: DollarSign,
+          variant: "primary",
+          link: ClientRoutes.AgencyWithdrawHistory,
+        },
+        {
+          label: "Host Withdraw History",
+          icon: DollarSign,
+          variant: "primary",
+          link: ClientRoutes.hostWithdrawHistory,
+        },
         // { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
         // { label: "Create Merchant", icon: Store, modal: "createMerchant" },
         // { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
@@ -185,12 +198,12 @@ export const DashboardContent: FC<{
       ],
       actions: [
         // { label: "Create Host", icon: UserPlus, modal: "createHost" },
-        // {
-        //   label: "Remove Host",
-        //   icon: UserMinus,
-        //   variant: "danger",
-        //   modal: "removeHost",
-        // },
+        {
+          label: "Withdraw Request",
+          icon: DollarSign,
+          variant: "info",
+          link: ClientRoutes.WithdrawHistory,
+        },
       ],
       lists: [
         { title: "Host List", emptyText: "Host data would appear here." },
@@ -273,16 +286,28 @@ export const DashboardContent: FC<{
       </div>
       {/* Action Buttons */}
       <div className="flex flex-wrap gap-4 mb-8">
-        {config?.actions?.map((action) => (
-          <ActionTinyButton
-            key={action.label}
-            variant={action.variant}
-            onClick={() => openModal(action.modal)}
-          >
-            <action.icon size={16} className="mr-2" />
-            {action.label}
-          </ActionTinyButton>
-        ))}
+        {config?.actions?.map((action) => {
+          if (action.link) {
+            return (
+              <Link to={action.link} key={action.label}>
+                <ActionTinyButton variant={action.variant || "primary"}>
+                  <action.icon size={16} className="mr-2" />
+                  {action.label}
+                </ActionTinyButton>
+              </Link>
+            );
+          }
+          return (
+            <ActionTinyButton
+              key={action.label}
+              variant={action.variant}
+              onClick={() => openModal(action.modal!)}
+            >
+              <action.icon size={16} className="mr-2" />
+              {action.label}
+            </ActionTinyButton>
+          );
+        })}
 
         {role === Roles.Admin && (
           <Link to={ClientRoutes.Gifts}>
