@@ -2,6 +2,7 @@ import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { DashboardCard } from "@/components/cards/dashboard-card";
 import { ClientRoutes, Roles } from "@/constants/route.enum";
 import { useGetDashboardStatsQuery } from "@/redux/api/auth.api";
+import { useAppSelector } from "@/redux/hooks";
 
 import { ButtonProps } from "@/types/buttons";
 import { ModalName, Role } from "@/types/pages/dashboard";
@@ -50,8 +51,9 @@ export const DashboardContent: FC<{
   openModal: (modal: ModalName) => void;
 }> = ({ role, openModal }) => {
   // fetching data from server
+  const user = useAppSelector((state) => state.auth.user);
   const { data: statsDataRes, isLoading } = useGetDashboardStatsQuery();
-  if(isLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
   const staticStatesData = statsDataRes?.result;
@@ -147,8 +149,13 @@ export const DashboardContent: FC<{
       stats: [
         {
           title: "Total Users",
-          value: staticStatesData?.users,
+          value: staticStatesData?.users || 0,
           link: ClientRoutes.Users,
+        },
+        {
+          title: "Total Agencies",
+          value: staticStatesData?.hosts || 0, //TODO: staticStatesData?.agencies || 0,
+          link: `${ClientRoutes.SubAdmins}/${user?.id}`,
         },
         // {
         //   title: "Total Agencies",
@@ -189,12 +196,12 @@ export const DashboardContent: FC<{
     agency: {
       stats: [
         { title: "Current Salary", value: "Future Feature" },
-        { title: "Total Hosts", value: "150", link: "" },
+        { title: "Total Hosts", value: staticStatesData?.hosts || 0, link: `${ClientRoutes.Agencies}/${user?.id}` },
       ],
       actions: [
         // { label: "Create Host", icon: UserPlus, modal: "createHost" },
         {
-          label: "Withdraw Request",
+          label: "Withdraw History",
           icon: DollarSign,
           variant: "info",
           link: ClientRoutes.WithdrawHistory,
