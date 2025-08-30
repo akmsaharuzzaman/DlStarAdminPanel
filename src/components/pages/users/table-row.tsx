@@ -1,6 +1,18 @@
 import { TUser } from "@/types/api/auth";
 
-export const renderUserRow = (user: TUser) => (
+type RenderUserRowProps = {
+  user: TUser;
+  roleOptions: string[];
+  onRoleChange: (userId: string, newRole: string) => void;
+  isUpdating?: boolean;
+};
+
+export const renderUserRow = ({
+  user,
+  roleOptions,
+  onRoleChange,
+  isUpdating = false,
+}: RenderUserRowProps) => (
   <>
     <td className="px-6 py-5">
       <div className="flex items-center gap-4">
@@ -16,8 +28,23 @@ export const renderUserRow = (user: TUser) => (
         />
         <div>
           <div className="font-semibold text-gray-900">{user?.name}</div>
-          <div className="mt-1 inline-block rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-600">
-            {user?.userRole}
+          <div className="mt-1">
+            <select
+              className="rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-600"
+              value={user?.userRole}
+              onChange={(e) => onRoleChange(user._id, e.target.value)}
+              disabled={isUpdating}
+            >
+              <option value={user?.userRole}>{user?.userRole}</option>
+              {roleOptions.map((role) => (
+                <option key={role} value={role}>
+                  {role}
+                </option>
+              ))}
+            </select>
+            {isUpdating && (
+              <span className="ml-2 text-xs text-gray-400">Updating...</span>
+            )}
           </div>
         </div>
       </div>
@@ -60,5 +87,6 @@ export const renderUserRow = (user: TUser) => (
         ID: {user?._id}
       </div>
     </td>
+    <td>{/* Actions column for dropdown */}</td>
   </>
 );

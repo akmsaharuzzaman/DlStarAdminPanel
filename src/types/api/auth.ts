@@ -93,3 +93,23 @@ export type TCreatePortalRoleBody = {
   parentCreator?: string;
   userPermissions?: string[];
 };
+
+export type TWidrawRequest = {
+  _id: string;
+  name: string;
+  hostId: string;
+  accountNumber: string;
+  accountType: string;
+  withdrawDate: string;
+  day: number;
+  time: number;
+  audioHour: number;
+  videoHour: number;
+  country: string;
+  totalSalary: number;
+  status: string;
+  agencyId: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: 0;
+};

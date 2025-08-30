@@ -1,10 +1,11 @@
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { DashboardCard } from "@/components/cards/dashboard-card";
 import { ClientRoutes, Roles } from "@/constants/route.enum";
+import { useGetDashboardStatsQuery } from "@/redux/api/auth.api";
 
 import { ButtonProps } from "@/types/buttons";
 import { ModalName, Role } from "@/types/pages/dashboard";
-import { Coins, Gift, LucideIcon } from "lucide-react";
+import { Coins, DollarSign, Gift, LucideIcon } from "lucide-react";
 import { FC, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -22,7 +23,8 @@ interface DashboardAction {
   label: string;
   icon: LucideIcon;
   variant?: ButtonProps["variant"];
-  modal: ModalName;
+  modal?: ModalName;
+  link?: string;
 }
 
 // Dashboard card config
@@ -48,17 +50,11 @@ export const DashboardContent: FC<{
   openModal: (modal: ModalName) => void;
 }> = ({ role, openModal }) => {
   // fetching data from server
-
-  const staticStatesData = {
-    totalUser: 100,
-    totalSubAdmin: 50,
-    totalAgency: 20,
-    totalMerchant: 10,
-    totalCountryAdmin: 50,
-    totalReseller: 30,
-    totalCoin: 100,
-    totalSpendCoin: 1,
-  };
+  const { data: statsDataRes, isLoading } = useGetDashboardStatsQuery();
+  if(isLoading) {
+    return <div>Loading...</div>;
+  }
+  const staticStatesData = statsDataRes?.result;
 
   /**
    * dashboardConfigs: All dashboard stats, actions, and lists for each role.
@@ -69,12 +65,12 @@ export const DashboardContent: FC<{
       stats: [
         {
           title: "Total Users",
-          value: staticStatesData.totalUser || 0,
+          value: staticStatesData?.users || 0,
           link: ClientRoutes.Users,
         },
         {
           title: "Total Sub-Admins",
-          value: staticStatesData.totalSubAdmin || 0,
+          value: staticStatesData?.subAdmins || 0,
           link: ClientRoutes.SubAdmins,
         },
         // {
@@ -84,12 +80,12 @@ export const DashboardContent: FC<{
         // },
         {
           title: "Total Merchants",
-          value: staticStatesData.totalMerchant || 0,
+          value: staticStatesData?.merchants || 0,
           link: ClientRoutes.Merchants,
         },
         {
           title: "Total Country Admins",
-          value: staticStatesData.totalCountryAdmin || 0,
+          value: staticStatesData?.countryAdmins || 0,
           link: ClientRoutes.CountryAdmins,
         },
         // {
@@ -104,6 +100,18 @@ export const DashboardContent: FC<{
           icon: Coins,
           variant: "success",
           modal: "sellCoin",
+        },
+        {
+          label: "Agnecy Withdraw History",
+          icon: DollarSign,
+          variant: "primary",
+          link: ClientRoutes.AgencyWithdrawHistory,
+        },
+        {
+          label: "Host Withdraw History",
+          icon: DollarSign,
+          variant: "primary",
+          link: ClientRoutes.hostWithdrawHistory,
         },
         // { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
         // { label: "Create Merchant", icon: Store, modal: "createMerchant" },
@@ -139,7 +147,7 @@ export const DashboardContent: FC<{
       stats: [
         {
           title: "Total Users",
-          value: staticStatesData.totalUser,
+          value: staticStatesData?.users,
           link: ClientRoutes.Users,
         },
         // {
@@ -147,11 +155,11 @@ export const DashboardContent: FC<{
         //   value: staticStatesData.totalAgency,
         //   link: ClientRoutes.Agencies,
         // },
-        {
-          title: "Total Resellers",
-          value: staticStatesData.totalReseller,
-          link: ClientRoutes.Resellers,
-        },
+        // {
+        //   title: "Total Resellers",
+        //   value: staticStatesData.totalReseller,
+        //   link: ClientRoutes.Resellers,
+        // },
       ],
       actions: [
         {
@@ -185,12 +193,12 @@ export const DashboardContent: FC<{
       ],
       actions: [
         // { label: "Create Host", icon: UserPlus, modal: "createHost" },
-        // {
-        //   label: "Remove Host",
-        //   icon: UserMinus,
-        //   variant: "danger",
-        //   modal: "removeHost",
-        // },
+        {
+          label: "Withdraw Request",
+          icon: DollarSign,
+          variant: "info",
+          link: ClientRoutes.WithdrawHistory,
+        },
       ],
       lists: [
         { title: "Host List", emptyText: "Host data would appear here." },
@@ -198,11 +206,11 @@ export const DashboardContent: FC<{
     },
     merchant: {
       stats: [
-        {
-          title: "Total Resellers",
-          value: staticStatesData.totalReseller,
-          link: ClientRoutes.Resellers,
-        },
+        // {
+        //   title: "Total Resellers",
+        //   value: staticStatesData.totalReseller,
+        //   link: ClientRoutes.Resellers,
+        // },
       ],
       actions: [
         {
@@ -273,16 +281,28 @@ export const DashboardContent: FC<{
       </div>
       {/* Action Buttons */}
       <div className="flex flex-wrap gap-4 mb-8">
-        {config?.actions?.map((action) => (
-          <ActionTinyButton
-            key={action.label}
-            variant={action.variant}
-            onClick={() => openModal(action.modal)}
-          >
-            <action.icon size={16} className="mr-2" />
-            {action.label}
-          </ActionTinyButton>
-        ))}
+        {config?.actions?.map((action) => {
+          if (action.link) {
+            return (
+              <Link to={action.link} key={action.label}>
+                <ActionTinyButton variant={action.variant || "primary"}>
+                  <action.icon size={16} className="mr-2" />
+                  {action.label}
+                </ActionTinyButton>
+              </Link>
+            );
+          }
+          return (
+            <ActionTinyButton
+              key={action.label}
+              variant={action.variant}
+              onClick={() => openModal(action.modal!)}
+            >
+              <action.icon size={16} className="mr-2" />
+              {action.label}
+            </ActionTinyButton>
+          );
+        })}
 
         {role === Roles.Admin && (
           <Link to={ClientRoutes.Gifts}>

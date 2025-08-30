@@ -1,6 +1,11 @@
-import { TResponse } from "@/types/api";
+import { Tpagination, TResponse } from "@/types/api";
 import { onuliveCloneDashboardBaseApi } from "./base.api";
-import { TCreatePortalRoleBody, TLoginBody, TUser } from "@/types/api/auth";
+import {
+  TCreatePortalRoleBody,
+  TLoginBody,
+  TUser,
+  TWidrawRequest,
+} from "@/types/api/auth";
 import { tagTypes } from "../tag.types";
 
 type TLoginResponse = TResponse<TUser[]> & { access_token: string };
@@ -55,6 +60,39 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
+    getWithdrawRequests: builder.query<
+      TResponse<{ pagination: Tpagination; data: TWidrawRequest[] }>,
+      void
+    >({
+      query: () => ({
+        url: "/admin/withdraw-requests",
+        method: "GET",
+      }),
+      // providesTags: [tagTypes],
+    }),
+    updateRole: builder.mutation({
+      query: ({ userId, newRole }: { userId: string; newRole: string }) => ({
+        url: `/admin/user/asign-role/${newRole}`,
+        method: "PUT",
+        body: { userId },
+      }),
+      invalidatesTags: [tagTypes.user],
+    }),
+    getDashboardStats: builder.query<
+      TResponse<{
+        users: number;
+        subAdmins: number;
+        merchants: number;
+        countryAdmins: number;
+      }>,
+      void
+    >({
+      query: () => ({
+        url: "/admin/dashboard/stats",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
   }),
 });
 
@@ -65,4 +103,7 @@ export const {
   useGetGiftCategoriesQuery,
   useCreatePortalUserMutation,
   useMyProfileQuery,
+  useGetWithdrawRequestsQuery,
+  useUpdateRoleMutation,
+  useGetDashboardStatsQuery
 } = authApi;

@@ -14,6 +14,7 @@ import MerchantById from "@/pages/MerchantById";
 import SubAdmin from "@/pages/Sub-admin";
 import SubAdminById from "@/pages/SubAdminById";
 import Users from "@/pages/Users";
+import { WithdrawHistoryPage } from "@/pages/WithdrawHistory";
 
 export const appRoutes = [
   {
@@ -101,4 +102,9 @@ export const appRoutes = [
     element: <GiftListsPage backRoute={"/"} />,
     roles: [Roles.Admin],
   },
+  {
+    path: "/withdraw-history",
+    element: <WithdrawHistoryPage onBack={"/"}/>,
+    roles: [Roles.Admin]
+  }
 ];
