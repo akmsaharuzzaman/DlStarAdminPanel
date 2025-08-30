@@ -1,6 +1,7 @@
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { DashboardCard } from "@/components/cards/dashboard-card";
 import { ClientRoutes, Roles } from "@/constants/route.enum";
+import { useGetDashboardStatsQuery } from "@/redux/api/auth.api";
 
 import { ButtonProps } from "@/types/buttons";
 import { ModalName, Role } from "@/types/pages/dashboard";
@@ -49,17 +50,11 @@ export const DashboardContent: FC<{
   openModal: (modal: ModalName) => void;
 }> = ({ role, openModal }) => {
   // fetching data from server
-
-  const staticStatesData = {
-    totalUser: 100,
-    totalSubAdmin: 50,
-    totalAgency: 20,
-    totalMerchant: 10,
-    totalCountryAdmin: 50,
-    totalReseller: 30,
-    totalCoin: 100,
-    totalSpendCoin: 1,
-  };
+  const { data: statsDataRes, isLoading } = useGetDashboardStatsQuery();
+  if(isLoading) {
+    return <div>Loading...</div>;
+  }
+  const staticStatesData = statsDataRes?.result;
 
   /**
    * dashboardConfigs: All dashboard stats, actions, and lists for each role.
@@ -70,12 +65,12 @@ export const DashboardContent: FC<{
       stats: [
         {
           title: "Total Users",
-          value: staticStatesData.totalUser || 0,
+          value: staticStatesData?.users || 0,
           link: ClientRoutes.Users,
         },
         {
           title: "Total Sub-Admins",
-          value: staticStatesData.totalSubAdmin || 0,
+          value: staticStatesData?.subAdmins || 0,
           link: ClientRoutes.SubAdmins,
         },
         // {
@@ -85,12 +80,12 @@ export const DashboardContent: FC<{
         // },
         {
           title: "Total Merchants",
-          value: staticStatesData.totalMerchant || 0,
+          value: staticStatesData?.merchants || 0,
           link: ClientRoutes.Merchants,
         },
         {
           title: "Total Country Admins",
-          value: staticStatesData.totalCountryAdmin || 0,
+          value: staticStatesData?.countryAdmins || 0,
           link: ClientRoutes.CountryAdmins,
         },
         // {
@@ -152,7 +147,7 @@ export const DashboardContent: FC<{
       stats: [
         {
           title: "Total Users",
-          value: staticStatesData.totalUser,
+          value: staticStatesData?.users,
           link: ClientRoutes.Users,
         },
         // {
@@ -160,11 +155,11 @@ export const DashboardContent: FC<{
         //   value: staticStatesData.totalAgency,
         //   link: ClientRoutes.Agencies,
         // },
-        {
-          title: "Total Resellers",
-          value: staticStatesData.totalReseller,
-          link: ClientRoutes.Resellers,
-        },
+        // {
+        //   title: "Total Resellers",
+        //   value: staticStatesData.totalReseller,
+        //   link: ClientRoutes.Resellers,
+        // },
       ],
       actions: [
         {
@@ -211,11 +206,11 @@ export const DashboardContent: FC<{
     },
     merchant: {
       stats: [
-        {
-          title: "Total Resellers",
-          value: staticStatesData.totalReseller,
-          link: ClientRoutes.Resellers,
-        },
+        // {
+        //   title: "Total Resellers",
+        //   value: staticStatesData.totalReseller,
+        //   link: ClientRoutes.Resellers,
+        // },
       ],
       actions: [
         {

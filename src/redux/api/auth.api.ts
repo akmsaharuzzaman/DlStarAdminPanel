@@ -78,6 +78,21 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.user],
     }),
+    getDashboardStats: builder.query<
+      TResponse<{
+        users: number;
+        subAdmins: number;
+        merchants: number;
+        countryAdmins: number;
+      }>,
+      void
+    >({
+      query: () => ({
+        url: "/admin/dashboard/stats",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
   }),
 });
 
@@ -90,4 +105,5 @@ export const {
   useMyProfileQuery,
   useGetWithdrawRequestsQuery,
   useUpdateRoleMutation,
+  useGetDashboardStatsQuery
 } = authApi;

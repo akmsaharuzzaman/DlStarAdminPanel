@@ -1,37 +1,7 @@
 import { useGetWithdrawRequestsQuery } from "@/redux/api/auth.api";
+import { TWidrawRequest } from "@/types/api/auth";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-
-const agencyWithdrawHistory = [
-  {
-    id: "AW001",
-    name: "Alpha Agency",
-    amount: 1250.0,
-    withdrawDate: "2025-08-28",
-    status: "Completed",
-  },
-  {
-    id: "AW002",
-    name: "Bravo Creatives",
-    amount: 850.5,
-    withdrawDate: "2025-08-27",
-    status: "Completed",
-  },
-  {
-    id: "AW003",
-    name: "Charlie Gamers",
-    amount: 2500.0,
-    withdrawDate: "2025-08-29",
-    status: "Pending",
-  },
-  {
-    id: "AW004",
-    name: "Delta Entertainment",
-    amount: 500.75,
-    withdrawDate: "2025-08-26",
-    status: "Failed",
-  },
-];
 
 // const hostWithdrawHistory = [
 //   {
@@ -67,7 +37,7 @@ const agencyWithdrawHistory = [
 export const WithdrawHistoryPage = ({ onBack = "/" }: { onBack: string }) => {
   const { data: withdrawRequestRes, isLoading } =
     useGetWithdrawRequestsQuery(undefined);
-//   const agencyWithdrawHistory = withdrawRequestRes?.result?.data || [];
+  const agencyWithdrawHistory = withdrawRequestRes?.result?.data || [];
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <header className="mb-8">
@@ -92,8 +62,10 @@ export const WithdrawHistoryPage = ({ onBack = "/" }: { onBack: string }) => {
 };
 
 // Withdraw History Page Components
-const StatusBadge = ({ status }) => {
-  const styles = {
+type StatusType = "Completed" | "Pending" | "Failed";
+
+const StatusBadge = ({ status }: { status: StatusType }) => {
+  const styles: Record<StatusType, string> = {
     Completed: "bg-green-100 text-green-800",
     Pending: "bg-yellow-100 text-yellow-800",
     Failed: "bg-red-100 text-red-800",
@@ -107,7 +79,13 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-const HistoryTable = ({ title, data }) => (
+const HistoryTable = ({
+  title,
+  data,
+}: {
+  title: string;
+  data: TWidrawRequest[];
+}) => (
   <div className="bg-white p-6 rounded-lg shadow-md">
     <h2 className="text-xl font-semibold text-gray-800 mb-4">{title}</h2>
     <div className="overflow-x-auto">
@@ -148,21 +126,21 @@ const HistoryTable = ({ title, data }) => (
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {data.map((item) => (
-            <tr key={item.id}>
+            <tr key={item._id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {item.id}
+                {item._id}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {item.name}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                ${item.amount.toFixed(2)}
+                ${item.totalSalary.toFixed(2)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {item.withdrawDate}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <StatusBadge status={item.status} />
+                <StatusBadge status={item?.status as StatusType} />
               </td>
             </tr>
           ))}
