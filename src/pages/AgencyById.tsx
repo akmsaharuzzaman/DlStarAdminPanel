@@ -1,8 +1,8 @@
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { HostTable } from "@/components/pages/agency-by-id/table-list";
 import { colors } from "@/constants/constant";
-import { ClientRoutes, Roles } from "@/constants/route.enum";
-import { useGetMidPortalManagementQuery } from "@/redux/api/power-shared";
+import { ClientRoutes } from "@/constants/route.enum";
+import { useLowerPortalManagementQuery } from "@/redux/api/power-shared";
 import { Dispatch, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -43,17 +43,17 @@ const AgencyById = () => {
   const [q, setQ] = useState("");
   const { agencyId } = useParams();
   const {
-    data: subAdminRes,
+    data: hostsRes,
     error,
     isLoading,
-  } = useGetMidPortalManagementQuery({
-    type: Roles.Host,
+  } = useLowerPortalManagementQuery({
+    // type: Roles.Host,
     id: agencyId!,
     searchTerm: q,
   });
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error occurred: {(error as any).message}</div>;
-  const hostData = subAdminRes?.result?.data || [];
+  const hostData = hostsRes?.result?.data || [];
   return (
     <div>
       <div

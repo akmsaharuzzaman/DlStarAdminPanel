@@ -111,7 +111,7 @@ export function UserTable({
                           className="w-4 h-4 mr-1"
                         />
                         <span className="">
-                          {user?.stats && user?.stats.coins
+                          {user?.stats && user?.stats?.coins
                             ? user?.stats?.coins
                             : 0}
                         </span>
@@ -125,7 +125,7 @@ export function UserTable({
                           className="w-4 h-4 mr-1"
                         />
                         <span className="">
-                          {user?.stats && user?.stats.diamonds
+                          {user?.stats && user?.stats?.diamonds
                             ? user?.stats?.diamonds
                             : 0}
                         </span>

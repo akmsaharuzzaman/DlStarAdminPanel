@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Checkbox } from "../ui/checkbox";
 import { Permissions, Roles } from "@/constants/route.enum";
 import { ActionTinyButton } from "../buttons/action-tiny-buttons";
 import { useCreatePortalUserMutation } from "@/redux/api/auth.api";
@@ -58,7 +57,7 @@ export function CreateMerchantForm() {
         designation: values.designation,
         userRole: values.userRole,
         // parentCreator: values.parentCreator,
-        userPermissions: values.userPermissions,
+        userPermissions: [Permissions.CoinDistribution], // default permission
       };
       // if (values.parentCreator === "") {
       //   delete body.parentCreator;
@@ -198,7 +197,7 @@ export function CreateMerchantForm() {
             /> */}
 
             {/* Permissions (full-width row) */}
-            <div className="md:col-span-2">
+            {/* <div className="md:col-span-2">
               <FormField
                 control={form.control}
                 name="userPermissions"
@@ -267,7 +266,7 @@ export function CreateMerchantForm() {
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
 
             {/* Submit */}
             <div className="md:col-span-2">
