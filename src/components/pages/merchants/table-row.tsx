@@ -24,7 +24,7 @@ export const renderMerchantRow = (user: TUser) => (
         </div>
       </div>
     </td>
-    <td className="px-6 py-5 font-mono text-xs text-gray-700">{user?.uid}</td>
+    <td className="px-6 py-5 font-mono text-xs text-gray-700">{user?.userId}</td>
     <td className="px-6 py-5">{user?.gender}</td>
     <td className="px-6 py-5 text-gray-500 italic">{user?.country || "N/A"}</td>
     <td className="px-6 py-5">

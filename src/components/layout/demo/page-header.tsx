@@ -2,7 +2,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut, selectUser } from "@/redux/features/auth.slice";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import { Activity, BarChart3, Contact, Gift, UserIcon, Users, UsersRound } from "lucide-react";
+import {
+  Activity,
+  BarChart3,
+  Contact,
+  Gift,
+  UserIcon,
+  Users,
+  UsersRound,
+} from "lucide-react";
+import { useAdminProfileQuery } from "@/redux/api/auth.api";
 
 export function PageHeader() {
   const user = useSelector(selectUser);
@@ -10,7 +19,7 @@ export function PageHeader() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const { data: adminProfileRes, isLoading } = useAdminProfileQuery();
   // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -92,6 +101,11 @@ export function PageHeader() {
           ))}
         </div> */}
         {/* Profile Action Bar */}
+
+        <div className="flex items-center gap-1 text-sm text-yellow-500">
+          <span className="text-base">🪙</span>{" "}
+          {isLoading ? "..." : adminProfileRes?.result?.coins || 0}
+        </div>
         <div className="relative" ref={dropdownRef}>
           <button
             className="ml-4 flex items-center focus:outline-none"

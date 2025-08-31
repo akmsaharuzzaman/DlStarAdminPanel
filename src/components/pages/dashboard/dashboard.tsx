@@ -98,10 +98,10 @@ export const DashboardContent: FC<{
       ],
       actions: [
         {
-          label: "Sell Coin",
+          label: "Sell Coin to Merchant",
           icon: Coins,
           variant: "success",
-          modal: "sellCoin",
+          modal: "sellCoinToMerchant",
         },
         {
           label: "Agnecy Withdraw History",
@@ -114,6 +114,12 @@ export const DashboardContent: FC<{
           icon: DollarSign,
           variant: "primary",
           link: ClientRoutes.hostWithdrawHistory,
+        },
+        {
+          label: "Add Coin",
+          icon: Coins,
+          variant: "success",
+          modal: "addCoin",
         },
         // { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
         // { label: "Create Merchant", icon: Store, modal: "createMerchant" },
@@ -221,7 +227,13 @@ export const DashboardContent: FC<{
       ],
       actions: [
         {
-          label: "Sell Coin",
+          label: "Sell Coin to Reseller",
+          icon: Coins,
+          variant: "success",
+          modal: "sellCoinToReseller",
+        },
+        {
+          label: "Sell Coin to User",
           icon: Coins,
           variant: "success",
           modal: "sellCoin",

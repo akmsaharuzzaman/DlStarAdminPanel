@@ -1,5 +1,5 @@
 import { Table } from "@/components/tables/table";
-import { renderAgencyRow } from "./table-row";
+import { RenderAgencyRow } from "./table-row";
 
 
 export const AgencyTable = ({ data }: { data: any[] }) => {
@@ -16,6 +16,6 @@ export const AgencyTable = ({ data }: { data: any[] }) => {
   ];
 
   return (
-    <Table columns={columns} data={data} rowRenderer={renderAgencyRow} />
+    <Table columns={columns} data={data} rowRenderer={RenderAgencyRow} />
   );
 };

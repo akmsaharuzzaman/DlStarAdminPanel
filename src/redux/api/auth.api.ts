@@ -7,6 +7,7 @@ import {
   TWidrawRequest,
 } from "@/types/api/auth";
 import { tagTypes } from "../tag.types";
+import { TAdminProfile } from "@/types/pages/admin";
 
 type TLoginResponse = TResponse<TUser[]> & { access_token: string };
 type TGetGiftCategryResponse = TResponse<string[]>;
@@ -53,6 +54,13 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.user],
     }),
+    adminProfile: builder.query<TResponse<TAdminProfile>, void>({
+      query: () => ({
+        url: "/admin/auth",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user, tagTypes.coin],
+    }),
     myProfile: builder.query<TResponse<TUser>, void>({
       query: () => ({
         url: "/auth/my-profile",
@@ -96,6 +104,14 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
+    addCoinForAdmin: builder.mutation<TResponse<TUser>, { coins: number }>({
+      query: ({ coins }) => ({
+        url: "/admin/auth/assign-coin",
+        method: "PUT",
+        body: { coins },
+      }),
+      invalidatesTags: [tagTypes.coin],
+    }),
   }),
 });
 
@@ -105,8 +121,10 @@ export const {
   useUpdateAdminMutation,
   useGetGiftCategoriesQuery,
   useCreatePortalUserMutation,
+  useAdminProfileQuery,
   useMyProfileQuery,
   useGetWithdrawRequestsQuery,
   useUpdateRoleMutation,
-  useGetDashboardStatsQuery
+  useGetDashboardStatsQuery,
+  useAddCoinForAdminMutation,
 } = authApi;
