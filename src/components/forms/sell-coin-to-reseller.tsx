@@ -95,12 +95,12 @@ export const SellCoinToResellerForm = () => {
           htmlFor="sell-email"
           className="block text-sm font-medium text-gray-700"
         >
-          Search by Email or User ID
+          Search by User ID
         </label>
         <Input
-          id="sell-email"
+          id="sell-userId"
           type="text"
-          placeholder="user@example.com"
+          placeholder="@985656"
           onChange={(e) => setSearchName(e.target.value)}
         />
         {searchName && (
