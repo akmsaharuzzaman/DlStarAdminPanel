@@ -1,6 +1,9 @@
 import { ModalDialog } from "@/components/dialog/modal-dialog";
-
+import { AddCoinForm } from "@/components/forms/add-coin-form";
 import { SellCoinForm } from "@/components/forms/sell-coin-form";
+import { SellCoinToMerchantForm } from "@/components/forms/sell-coin-to-merchant-form";
+import { SellCoinToResellerForm } from "@/components/forms/sell-coin-to-reseller";
+
 import { DashboardContent } from "@/components/pages/dashboard/dashboard";
 import { RoleContext } from "@/provider/role-provider";
 import { ModalContentConfig, ModalName } from "@/types/pages/dashboard";
@@ -14,8 +17,23 @@ import { Outlet } from "react-router-dom";
 const modalContentConfig: Record<ModalName, ModalContentConfig> = {
   sellCoin: {
     title: "Sell Coin",
-    description: "Send coins to a user, reseller, or merchant.",
+    description: "Send coins to Merchant.",
     content: <SellCoinForm />,
+  },
+  sellCoinToMerchant: {
+    title: "Sell Coin to Merchant",
+    description: "Send coins to Merchant.",
+    content: <SellCoinToMerchantForm />,
+  },
+  sellCoinToReseller: {
+    title: "Sell Coin to Reseller",
+    description: "Send coins to Reseller.",
+    content: <SellCoinToResellerForm />,
+  },
+  addCoin: {
+    title: "Add Coin",
+    description: "Add coins to self.",
+    content: <AddCoinForm />,
   },
   // createSubAdmin: {
   //   title: "Create Sub-Admin",

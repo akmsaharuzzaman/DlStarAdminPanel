@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RoleContext } from "@/provider/role-provider";
+import { useAdminProfileQuery } from "@/redux/api/auth.api";
 import { logOut } from "@/redux/features/auth.slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { LogOut, Settings, User } from "lucide-react";
@@ -43,6 +44,8 @@ const RootLayout = () => {
     dispatch(logOut());
     navigate("/login");
   };
+
+  const { data: adminProfileRes, isLoading } = useAdminProfileQuery();
   console.log(role, "current role in root layout");
   // const profile = role !== Roles.Admin ? portalProfileRes?.result : profileRes?.result;
   // const fallbackName = profile?.name
@@ -70,7 +73,11 @@ const RootLayout = () => {
                 Dlstar
               </span>
             </div>
-
+            <div className="flex gap-x-4 items-center">
+              <div className="flex items-center gap-1 text-sm text-yellow-500 bg-gray-100 px-3 py-1 rounded-full">
+              <span className="text-base">🪙</span>{" "}
+              {isLoading ? "..." : adminProfileRes?.result?.coins || 0}
+            </div>
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center space-x-3 focus:outline-none">
                 <Avatar className="h-9 w-9">
@@ -113,6 +120,7 @@ const RootLayout = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </div>
 
             {/* <div className="flex items-center space-x-4">
               <div className="flex justify-center gap-x-4">
