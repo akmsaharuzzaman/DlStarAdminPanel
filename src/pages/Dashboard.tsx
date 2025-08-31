@@ -1,5 +1,6 @@
 import { ModalDialog } from "@/components/dialog/modal-dialog";
 import { AddCoinForm } from "@/components/forms/add-coin-form";
+import { CreateHostForm } from "@/components/forms/create-host-form";
 import { SellCoinForm } from "@/components/forms/sell-coin-form";
 import { SellCoinToMerchantForm } from "@/components/forms/sell-coin-to-merchant-form";
 import { SellCoinToResellerForm } from "@/components/forms/sell-coin-to-reseller";
@@ -34,6 +35,11 @@ const modalContentConfig: Record<ModalName, ModalContentConfig> = {
     title: "Add Coin",
     description: "Add coins to self.",
     content: <AddCoinForm />,
+  },
+  createHost: {
+    title: "Create Host",
+    description: "Create host with updating permissions.",
+    content: <CreateHostForm />,
   },
   // createSubAdmin: {
   //   title: "Create Sub-Admin",
