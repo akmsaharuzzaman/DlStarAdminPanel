@@ -121,6 +121,7 @@ export const DashboardContent: FC<{
           variant: "success",
           modal: "addCoin",
         },
+        
         // { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
         // { label: "Create Merchant", icon: Store, modal: "createMerchant" },
         // { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
@@ -211,6 +212,12 @@ export const DashboardContent: FC<{
           icon: DollarSign,
           variant: "info",
           link: ClientRoutes.WithdrawHistory,
+        },
+        {
+          label: "Create Host",
+          icon: Coins,
+          variant: "primary",
+          modal: "createHost",
         },
       ],
       lists: [

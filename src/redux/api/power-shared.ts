@@ -1,7 +1,7 @@
 import { Tpagination, TResponse } from "@/types/api";
 import { onuliveCloneDashboardBaseApi } from "./base.api";
 import { TUser } from "@/types/api/auth";
-import { TAsignCoinToUserRequestBody, TUserRewards } from "@/types/api/user";
+import { TAsignCoinToUserRequestBody, TCreateHost, TUserRewards } from "@/types/api/user";
 import { tagTypes } from "../tag.types";
 import { Roles } from "@/constants/route.enum";
 import { TPortalLoginBody } from "@/types/api/power-shared";
@@ -183,6 +183,18 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
     //   }),
     //   providesTags: [tagTypes.user],
     // }),
+
+     createHost: builder.mutation<
+      TAsignCoinToUserResponse,
+      TCreateHost
+    >({
+      query: (userInfo) => ({
+        url: "/power-shared/users/promote",
+        method: "PUT",
+        body: userInfo,
+      }),
+      invalidatesTags: [tagTypes.user],
+    }),
   }),
 });
 
@@ -197,4 +209,5 @@ export const {
   useGetCountryAdminQuery,
   useGetMidPortalManagementQuery,
   useLowerPortalManagementQuery,
+  useCreateHostMutation
 } = sharedPowerApi;

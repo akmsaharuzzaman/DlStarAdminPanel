@@ -19,3 +19,8 @@ export type TAsignCoinToUserRequestBody = {
   coins: number;
   userRole: string; // Changed to string to match backend enum
 };
+
+export type TCreateHost = {
+  userId: string;
+  permissions: string[];
+};

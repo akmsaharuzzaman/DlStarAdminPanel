@@ -10,19 +10,20 @@ export type ModalName =
   | "addCoin"
   | "sellCoinToMerchant"
   | "sellCoinToReseller"
-  // | "createSubAdmin"
-  // | "createMerchant"
-  // | "createReseller"
-  // | "createAgency"
-  // | "createHost"
-  // | "removeHost"
-  // | "blockUser"
-  // | "blockedUsers"
-  // | "history";
+  | "createHost";
+// | "createSubAdmin"
+// | "createMerchant"
+// | "createReseller"
+// | "createAgency"
+// | "createHost"
+// | "removeHost"
+// | "blockUser"
+// | "blockedUsers"
+// | "history";
 
 // Modal content config
 export interface ModalContentConfig {
   title: string;
-  description?:string;
+  description?: string;
   content: ReactNode;
 }
