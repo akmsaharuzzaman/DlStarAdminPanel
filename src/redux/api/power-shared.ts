@@ -75,10 +75,12 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
     }),
     getMerchants: builder.query<
       TResponse<{ pagination: Tpagination; data: TUser[] }>,
-      { page?: number; limit?: number }
+      { page?: number; limit?: number; searchTerm?: string }
     >({
-      query: ({ page = 1, limit = 9999 } = {}) => ({
-        url: `/power-shared/portal/merchant?page=${page}&limit=${limit}`,
+      query: ({ page = 1, limit = 9999, searchTerm = "" }) => ({
+        url: `/power-shared/portal/merchant?page=${page}&limit=${limit}&searchTerm=${
+          searchTerm || ""
+        }`,
         method: "GET",
       }),
       providesTags: [tagTypes.user],
@@ -94,6 +96,31 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       providesTags: [tagTypes.user],
     }),
 
+    // mid portal management
+    getTopPortalManagement: builder.query<
+      TResponse<{ data: TUser[]; pagination: Tpagination }>,
+      {
+        type: Roles;
+        id: string;
+        searchTerm?: string;
+        page?: number;
+        limit?: number;
+      }
+    >({
+      query: ({ type, id, searchTerm, page = 1, limit = 9999 }) => {
+        const url = `/power-shared/portal/${type}/${id}`;
+        const params = new URLSearchParams();
+
+        if (searchTerm) {
+          params.append("searchTerm", searchTerm);
+        }
+        return {
+          url: `${url}?${params.toString()}&page=${page}&limit=${limit}`,
+          method: "GET",
+        };
+      },
+      providesTags: [tagTypes.user],
+    }),
     // mid portal management
     getMidPortalManagement: builder.query<
       TResponse<{ data: TUser[]; pagination: Tpagination }>,
@@ -120,7 +147,7 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       providesTags: [tagTypes.user],
     }),
 
-     // lower portal management
+    // lower portal management
     lowerPortalManagement: builder.query<
       TResponse<{ data: TUser[]; pagination: Tpagination }>,
       {
@@ -169,5 +196,5 @@ export const {
   useGetMerchantsQuery,
   useGetCountryAdminQuery,
   useGetMidPortalManagementQuery,
-  useLowerPortalManagementQuery
+  useLowerPortalManagementQuery,
 } = sharedPowerApi;

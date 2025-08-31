@@ -1,63 +1,68 @@
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { skipToken } from "@reduxjs/toolkit/query";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormSetValue } from "react-hook-form";
 import { toast } from "sonner";
-import { useAsignCoinToUserByIdMutation, useGetMidPortalManagementQuery } from "@/redux/api/power-shared";
+import { TUser } from "@/types/api/auth";
+import {
+  useAsignCoinToUserByIdMutation,
+  useGetMidPortalManagementQuery,
+} from "@/redux/api/power-shared";
 import { Roles } from "@/constants/route.enum";
 import { useAppSelector } from "@/redux/hooks";
-import { useState } from "react";
-
 
 const sellCoinSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
   coinAmount: z.number().min(1, "Amount must be at least 1"),
   userRole: z.string().min(1, "User role is required"), // This will be set internally
 });
-type SellCoinToPortalFormValues = z.infer<typeof sellCoinSchema>;
+type SellCoinFormValues = z.infer<typeof sellCoinSchema>;
 
 export const SellCoinToResellerForm = () => {
-    const user = useAppSelector((state) => state.auth.user);
-    console.log(user)
-  const [asignCoinToUser, { isLoading }] = useAsignCoinToUserByIdMutation();
-  const [q, setQ] = useState("");
-  const {
-    data: resellerRes,
-    error,
-    isLoading,
-  } = useGetMidPortalManagementQuery({
-    type: Roles.Reseller,
-    id: user?.id as string,
-    searchTerm: q,
-  });
+  const [searchName, setSearchName] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  console.log(resellerRes, "resellerRes")
+  const [asignCoinToUser, { isLoading }] = useAsignCoinToUserByIdMutation();
+  const user = useAppSelector((state) => state.auth.user);
+  const merchantId = user?.id || "";
+  // debounce search input
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchName);
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [searchName]);
+
+  // Use backend search for email
+  const { data: searchedUsers, isLoading: isSearching } =
+    useGetMidPortalManagementQuery(
+      debouncedSearch.length > 0
+        ? {
+            type: Roles.Reseller,
+            id: merchantId!,
+            searchTerm: debouncedSearch,
+          }
+        : skipToken
+    );
+
+  const filteredUsers =
+    debouncedSearch.length > 0 ? searchedUsers?.result?.data || [] : [];
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
     reset,
-  } = useForm<SellCoinToPortalFormValues>({
+  } = useForm<SellCoinFormValues>({
     resolver: zodResolver(sellCoinSchema),
-    defaultValues: { userId: "", coinAmount: 1, userRole: Roles.Reseller },
+    defaultValues: { userId: "", coinAmount: 1, userRole: "" },
   });
 
-
-  const userIdOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const enteredUserId = e.target.value;
-    // const matchedUser = resellerRes?.result.find((user) => user.id === enteredUserId);
-    // if (matchedUser) {
-    //   // If a matching user is found, set the userRole field
-    //   setValue("userRole", matchedUser.role);
-    // } else {
-    //   // If no match is found, clear the userRole field
-    //   setValue("userRole", "");
-    // }
-  }
-  
-  const onSubmit = async (data: SellCoinToPortalFormValues) => {
+  const onSubmit = async (data: SellCoinFormValues) => {
     try {
       const payload = {
         userId: data.userId,
@@ -78,9 +83,7 @@ export const SellCoinToResellerForm = () => {
     } catch (error: any) {
       console.log(error);
       toast.error(
-        error?.data?.message ||
-          error?.message ||
-          "Failed to sell coins. Please try again."
+        error?.data?.message || "Failed to sell coins. Please try again."
       );
       // setSuccessMsg("Failed to sell coins. Please try again.");
     }
@@ -89,16 +92,55 @@ export const SellCoinToResellerForm = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <label
-          htmlFor="userId"
+          htmlFor="sell-email"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Search by Email or User ID
+        </label>
+        <Input
+          id="sell-email"
+          type="text"
+          placeholder="user@example.com"
+          onChange={(e) => setSearchName(e.target.value)}
+        />
+        {searchName && (
+          <div className="mt-2 max-h-32 overflow-y-auto border rounded bg-white shadow">
+            {isSearching ? (
+              <div className="px-3 py-2 text-gray-400 text-sm text-center">
+                Searching...
+              </div>
+            ) : (filteredUsers as TUser[]).length > 0 ? ( // Todo: need to remove the type assertion
+              (filteredUsers as TUser[]).map(
+                // Todo: need to remove the  type assertion
+                (user) => (
+                  <SearchingResultAppear
+                    key={user._id}
+                    user={user}
+                    setValue={setValue}
+                    setSearchName={setSearchName}
+                  />
+                )
+              )
+            ) : (
+              <div className="px-3 py-2 text-gray-400 text-sm">
+                No user found
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      <div>
+        <label
+          htmlFor="sell-email"
           className="block text-sm font-medium text-gray-700"
         >
           User ID
         </label>
-        <Input type="text" {...register("userId")} />
+        <Input type="text" {...register("userId")} readOnly />
       </div>
       <div>
         <label
-          htmlFor="coin-amount"
+          htmlFor="sell-amount"
           className="block text-sm font-medium text-gray-700"
         >
           Coin Amount
@@ -127,5 +169,47 @@ export const SellCoinToResellerForm = () => {
         </Button>
       )}
     </form>
+  );
+};
+
+const SearchingResultAppear = ({
+  setSearchName,
+  setValue,
+  user,
+}: {
+  user: TUser;
+  setValue: UseFormSetValue<{
+    userId: string;
+    coinAmount: number;
+    userRole: string;
+  }>;
+  setSearchName: (name: string) => void;
+}) => {
+  return (
+    <div
+      className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-pink-50 text-sm"
+      onClick={() => {
+        setValue("userId", user._id);
+        setSearchName(user.name);
+        setValue("userRole", user.userRole);
+      }}
+    >
+      {user.avatar ? (
+        <img
+          src={user.avatar}
+          alt={user.name}
+          className="w-8 h-8 rounded-full border border-gray-200 object-cover"
+        />
+      ) : (
+        <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 font-bold border border-gray-200">
+          {user.name?.charAt(0).toUpperCase()}
+        </div>
+      )}
+      <div className="flex flex-col">
+        <span className="font-medium text-gray-800">{user.name}</span>
+        <span className="text-xs text-gray-500">{user.email}</span>
+        <span className="text-xs text-gray-400">ID: {user._id}</span>
+      </div>
+    </div>
   );
 };
