@@ -10,6 +10,7 @@ import {
 import { Roles } from "@/constants/route.enum";
 import { RoleContext } from "@/provider/role-provider";
 import { useAdminProfileQuery } from "@/redux/api/auth.api";
+import { useGetPortalProfileQuery } from "@/redux/api/power-shared";
 import { logOut } from "@/redux/features/auth.slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { LogOut, Settings, User } from "lucide-react";
@@ -47,12 +48,21 @@ const RootLayout = () => {
   };
 
   const { data: adminProfileRes, isLoading } = useAdminProfileQuery();
+  const { data: portalProfileRes, isLoading: portalIsLoading } =
+    useGetPortalProfileQuery();
+
   console.log(role, "current role in root layout");
   // const profile = role !== Roles.Admin ? portalProfileRes?.result : profileRes?.result;
   // const fallbackName = profile?.name
   //   ? profile.name.charAt(0).toUpperCase()
   //   : "U";
   const fallbackName = "U";
+  const renderAdmin = isLoading ? "..." : adminProfileRes?.result?.coins || 0;
+  const renderPortal = portalIsLoading
+    ? "..."
+    : portalProfileRes?.result?.coins || 0;
+  // const renderAdmin = isLoading ? "..." : adminProfileRes?.result?.coins || 0;
+console.log(renderPortal)
   return (
     <div className="min-h-screen bg-gray-100 font-sans">
       {/* Header with role switcher */}
@@ -78,7 +88,19 @@ const RootLayout = () => {
               {role === Roles.Admin && (
                 <div className="flex items-center gap-1 text-sm text-yellow-500 bg-gray-100 px-3 py-1 rounded-full">
                   <span className="text-base">🪙</span>{" "}
-                  {isLoading ? "..." : adminProfileRes?.result?.coins || 0}
+                  <span className="font-medium">{renderAdmin}</span>
+                </div>
+              )}
+              {role === Roles.Merchant && (
+                <div className="flex items-center gap-1 text-sm text-yellow-500 bg-gray-100 px-3 py-1 rounded-full">
+                  <span className="text-base">🪙</span>{" "}
+                  <span className="font-medium">{renderPortal}</span>
+                </div>
+              )}
+              {role === Roles.Reseller && (
+                <div className="flex items-center gap-1 text-sm text-yellow-500 bg-gray-100 px-3 py-1 rounded-full">
+                  <span className="text-base">🪙</span>{" "}
+                  <span className="font-medium">{renderPortal}</span>
                 </div>
               )}
               <DropdownMenu>

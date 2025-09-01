@@ -3,6 +3,7 @@ import { onuliveCloneDashboardBaseApi } from "./base.api";
 import {
   TCreatePortalRoleBody,
   TLoginBody,
+  TTransactionAdminHistory,
   TUser,
   TWidrawRequest,
 } from "@/types/api/auth";
@@ -112,6 +113,19 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.coin],
     }),
+    getAdminTransactions: builder.query<
+      TResponse<{
+        pagination: Tpagination;
+        data: TTransactionAdminHistory[];
+      }>,
+      void
+    >({
+      query: () => ({
+        url: "/admin/transaction-admin",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
   }),
 });
 
@@ -127,4 +141,5 @@ export const {
   useUpdateRoleMutation,
   useGetDashboardStatsQuery,
   useAddCoinForAdminMutation,
+  useGetAdminTransactionsQuery,
 } = authApi;

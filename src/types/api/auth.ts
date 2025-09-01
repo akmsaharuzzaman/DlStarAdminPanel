@@ -65,6 +65,7 @@ export type TUser = {
   country?: string;
   countryLanguages: string[];
   isViewer: false;
+  coins: number;
   activityZone: {
     zone: string;
   };
@@ -112,4 +113,18 @@ export type TWidrawRequest = {
   createdAt: string;
   updatedAt: string;
   __v: 0;
+};
+
+export type TTransactionAdminHistory = {
+  _id: string;
+  senderRole: string;
+  senderId: string;
+  receiverRole: string;
+  receiverId: string;
+  amount: number;
+  expireAt: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: 0;
+  receiver: TUser;
 };
