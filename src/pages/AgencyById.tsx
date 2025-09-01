@@ -1,10 +1,8 @@
-import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { HostTable } from "@/components/pages/agency-by-id/table-list";
 import { colors } from "@/constants/constant";
-import { ClientRoutes } from "@/constants/route.enum";
 import { useLowerPortalManagementQuery } from "@/redux/api/power-shared";
 import { Dispatch, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const SearchBar = ({
   value,
@@ -72,9 +70,9 @@ const AgencyById = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar value={q} onChange={setQ} />
-          <Link to={ClientRoutes.Hosts}>
+          {/* <Link to={ClientRoutes.Hosts}>
             <ActionTinyButton variant="primary">Create Host</ActionTinyButton>
-          </Link>
+          </Link> */}
         </div>
       </div>
 
@@ -90,9 +88,9 @@ const AgencyById = () => {
           <p style={{ color: colors.textMuted, marginBottom: 16 }}>
             No hosts matched your search.
           </p>
-          <Link to={ClientRoutes.Hosts}>
+          {/* <Link to={ClientRoutes.Hosts}>
             <ActionTinyButton variant="primary">Create Host</ActionTinyButton>
-          </Link>
+          </Link> */}
         </div>
       ) : (
         <HostTable data={hostData} />

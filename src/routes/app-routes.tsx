@@ -13,6 +13,7 @@ import Merchant from "@/pages/Merchant";
 import MerchantById from "@/pages/MerchantById";
 import SubAdmin from "@/pages/Sub-admin";
 import SubAdminById from "@/pages/SubAdminById";
+import { TransactionHistoryPage } from "@/pages/TransactionHistory";
 import Users from "@/pages/Users";
 import { WithdrawHistoryPage } from "@/pages/WithdrawHistory";
 
@@ -45,7 +46,7 @@ export const appRoutes = [
     element: <Users />,
     roles: [Roles.Admin, Roles.SubAdmin],
   },
-   {
+  {
     path: "/create-agency/:subAdminId",
     element: <CreateAgencyPage backRoute={"/"} />,
     roles: [Roles.Admin, Roles.SubAdmin],
@@ -72,7 +73,7 @@ export const appRoutes = [
     element: <CreateCountryAdminPage backRoute={"/"} />,
     roles: [Roles.Admin],
   },
-   {
+  {
     path: "/create-reseller/:merchantId",
     element: <CreateResellerPage backRoute={"/"} />,
     roles: [Roles.Admin],
@@ -104,7 +105,12 @@ export const appRoutes = [
   },
   {
     path: "/withdraw-history",
-    element: <WithdrawHistoryPage onBack={"/"}/>,
-    roles: [Roles.Admin]
-  }
+    element: <WithdrawHistoryPage onBack={"/"} />,
+    roles: [Roles.Admin],
+  },
+  {
+    path: "transaction-history",
+    element: <TransactionHistoryPage onBack={"/"} />,
+    roles: [Roles.Admin],
+  },
 ];

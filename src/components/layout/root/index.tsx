@@ -7,8 +7,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Roles } from "@/constants/route.enum";
 import { RoleContext } from "@/provider/role-provider";
 import { useAdminProfileQuery } from "@/redux/api/auth.api";
+import { useGetPortalProfileQuery } from "@/redux/api/power-shared";
 import { logOut } from "@/redux/features/auth.slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { LogOut, Settings, User } from "lucide-react";
@@ -46,12 +48,21 @@ const RootLayout = () => {
   };
 
   const { data: adminProfileRes, isLoading } = useAdminProfileQuery();
+  const { data: portalProfileRes, isLoading: portalIsLoading } =
+    useGetPortalProfileQuery();
+
   console.log(role, "current role in root layout");
   // const profile = role !== Roles.Admin ? portalProfileRes?.result : profileRes?.result;
   // const fallbackName = profile?.name
   //   ? profile.name.charAt(0).toUpperCase()
   //   : "U";
   const fallbackName = "U";
+  const renderAdmin = isLoading ? "..." : adminProfileRes?.result?.coins || 0;
+  const renderPortal = portalIsLoading
+    ? "..."
+    : portalProfileRes?.result?.coins || 0;
+  // const renderAdmin = isLoading ? "..." : adminProfileRes?.result?.coins || 0;
+console.log(renderPortal)
   return (
     <div className="min-h-screen bg-gray-100 font-sans">
       {/* Header with role switcher */}
@@ -74,23 +85,37 @@ const RootLayout = () => {
               </span>
             </div>
             <div className="flex gap-x-4 items-center">
-              <div className="flex items-center gap-1 text-sm text-yellow-500 bg-gray-100 px-3 py-1 rounded-full">
-              <span className="text-base">🪙</span>{" "}
-              {isLoading ? "..." : adminProfileRes?.result?.coins || 0}
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center space-x-3 focus:outline-none">
-                <Avatar className="h-9 w-9">
-                  <AvatarImage
-                    src={
-                      // profile?.avatar ||
-                      "https://dovercourt.org/wp-content/uploads/2019/11/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.jpg"
-                    }
-                    alt="User"
-                  />
-                  <AvatarFallback>{fallbackName}</AvatarFallback>
-                </Avatar>
-                {/* <div className="hidden sm:flex flex-col text-left">
+              {role === Roles.Admin && (
+                <div className="flex items-center gap-1 text-sm text-yellow-500 bg-gray-100 px-3 py-1 rounded-full">
+                  <span className="text-base">🪙</span>{" "}
+                  <span className="font-medium">{renderAdmin}</span>
+                </div>
+              )}
+              {role === Roles.Merchant && (
+                <div className="flex items-center gap-1 text-sm text-yellow-500 bg-gray-100 px-3 py-1 rounded-full">
+                  <span className="text-base">🪙</span>{" "}
+                  <span className="font-medium">{renderPortal}</span>
+                </div>
+              )}
+              {role === Roles.Reseller && (
+                <div className="flex items-center gap-1 text-sm text-yellow-500 bg-gray-100 px-3 py-1 rounded-full">
+                  <span className="text-base">🪙</span>{" "}
+                  <span className="font-medium">{renderPortal}</span>
+                </div>
+              )}
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center space-x-3 focus:outline-none">
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage
+                      src={
+                        // profile?.avatar ||
+                        "https://dovercourt.org/wp-content/uploads/2019/11/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.jpg"
+                      }
+                      alt="User"
+                    />
+                    <AvatarFallback>{fallbackName}</AvatarFallback>
+                  </Avatar>
+                  {/* <div className="hidden sm:flex flex-col text-left">
                   <span className="text-sm font-medium text-gray-800">
                     John
                   </span>
@@ -98,28 +123,28 @@ const RootLayout = () => {
                     john@example.com
                   </span>
                 </div> */}
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-red-600"
-                  onClick={handleLogout}
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-600"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             {/* <div className="flex items-center space-x-4">

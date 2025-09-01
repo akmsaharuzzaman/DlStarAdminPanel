@@ -116,12 +116,18 @@ export const DashboardContent: FC<{
           link: ClientRoutes.hostWithdrawHistory,
         },
         {
+          label: "Transaction History",
+          icon: DollarSign,
+          variant: "primary",
+          link: ClientRoutes.TransactionHistory,
+        },
+        {
           label: "Add Coin",
           icon: Coins,
           variant: "success",
           modal: "addCoin",
         },
-        
+
         // { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },
         // { label: "Create Merchant", icon: Store, modal: "createMerchant" },
         // { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
@@ -176,12 +182,12 @@ export const DashboardContent: FC<{
         // },
       ],
       actions: [
-        {
-          label: "Sell Coin",
-          icon: Coins,
-          variant: "success",
-          modal: "sellCoin",
-        },
+        // {
+        //   label: "Sell Coin",
+        //   icon: Coins,
+        //   variant: "success",
+        //   modal: "sellCoin",
+        // },
         // { label: "Create Agency", icon: Building, modal: "createAgency" },
         // {
         //   label: "Block User",
@@ -203,7 +209,11 @@ export const DashboardContent: FC<{
     agency: {
       stats: [
         { title: "Current Salary", value: "Future Feature" },
-        { title: "Total Hosts", value: staticStatesData?.hosts || 0, link: `${ClientRoutes.Agencies}/${user?.id}` },
+        {
+          title: "Total Hosts",
+          value: staticStatesData?.hosts || 0,
+          link: `${ClientRoutes.Agencies}/${user?.id}`,
+        },
       ],
       actions: [
         // { label: "Create Host", icon: UserPlus, modal: "createHost" },
