@@ -24,7 +24,7 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         url: "/power-shared/auth",
         method: "GET",
       }),
-      providesTags: [tagTypes.user],
+      providesTags: [tagTypes.user, tagTypes.coin],
     }),
     getUsers: builder.query<
       TGetUserResponse,
