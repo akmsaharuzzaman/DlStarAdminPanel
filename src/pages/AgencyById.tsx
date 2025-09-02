@@ -51,7 +51,8 @@ const AgencyById = () => {
   });
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error occurred: {(error as any).message}</div>;
-  const hostData = hostsRes?.result?.data || [];
+  const hostData = hostsRes?.result?.users || [];
+console.log({hostData});
   return (
     <div>
       <div

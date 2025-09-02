@@ -229,6 +229,12 @@ export const DashboardContent: FC<{
           variant: "primary",
           modal: "createHost",
         },
+          {
+          label: "Withdraw Apply",
+          icon: Coins,
+          variant: "primary",
+          modal: "withdrawApplyForm",
+        },
       ],
       lists: [
         { title: "Host List", emptyText: "Host data would appear here." },

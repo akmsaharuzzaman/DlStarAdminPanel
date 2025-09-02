@@ -4,6 +4,7 @@ import { CreateHostForm } from "@/components/forms/create-host-form";
 import { SellCoinForm } from "@/components/forms/sell-coin-form";
 import { SellCoinToMerchantForm } from "@/components/forms/sell-coin-to-merchant-form";
 import { SellCoinToResellerForm } from "@/components/forms/sell-coin-to-reseller";
+import { WithdrawApplyForm } from "@/components/forms/withdraw-apply-form";
 
 import { DashboardContent } from "@/components/pages/dashboard/dashboard";
 import { RoleContext } from "@/provider/role-provider";
@@ -21,12 +22,12 @@ const modalContentConfig: Record<ModalName, ModalContentConfig> = {
     description: "Send coins to Merchant.",
     content: <SellCoinForm />,
   },
-   sellCoinToUser: {
+  sellCoinToUser: {
     title: "Sell Coin",
     description: "Send coins to User.",
     content: <SellCoinForm />,
   },
-  
+
   sellCoinToMerchant: {
     title: "Sell Coin to Merchantd",
     description: "Send coins to Merchant.",
@@ -46,6 +47,11 @@ const modalContentConfig: Record<ModalName, ModalContentConfig> = {
     title: "Create Host",
     description: "Create host with updating permissions.",
     content: <CreateHostForm />,
+  },
+  withdrawApplyForm: {
+    title: "Withdraw Apply",
+    description: "Create withdraw for request salary.",
+    content: <WithdrawApplyForm />,
   },
   // createSubAdmin: {
   //   title: "Create Sub-Admin",

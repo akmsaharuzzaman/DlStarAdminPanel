@@ -149,7 +149,7 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
 
     // lower portal management
     lowerPortalManagement: builder.query<
-      TResponse<{ data: TUser[]; pagination: Tpagination }>,
+      TResponse<{ users: TUser[]; pagination: Tpagination }>,
       {
         // type: Roles;
         id: string;
