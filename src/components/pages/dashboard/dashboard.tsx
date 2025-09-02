@@ -116,7 +116,7 @@ export const DashboardContent: FC<{
           link: ClientRoutes.hostWithdrawHistory,
         },
         {
-          label: "Transaction History",
+          label: "Coin Transaction History",
           icon: DollarSign,
           variant: "primary",
           link: ClientRoutes.TransactionHistory,
@@ -229,6 +229,7 @@ export const DashboardContent: FC<{
           variant: "primary",
           modal: "createHost",
         },
+        
       ],
       lists: [
         { title: "Host List", emptyText: "Host data would appear here." },
@@ -254,6 +255,12 @@ export const DashboardContent: FC<{
           icon: Coins,
           variant: "success",
           modal: "sellCoin",
+        },
+        {
+          label: "Coin Transaction History",
+          icon: DollarSign,
+          variant: "primary",
+          link: ClientRoutes.TransactionHistory,
         },
         // { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
         // {
@@ -281,6 +288,12 @@ export const DashboardContent: FC<{
           icon: Coins,
           variant: "success",
           modal: "sellCoin",
+        },
+        {
+          label: "Coin Transaction History",
+          icon: DollarSign,
+          variant: "primary",
+          link: ClientRoutes.TransactionHistory,
         },
         // {
         //   label: "History",
