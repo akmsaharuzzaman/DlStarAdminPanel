@@ -21,8 +21,14 @@ const modalContentConfig: Record<ModalName, ModalContentConfig> = {
     description: "Send coins to Merchant.",
     content: <SellCoinForm />,
   },
+   sellCoinToUser: {
+    title: "Sell Coin",
+    description: "Send coins to User.",
+    content: <SellCoinForm />,
+  },
+  
   sellCoinToMerchant: {
-    title: "Sell Coin to Merchant",
+    title: "Sell Coin to Merchantd",
     description: "Send coins to Merchant.",
     content: <SellCoinToMerchantForm />,
   },

@@ -229,7 +229,6 @@ export const DashboardContent: FC<{
           variant: "primary",
           modal: "createHost",
         },
-        
       ],
       lists: [
         { title: "Host List", emptyText: "Host data would appear here." },
@@ -254,7 +253,7 @@ export const DashboardContent: FC<{
           label: "Sell Coin to User",
           icon: Coins,
           variant: "success",
-          modal: "sellCoin",
+          modal: "sellCoinToUser",
         },
         {
           label: "Coin Transaction History",
@@ -279,15 +278,15 @@ export const DashboardContent: FC<{
     },
     "re-seller": {
       stats: [
-        { title: "Your ResellerCoins", value: "50,000" },
-        { title: "Total Earning", value: "$1,250" },
+        { title: "Available Reseller Coins", value: 0 }, //TODO: add the value from the api
+        // { title: "Total Earning", value: "$1,250" },
       ],
       actions: [
         {
           label: "Sell Coin to User",
           icon: Coins,
           variant: "success",
-          modal: "sellCoin",
+          modal: "sellCoinToUser",
         },
         {
           label: "Coin Transaction History",
