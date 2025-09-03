@@ -8,9 +8,11 @@ export type Role = "admin" | "sub-admin" | "agency" | "merchant" | "re-seller";
 export type ModalName =
   | "sellCoin"
   | "addCoin"
+  | "sellCoinToUser"
   | "sellCoinToMerchant"
   | "sellCoinToReseller"
-  | "createHost";
+  | "createHost"
+  | "withdrawApplyForm";
 // | "createSubAdmin"
 // | "createMerchant"
 // | "createReseller"

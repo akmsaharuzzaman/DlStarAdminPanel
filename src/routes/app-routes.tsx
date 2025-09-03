@@ -111,6 +111,8 @@ export const appRoutes = [
   {
     path: "transaction-history",
     element: <TransactionHistoryPage onBack={"/"} />,
-    roles: [Roles.Admin],
+    roles: [Roles.Admin, Roles.Merchant, Roles.Reseller],
   },
 ];
+
+
