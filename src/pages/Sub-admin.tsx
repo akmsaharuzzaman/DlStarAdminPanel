@@ -54,8 +54,12 @@ const SearchBar = ({
 const SubAdmin = () => {
   const [q, setQ] = useState("");
   const { data: subAdminRes, isLoading } = useGetSubAdminsQuery({});
-  const subAdminData = subAdminRes?.result?.data || [];
-
+  const subAdmins = subAdminRes?.result?.data || [];
+  const subAdminData = subAdmins ? [...subAdmins].sort((a, b) => {
+    return (
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }) : [];
   const filtered = useMemo(
     () =>
       subAdminData.filter((u) => {

@@ -3,7 +3,7 @@ import { AppPagination } from "@/components/shared/pagination";
 import { SearchBar } from "@/components/shared/search-bar";
 import { colors } from "@/constants/constant";
 import { useGetUsersQuery } from "@/redux/api/power-shared";
-import {  useState } from "react";
+import { useState } from "react";
 const PAGE_LIMIT = 10;
 const initialPage = 1;
 const Users = () => {
@@ -16,15 +16,24 @@ const Users = () => {
     searchTerm: q,
   });
 
-  const userData = userResponse?.result?.users || [];
-  
   if (isLoading) {
     return <div>Loading...</div>;
   }
   if (!userResponse || !userResponse.result) {
     return <div>No user data found.</div>;
   }
+
   console.log(userResponse, "userResponse");
+  const users = userResponse?.result?.users || [];
+  const userData = users
+    ? [...users].sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      })
+    : [];
+
+  console.log(userData, "userResponse");
 
   return (
     <div>
