@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useAsignCoinToUserByIdMutation } from "@/redux/api/power-shared";
 
 const sellCoinSchema = z.object({
   salary: z.string().min(1, "Salary is required"),
@@ -16,7 +15,7 @@ type SellCoinFormValues = z.infer<typeof sellCoinSchema>;
 const PAYMENT_METHODS = ["Bkash", "Nagad", "Rocket"];
 
 export const WithdrawApplyForm = () => {
-  const [asignCoinToUser, { isLoading }] = useAsignCoinToUserByIdMutation();
+//   const [asignCoinToUser, { isLoading }] = useAsignCoinToUserByIdMutation();
 
   const {
     register,
@@ -110,18 +109,18 @@ export const WithdrawApplyForm = () => {
           </p>
         )}
       </div>
-      {isLoading ? (
+      {/* {isLoading ? ( */}
         <Button className="bg-green-500 text-white hover:bg-green-600" disabled>
           Processing..
         </Button>
-      ) : (
+      {/* ) : ( */}
         <Button
           type="submit"
           className="bg-green-500 text-white hover:bg-green-600"
         >
           Confirm Sale
         </Button>
-      )}
+      {/* )} */}
     </form>
   );
 };

@@ -2,6 +2,11 @@ import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { DashboardCard } from "@/components/cards/dashboard-card";
 import { ClientRoutes, Roles } from "@/constants/route.enum";
 import { useGetDashboardStatsQuery } from "@/redux/api/auth.api";
+import {
+  useGetMidPortalManagementQuery,
+  useGetPortalProfileQuery,
+  useLowerPortalManagementQuery,
+} from "@/redux/api/power-shared";
 import { useAppSelector } from "@/redux/hooks";
 
 import { ButtonProps } from "@/types/buttons";
@@ -53,9 +58,37 @@ export const DashboardContent: FC<{
   // fetching data from server
   const user = useAppSelector((state) => state.auth.user);
   const { data: statsDataRes, isLoading } = useGetDashboardStatsQuery();
+  const { data: portalProfileRes, isLoading: portalIsLoading } =
+    useGetPortalProfileQuery();
+  const {
+    data: hostsRes,
+    error,
+    isLoading:isHostLoading,
+  } = useLowerPortalManagementQuery({
+    // type: Roles.Host,
+    id: user!.id!,
+  });
+  const { data: subAdminRes, isLoading: subAdminLoading } = useGetMidPortalManagementQuery(
+    {
+      type: Roles.Agency,
+      id: user!.id!,
+    }
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error occurred: {(error as any).message}</div>;
+  const hosts = portalIsLoading ? 0 : hostsRes?.result?.users?.length || 0;
+  const salary = portalIsLoading ? 0 : portalProfileRes?.result?.coins || 0;
+
+  const agencies = subAdminLoading
+    ? "..."
+    : subAdminRes?.result?.data.length || 0;
+  console.log(salary, "hosts length");
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
   const staticStatesData = statsDataRes?.result;
 
   /**
@@ -167,7 +200,7 @@ export const DashboardContent: FC<{
         },
         {
           title: "Total Agencies",
-          value: staticStatesData?.hosts || 0, //TODO: staticStatesData?.agencies || 0,
+          value: agencies, //TODO: staticStatesData?.agencies || 0,
           link: `${ClientRoutes.SubAdmins}/${user?.id}`,
         },
         // {
@@ -208,10 +241,10 @@ export const DashboardContent: FC<{
     },
     agency: {
       stats: [
-        { title: "Current Salary", value: "Future Feature" },
+        { title: "Current Salary", value: salary }, // TOD: here add the api response. not static data
         {
           title: "Total Hosts",
-          value: staticStatesData?.hosts || 0,
+          value: isHostLoading ? "..." : hosts || 0,
           link: `${ClientRoutes.Agencies}/${user?.id}`,
         },
       ],
@@ -229,7 +262,7 @@ export const DashboardContent: FC<{
           variant: "primary",
           modal: "createHost",
         },
-          {
+        {
           label: "Withdraw Apply",
           icon: Coins,
           variant: "primary",
