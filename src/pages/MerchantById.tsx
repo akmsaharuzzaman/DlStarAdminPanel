@@ -22,7 +22,14 @@ const MerchantById = () => {
   });
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error occurred: {(error as any).message}</div>;
-  const resellerData = resellerRes?.result?.data || [];
+  const resellers = resellerRes?.result?.data || [];
+  const resellerData = resellers
+    ? [...resellers].sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      })
+    : [];
   return (
     <div>
       <div
@@ -41,7 +48,7 @@ const MerchantById = () => {
         </h3>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <SearchBar onChange={setQ} />
-          <Link to={`${ClientRoutes.CreateReseller}${merchantId}`}>
+          <Link to={`${ClientRoutes.CreateReseller}/${merchantId}`}>
             <ActionTinyButton variant="primary">
               Create Reseller
             </ActionTinyButton>

@@ -63,7 +63,14 @@ const SubAdminById = () => {
     searchTerm: q,
   });
 
-  const subAdminData = subAdminRes?.result?.data || [];
+  const agencies = subAdminRes?.result?.data || [];
+  const agenciesData = agencies
+    ? [...agencies].sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      })
+    : [];
   // const filtered = useMemo(
   //   () =>
   //     subAdminData.filter((u) => {
@@ -104,7 +111,7 @@ const SubAdminById = () => {
         </div>
       </div>
 
-      {subAdminData.length === 0 ? (
+      {agenciesData.length === 0 ? (
         <div
           style={{
             padding: 48,
@@ -121,7 +128,7 @@ const SubAdminById = () => {
           </Link>
         </div>
       ) : (
-        <AgencyTable data={subAdminData} />
+        <AgencyTable data={agenciesData} />
       )}
     </div>
   );

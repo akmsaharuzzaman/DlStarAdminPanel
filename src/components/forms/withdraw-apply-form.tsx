@@ -7,15 +7,15 @@ import { toast } from "sonner";
 
 const sellCoinSchema = z.object({
   salary: z.string().min(1, "Salary is required"),
-  paymentMethod: z.number().min(1, "Payment method must be at least 1"),
-  accountNumber: z.string().min(1, "Account number is required"), // This will be set internally
+  paymentMethod: z.string(),
+  accountNumber: z.number(), // This will be set internally
 });
 type SellCoinFormValues = z.infer<typeof sellCoinSchema>;
 
 const PAYMENT_METHODS = ["Bkash", "Nagad", "Rocket"];
 
 export const WithdrawApplyForm = () => {
-//   const [asignCoinToUser, { isLoading }] = useAsignCoinToUserByIdMutation();
+  //   const [asignCoinToUser, { isLoading }] = useAsignCoinToUserByIdMutation();
 
   const {
     register,
@@ -24,7 +24,7 @@ export const WithdrawApplyForm = () => {
     reset,
   } = useForm<SellCoinFormValues>({
     resolver: zodResolver(sellCoinSchema),
-    defaultValues: { salary: "", paymentMethod: 0, accountNumber: "" },
+    defaultValues: { salary: "", paymentMethod: "", accountNumber: 0 },
   });
 
   const onSubmit = async (data: SellCoinFormValues) => {
@@ -36,8 +36,8 @@ export const WithdrawApplyForm = () => {
       };
       console.log("Payload:", payload);
 
-    //   const response = await asignCoinToUser(payload).unwrap();
-    //   toast.success(response.message || "Coins sold successfully!");
+      //   const response = await asignCoinToUser(payload).unwrap();
+      //   toast.success(response.message || "Coins sold successfully!");
       // setSuccessMsg(
       //   `Successfully added ${data.coinAmount} coins to user ${data.userId}`
       // );
@@ -63,7 +63,7 @@ export const WithdrawApplyForm = () => {
         >
           Total Salary
         </label>
-        <Input type="text" {...register("salary")} readOnly />
+        <Input type="text" {...register("salary")} />
       </div>
 
       <div>
@@ -77,7 +77,7 @@ export const WithdrawApplyForm = () => {
           {...register("paymentMethod")}
           className="w-full border rounded px-2 py-1"
         >
-          <option value="">Select payment methods</option>
+          <option value="none">Select payment methods</option>
           {PAYMENT_METHODS.map((perm) => (
             <option key={perm} value={perm}>
               {perm}
@@ -100,8 +100,8 @@ export const WithdrawApplyForm = () => {
         </label>
         <Input
           type="number"
-          placeholder="e.g, 1000"
-          {...register("accountNumber", { valueAsNumber: true })}
+          placeholder="e.g: 1000 5481 6548"
+          {...register("accountNumber")}
         />
         {errors.accountNumber && (
           <p className="text-xs text-red-500 mt-1">
@@ -109,18 +109,18 @@ export const WithdrawApplyForm = () => {
           </p>
         )}
       </div>
-      {/* {isLoading ? ( */}
-        <Button className="bg-green-500 text-white hover:bg-green-600" disabled>
-          Processing..
+
+      <div className="flex gap-x-4 items-center">
+        <Button variant={"destructive"} type="reset">
+          Cancel
         </Button>
-      {/* ) : ( */}
         <Button
           type="submit"
           className="bg-green-500 text-white hover:bg-green-600"
         >
-          Confirm Sale
+          Withdraw
         </Button>
-      {/* )} */}
+      </div>
     </form>
   );
 };

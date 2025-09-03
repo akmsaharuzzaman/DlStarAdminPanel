@@ -10,7 +10,12 @@ const Merchant = () => {
   const [q, setQ] = useState("");
 
   const { data: merchantRes, isLoading } = useGetMerchantsQuery({});
-  const merchantData = merchantRes?.result?.data || [];
+  const merchants = merchantRes?.result?.data || [];
+  const merchantData = merchants ? [...merchants].sort((a, b) => {
+    return (
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }) : [];
   const filtered = useMemo(
     () =>
       merchantData.filter((u) => {
