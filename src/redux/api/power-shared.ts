@@ -101,14 +101,14 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       TResponse<{ data: TUser[]; pagination: Tpagination }>,
       {
         type: Roles;
-        id: string;
+        // id: string;
         searchTerm?: string;
         page?: number;
         limit?: number;
       }
     >({
-      query: ({ type, id, searchTerm, page = 1, limit = 9999 }) => {
-        const url = `/power-shared/portal/${type}/${id}`;
+      query: ({ type, searchTerm, page = 1, limit = 9999 }) => {
+        const url = `/power-shared/portal/${type}`;
         const params = new URLSearchParams();
 
         if (searchTerm) {
@@ -207,6 +207,7 @@ export const {
   useGetSubAdminsQuery,
   useGetMerchantsQuery,
   useGetCountryAdminQuery,
+  useGetTopPortalManagementQuery,
   useGetMidPortalManagementQuery,
   useLowerPortalManagementQuery,
   useCreateHostMutation

@@ -1,30 +1,52 @@
-import { Button } from "../ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
+import { Button } from "../ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-
+import z from "zod";
+import { SalarySelect } from "../select/salary-select";
+const SALARIES = [
+  { id: "us", name: "United States" },
+  { id: "uk", name: "United Kingdom" },
+  { id: "ca", name: "Canada" },
+  { id: "au", name: "Australia" },
+  { id: "fr", name: "France" },
+  { id: "de", name: "Germany" },
+  { id: "jp", name: "Japan" },
+  { id: "br", name: "Brazil" },
+];
 const sellCoinSchema = z.object({
   salary: z.string().min(1, "Salary is required"),
-  paymentMethod: z.string(),
-  accountNumber: z.number(), // This will be set internally
+  paymentMethod: z.string().min(1, "Select a payment method"),
+  accountNumber: z.number().min(1, "Account number is required"),
 });
 type SellCoinFormValues = z.infer<typeof sellCoinSchema>;
 
 const PAYMENT_METHODS = ["Bkash", "Nagad", "Rocket"];
 
 export const WithdrawApplyForm = () => {
-  //   const [asignCoinToUser, { isLoading }] = useAsignCoinToUserByIdMutation();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<SellCoinFormValues>({
+  const form = useForm<SellCoinFormValues>({
     resolver: zodResolver(sellCoinSchema),
-    defaultValues: { salary: "", paymentMethod: "", accountNumber: 0 },
+    defaultValues: {
+      salary: "",
+      paymentMethod: "",
+      accountNumber: 0,
+    },
   });
 
   const onSubmit = async (data: SellCoinFormValues) => {
@@ -36,91 +58,94 @@ export const WithdrawApplyForm = () => {
       };
       console.log("Payload:", payload);
 
-      //   const response = await asignCoinToUser(payload).unwrap();
-      //   toast.success(response.message || "Coins sold successfully!");
-      // setSuccessMsg(
-      //   `Successfully added ${data.coinAmount} coins to user ${data.userId}`
-      // );
+      // await asignCoinToUser(payload).unwrap();
+      // toast.success("Coins sold successfully!");
+
       setTimeout(() => {
-        // onClose();
-        // setSuccessMsg("");
-        reset();
+        form.reset();
       }, 1500);
     } catch (error: any) {
-      console.log(error);
       toast.error(
         error?.data?.message || "Failed to sell coins. Please try again."
       );
-      // setSuccessMsg("Failed to sell coins. Please try again.");
     }
   };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <label
-          htmlFor="total_salary"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Total Salary
-        </label>
-        <Input type="text" {...register("salary")} />
-      </div>
-
-      <div>
-        <label
-          htmlFor="permission"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Payment Methods
-        </label>
-        <select
-          {...register("paymentMethod")}
-          className="w-full border rounded px-2 py-1"
-        >
-          <option value="none">Select payment methods</option>
-          {PAYMENT_METHODS.map((perm) => (
-            <option key={perm} value={perm}>
-              {perm}
-            </option>
-          ))}
-        </select>
-        {errors.paymentMethod && (
-          <p className="text-xs text-red-500 mt-1">
-            {errors.paymentMethod.message}
-          </p>
-        )}
-      </div>
-
-      <div>
-        <label
-          htmlFor="account_number"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Account Number
-        </label>
-        <Input
-          type="number"
-          placeholder="e.g: 1000 5481 6548"
-          {...register("accountNumber")}
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 max-w-md"
+      >
+        {/* Salary Field */}
+        <SalarySelect
+          name="country"
+          title="Select salary"
+          options={SALARIES}
         />
-        {errors.accountNumber && (
-          <p className="text-xs text-red-500 mt-1">
-            {errors.accountNumber.message}
-          </p>
-        )}
-      </div>
 
-      <div className="flex gap-x-4 items-center">
-        <Button variant={"destructive"} type="reset">
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          className="bg-green-500 text-white hover:bg-green-600"
-        >
-          Withdraw
-        </Button>
-      </div>
-    </form>
+        {/* Payment Method Select */}
+        <FormField
+          control={form.control}
+          name="paymentMethod"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Payment Method</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a payment method" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {PAYMENT_METHODS.map((method) => (
+                    <SelectItem key={method} value={method}>
+                      {method}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Account Number Field */}
+        <FormField
+          control={form.control}
+          name="accountNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Account Number</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="e.g: 1000 5481 6548"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Buttons */}
+        <div className="flex gap-x-4 items-center">
+          <Button
+            type="reset"
+            variant="destructive"
+            onClick={() => form.reset()}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            className="bg-green-500 text-white hover:bg-green-600"
+          >
+            Withdraw
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 };
