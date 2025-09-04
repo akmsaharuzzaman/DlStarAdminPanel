@@ -20,16 +20,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import z from "zod";
 import { SalarySelect } from "../select/salary-select";
-const SALARIES = [
-  { id: "us", name: "United States" },
-  { id: "uk", name: "United Kingdom" },
-  { id: "ca", name: "Canada" },
-  { id: "au", name: "Australia" },
-  { id: "fr", name: "France" },
-  { id: "de", name: "Germany" },
-  { id: "jp", name: "Japan" },
-  { id: "br", name: "Brazil" },
-];
+import { useGetSalaryQuery } from "@/redux/api/auth.api";
+
+const fallbackSalary = [{ id: "none", name: "Sorry, cannot found salary..." }];
+
 const sellCoinSchema = z.object({
   salary: z.string().min(1, "Salary is required"),
   paymentMethod: z.string().min(1, "Select a payment method"),
@@ -48,6 +42,22 @@ export const WithdrawApplyForm = () => {
       accountNumber: 0,
     },
   });
+
+  const { data: salaryRes, isLoading: salaryLoading } =
+    useGetSalaryQuery(undefined);
+  console.log({ salaryRes });
+  // type OptionType = {
+  //   id: string;
+  //   name: string;
+  // };
+  // maping the response with rendering the logic of select options data
+  const SALARIES = salaryLoading
+    ? [{ id: "none", name: "Loading..." }]
+    : salaryRes!.result!.map((salary) => ({
+        id: salary._id,
+        name: `${salary.country} - $${salary.moneyCount} / ${salary.diamondCount} Diamonds`,
+      }));
+  console.log({ SALARIES });
 
   const onSubmit = async (data: SellCoinFormValues) => {
     try {
@@ -81,7 +91,7 @@ export const WithdrawApplyForm = () => {
         <SalarySelect
           name="country"
           title="Select salary"
-          options={SALARIES}
+          options={SALARIES?.length !== 0 ? SALARIES : fallbackSalary}
         />
 
         {/* Payment Method Select */}
