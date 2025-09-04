@@ -1,10 +1,11 @@
 import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 import { DashboardCard } from "@/components/cards/dashboard-card";
 import { ClientRoutes, Roles } from "@/constants/route.enum";
-import { useGetDashboardStatsQuery } from "@/redux/api/auth.api";
 import {
   useGetMidPortalManagementQuery,
   useGetPortalProfileQuery,
+  useGetTopPortalManagementQuery,
+  useGetUsersQuery,
   useLowerPortalManagementQuery,
 } from "@/redux/api/power-shared";
 import { useAppSelector } from "@/redux/hooks";
@@ -57,39 +58,76 @@ export const DashboardContent: FC<{
 }> = ({ role, openModal }) => {
   // fetching data from server
   const user = useAppSelector((state) => state.auth.user);
-  const { data: statsDataRes, isLoading } = useGetDashboardStatsQuery();
+  const { data: usersRes, isLoading: usersLoading } = useGetUsersQuery({
+    page: 1,
+    limit: 99999,
+  });
+  // const { data: statsDataRes, isLoading } = useGetDashboardStatsQuery();
   const { data: portalProfileRes, isLoading: portalIsLoading } =
     useGetPortalProfileQuery();
   const {
     data: hostsRes,
     error,
-    isLoading:isHostLoading,
+    isLoading: isHostLoading,
   } = useLowerPortalManagementQuery({
     // type: Roles.Host,
     id: user!.id!,
   });
-  const { data: subAdminRes, isLoading: subAdminLoading } = useGetMidPortalManagementQuery(
-    {
+  const { data: agencyRes, isLoading: agencyLoading } =
+    useGetMidPortalManagementQuery({
       type: Roles.Agency,
       id: user!.id!,
-    }
-  );
+    });
+  const { data: subAdminRes, isLoading: subAdminLoading } =
+    useGetTopPortalManagementQuery({
+      type: Roles.SubAdmin,
+      // id: user!.id!,
+    });
 
-  if (isLoading) return <div>Loading...</div>;
+  const { data: merchantRes, isLoading: merchantLoading } =
+    useGetTopPortalManagementQuery({
+      type: Roles.Merchant,
+      // id: user!.id!,
+    });
+  const { data: countryAdminRes, isLoading: countryAdminLoading } =
+    useGetTopPortalManagementQuery({
+      type: Roles.CountryAdmin,
+      // id: user!.id!,
+    });
+
+  // if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error occurred: {(error as any).message}</div>;
+
+  // top level users count
+  const users = usersLoading ? "..." : usersRes?.result?.pagination.total || 0;
+  const subAdmins = subAdminLoading
+    ? 0
+    : subAdminRes?.result?.pagination.total || 0;
+  const merchants = merchantLoading
+    ? 0
+    : merchantRes?.result?.pagination.total || 0;
+  const countryAdmins = countryAdminLoading
+    ? 0
+    : countryAdminRes?.result?.pagination.total || 0;
   const hosts = portalIsLoading ? 0 : hostsRes?.result?.users?.length || 0;
   const salary = portalIsLoading ? 0 : portalProfileRes?.result?.coins || 0;
 
-  const agencies = subAdminLoading
-    ? "..."
-    : subAdminRes?.result?.data.length || 0;
+  const agencies = agencyLoading ? "..." : agencyRes?.result?.data.length || 0;
   console.log(salary, "hosts length");
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  const staticStatesData = statsDataRes?.result;
+  // const staticStatesData = statsDataRes?.result;
+  const staticStatesData = {
+    users,
+    hosts,
+    agencies,
+    subAdmins,
+    merchants,
+    countryAdmins,
+  };
 
   /**
    * dashboardConfigs: All dashboard stats, actions, and lists for each role.
@@ -200,7 +238,7 @@ export const DashboardContent: FC<{
         },
         {
           title: "Total Agencies",
-          value: agencies, //TODO: staticStatesData?.agencies || 0,
+          value: staticStatesData?.agencies, //TODO: staticStatesData?.agencies || 0,
           link: `${ClientRoutes.SubAdmins}/${user?.id}`,
         },
         // {

@@ -128,3 +128,18 @@ export type TTransactionAdminHistory = {
   __v: 0;
   receiver: TUser;
 };
+
+export type TSalary = {
+  _id: string;
+  diamondCount: number;
+  moneyCount: number;
+  country: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TSalaryBody = {
+  diamondCount: number;
+  moneyCount: number;
+  country: string;
+};
