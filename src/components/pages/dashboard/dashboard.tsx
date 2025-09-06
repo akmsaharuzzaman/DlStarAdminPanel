@@ -65,14 +65,11 @@ export const DashboardContent: FC<{
   // const { data: statsDataRes, isLoading } = useGetDashboardStatsQuery();
   const { data: portalProfileRes, isLoading: portalIsLoading } =
     useGetPortalProfileQuery();
-  const {
-    data: hostsRes,
-    error,
-    isLoading: isHostLoading,
-  } = useLowerPortalManagementQuery({
-    // type: Roles.Host,
-    id: user!.id!,
-  });
+  const { data: hostsRes, isLoading: isHostLoading } =
+    useLowerPortalManagementQuery({
+      // type: Roles.Host,
+      id: user!.id!,
+    });
   const { data: agencyRes, isLoading: agencyLoading } =
     useGetMidPortalManagementQuery({
       type: Roles.Agency,
@@ -96,7 +93,7 @@ export const DashboardContent: FC<{
     });
 
   // if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error occurred: {(error as any).message}</div>;
+  // if (error) return <div>Error occurred: {(error as any).message}</div>;
 
   // top level users count
   const users = usersLoading ? "..." : usersRes?.result?.pagination.total || 0;
@@ -197,6 +194,12 @@ export const DashboardContent: FC<{
           icon: Coins,
           variant: "success",
           modal: "addCoin",
+        },
+        {
+          label: "Salary Management",
+          icon: DollarSign,
+          variant: "primary",
+          link: ClientRoutes.SalaryManagement,
         },
 
         // { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },

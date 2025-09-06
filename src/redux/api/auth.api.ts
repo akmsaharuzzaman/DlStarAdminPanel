@@ -3,7 +3,6 @@ import { onuliveCloneDashboardBaseApi } from "./base.api";
 import {
   TCreatePortalRoleBody,
   TLoginBody,
-  TSalary,
   TTransactionAdminHistory,
   TUser,
   TWidrawRequest,
@@ -127,14 +126,6 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
-    getSalary: builder.query<TResponse<TSalary[]>, void>({
-      query: () => ({
-        url: "/admin/salaries",
-        method: "GET",
-        // body: salaryPayload,
-      }),
-      providesTags: [tagTypes.user],
-    }),
   }),
 });
 
@@ -151,5 +142,4 @@ export const {
   useGetDashboardStatsQuery,
   useAddCoinForAdminMutation,
   useGetAdminTransactionsQuery,
-  useGetSalaryQuery,
 } = authApi;

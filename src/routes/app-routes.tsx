@@ -11,6 +11,7 @@ import { CreateSubAdminPage } from "@/pages/CreateSubAdmin";
 import { GiftListsPage } from "@/pages/GiftLIsts";
 import Merchant from "@/pages/Merchant";
 import MerchantById from "@/pages/MerchantById";
+import SalaryManagementPage from "@/pages/SalaryManagement";
 import SubAdmin from "@/pages/Sub-admin";
 import SubAdminById from "@/pages/SubAdminById";
 import { TransactionHistoryPage } from "@/pages/TransactionHistory";
@@ -109,10 +110,13 @@ export const appRoutes = [
     roles: [Roles.Admin],
   },
   {
-    path: "transaction-history",
+    path: "/salary-management",
+    element: <SalaryManagementPage />,
+    roles: [Roles.Admin, Roles.Merchant, Roles.Reseller],
+  },
+  {
+    path: "/transaction-history",
     element: <TransactionHistoryPage onBack={"/"} />,
     roles: [Roles.Admin, Roles.Merchant, Roles.Reseller],
   },
 ];
-
-
