@@ -30,10 +30,12 @@ import {
 import { Pencil, Trash } from "lucide-react";
 import { CreateSalaryForm } from "@/components/forms/create-salary-form";
 import {
+  useAgencySalaryAutoDistributeMutation,
   useDeleteSalaryMutation,
   useGetSalariesQuery,
 } from "@/redux/api/salaries.api";
 import { toast } from "sonner";
+import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 
 // -------------------- Schema --------------------
 const formSchema = z.object({
@@ -65,6 +67,9 @@ export default function SalaryManagementPage() {
   // RTK: endpoint cathicng ro deleting salary by salary id
   const [deleteSalary, { isLoading: salaryDeleteLoading }] =
     useDeleteSalaryMutation();
+  // RTK: endpoint for auto distribution at a time period manually
+  const [agencySalaryAutoDistribute, { isLoading: autoDistributionLoading }] =
+    useAgencySalaryAutoDistributeMutation();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -119,6 +124,16 @@ export default function SalaryManagementPage() {
     }
   };
 
+  const handleAutoDistribution = async () => {
+    try {
+      const res = await agencySalaryAutoDistribute({}).unwrap();
+      toast.success(res.message || "auto distributed salaries");
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.message || err.data.message || "something went wrong!");
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-gray-50 px-6 py-10">
       <div className="max-w-5xl mx-auto space-y-10">
@@ -131,6 +146,12 @@ export default function SalaryManagementPage() {
         <Card>
           <CardHeader>
             <CardTitle>Create Salary</CardTitle>
+            <ActionTinyButton
+              disabled={autoDistributionLoading}
+              onClick={handleAutoDistribution}
+            >
+              Auto Distribute Salary
+            </ActionTinyButton>
           </CardHeader>
           <CardContent>
             <CreateSalaryForm />

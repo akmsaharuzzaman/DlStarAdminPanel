@@ -47,6 +47,14 @@ export const salaryApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         method: "DELETE",
       }),
     }),
+
+    // deleting the salary by the salary id
+    agencySalaryAutoDistribute: builder.mutation({
+      query: () => ({
+        url: `/admin/agency-commission-distribute`,
+        method: "PUT",
+      }),
+    }),
   }),
 });
 
@@ -55,4 +63,5 @@ export const {
   useCreateSalaryMutation,
   useUpdateSalaryMutation,
   useDeleteSalaryMutation,
+  useAgencySalaryAutoDistributeMutation,
 } = salaryApi;
