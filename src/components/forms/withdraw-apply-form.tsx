@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import z from "zod";
 import { SalarySelect } from "../select/salary-select";
-import { useGetSalaryQuery } from "@/redux/api/auth.api";
+import { useGetSalariesQuery } from "@/redux/api/salaries.api";
 
 const fallbackSalary = [{ id: "none", name: "Sorry, cannot found salary..." }];
 
@@ -44,7 +44,7 @@ export const WithdrawApplyForm = () => {
   });
 
   const { data: salaryRes, isLoading: salaryLoading } =
-    useGetSalaryQuery(undefined);
+    useGetSalariesQuery(undefined);
   console.log({ salaryRes });
   // type OptionType = {
   //   id: string;
@@ -76,7 +76,7 @@ export const WithdrawApplyForm = () => {
       }, 1500);
     } catch (error: any) {
       toast.error(
-        error?.data?.message || "Failed to sell coins. Please try again."
+        error?.data?.message || "Failed to sell coins. Please try again.",
       );
     }
   };

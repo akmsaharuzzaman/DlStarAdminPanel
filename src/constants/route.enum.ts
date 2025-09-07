@@ -11,6 +11,7 @@ export enum ClientRoutes {
   AgencyWithdrawHistory = "/agency-withdraw-history",
   hostWithdrawHistory = "/host-withdraw-history",
   TransactionHistory = "/transaction-history",
+  SalaryManagement = "/salary-management",
 
   // creating pages
   CreateSubAdmin = "/create-sub-admin",
