@@ -112,8 +112,9 @@ export const appRoutes = [
   {
     path: "/salary-management",
     element: <SalaryManagementPage />,
-    roles: [Roles.Admin, Roles.Merchant, Roles.Reseller],
+    roles: [Roles.Admin],
   },
+
   {
     path: "/transaction-history",
     element: <TransactionHistoryPage onBack={"/"} />,
