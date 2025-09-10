@@ -83,15 +83,15 @@ export default function SalaryManagementPage() {
   if (salariesLoading) {
     return <h4>Please wait for salaries...</h4>;
   }
-  // const salaries = salariesRes?.result;
-  const salaries = [
-    {
-      _id: "5454474",
-      diamondCount: 1,
-      moneyCount: 10,
-      country: "BDT",
-    },
-  ];
+  const salaries = salariesRes?.result;
+  // const salaries = [
+  //   {
+  //     _id: "5454474",
+  //     diamondCount: 1,
+  //     moneyCount: 10,
+  //     country: "BDT",
+  //   },
+  // ];
   console.log(salariesRes, "sajuty");
 
   const handleEdit = (salary: FormValues & { _id: string }) => {
@@ -140,18 +140,18 @@ export default function SalaryManagementPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Salary Management</h1>
+          <ActionTinyButton
+            disabled={autoDistributionLoading}
+            onClick={handleAutoDistribution}
+          >
+            Auto Distribute Salary
+          </ActionTinyButton>
         </div>
 
         {/* Form Card */}
         <Card>
           <CardHeader>
             <CardTitle>Create Salary</CardTitle>
-            <ActionTinyButton
-              disabled={autoDistributionLoading}
-              onClick={handleAutoDistribution}
-            >
-              Auto Distribute Salary
-            </ActionTinyButton>
           </CardHeader>
           <CardContent>
             <CreateSalaryForm />
@@ -181,14 +181,14 @@ export default function SalaryManagementPage() {
                     <TableCell>{salary.moneyCount}</TableCell>
                     {/*<TableCell>{salary.type}</TableCell>*/}
                     <TableCell>{salary.country}</TableCell>
-                    <TableCell className="text-right flex gap-x-1">
-                      <Button
+                    <TableCell className="text-right flex justify-end gap-x-1">
+                      {/*<Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleEdit(salary)}
                       >
                         <Pencil className="h-4 w-4 mr-1" /> Edit
-                      </Button>
+                      </Button>*/}
                       <Button
                         variant="destructive"
                         size="sm"

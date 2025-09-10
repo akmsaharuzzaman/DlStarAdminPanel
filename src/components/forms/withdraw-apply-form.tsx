@@ -21,13 +21,14 @@ import { toast } from "sonner";
 import z from "zod";
 import { SalarySelect } from "../select/salary-select";
 import { useGetSalariesQuery } from "@/redux/api/salaries.api";
+import { useAgencyApplyWithdrawMutation } from "@/redux/api/power-shared";
 
 const fallbackSalary = [{ id: "none", name: "Sorry, cannot found salary..." }];
 
 const sellCoinSchema = z.object({
   salary: z.string().min(1, "Salary is required"),
   paymentMethod: z.string().min(1, "Select a payment method"),
-  accountNumber: z.number().min(1, "Account number is required"),
+  accountNumber: z.string().min(1, "Account number is required"),
 });
 type SellCoinFormValues = z.infer<typeof sellCoinSchema>;
 
@@ -39,13 +40,15 @@ export const WithdrawApplyForm = () => {
     defaultValues: {
       salary: "",
       paymentMethod: "",
-      accountNumber: 0,
+      accountNumber: "",
     },
   });
 
   const { data: salaryRes, isLoading: salaryLoading } =
     useGetSalariesQuery(undefined);
   console.log({ salaryRes });
+  const [applyWithdraw, { isLoading: applyWithdrawLoading }] =
+    useAgencyApplyWithdrawMutation();
   // type OptionType = {
   //   id: string;
   //   name: string;
@@ -54,29 +57,34 @@ export const WithdrawApplyForm = () => {
   const SALARIES = salaryLoading
     ? [{ id: "none", name: "Loading..." }]
     : salaryRes!.result!.map((salary) => ({
-        id: salary._id,
-        name: `${salary.country} - $${salary.moneyCount} / ${salary.diamondCount} Diamonds`,
+        id: salary.diamondCount.toString(),
+        name: `${salary.diamondCount} Diamonds`,
       }));
   console.log({ SALARIES });
 
   const onSubmit = async (data: SellCoinFormValues) => {
+    console.log("Form Data:", data);
+
     try {
       const payload = {
-        salary: data.salary,
-        paymentMethod: data.paymentMethod,
+        totalSalary: Number(data.salary),
+        accountType: data.paymentMethod,
         accountNumber: data.accountNumber,
       };
+
       console.log("Payload:", payload);
 
-      // await asignCoinToUser(payload).unwrap();
-      // toast.success("Coins sold successfully!");
+      const res = await applyWithdraw(payload).unwrap();
+      toast.success(res.message || "Withdraw request submitted successfully!");
 
       setTimeout(() => {
         form.reset();
       }, 1500);
     } catch (error: any) {
+      console.error("Error:", error);
       toast.error(
-        error?.data?.message || "Failed to sell coins. Please try again.",
+        error?.data?.message ||
+          "Failed to submit withdraw request. Please try again."
       );
     }
   };
@@ -89,7 +97,7 @@ export const WithdrawApplyForm = () => {
       >
         {/* Salary Field */}
         <SalarySelect
-          name="country"
+          name="salary"
           title="Select salary"
           options={SALARIES?.length !== 0 ? SALARIES : fallbackSalary}
         />
@@ -151,8 +159,9 @@ export const WithdrawApplyForm = () => {
           <Button
             type="submit"
             className="bg-green-500 text-white hover:bg-green-600"
+            disabled={applyWithdrawLoading}
           >
-            Withdraw
+            {applyWithdrawLoading ? "Applying..." : "Withdraw"}
           </Button>
         </div>
       </form>

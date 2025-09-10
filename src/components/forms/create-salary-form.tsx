@@ -14,6 +14,19 @@ import {
 import { ActionTinyButton } from "../buttons/action-tiny-buttons";
 import { useCreateSalaryMutation } from "@/redux/api/salaries.api";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { cn } from "@/lib/utils";
+
+const SALARY_TYPES = [
+  { id: "audio", name: "Audio" },
+  { id: "video", name: "Video" },
+];
 
 const formSchema = z.object({
   diamondCount: z.number({ message: "Diamond count is required" }).min(1),
@@ -31,7 +44,7 @@ export const CreateSalaryForm = () => {
       diamondCount: 0,
       moneyCount: 0,
       type: "",
-      country: "",
+      country: "USD", // added value explicitely
     },
   });
   const [createSalary, { isLoading: createSalaryLoading }] =
@@ -100,7 +113,7 @@ export const CreateSalaryForm = () => {
           )}
         />
 
-        <FormField
+        {/*<FormField
           control={form.control}
           name="type"
           render={({ field }) => (
@@ -112,9 +125,45 @@ export const CreateSalaryForm = () => {
               <FormMessage />
             </FormItem>
           )}
+        />*/}
+        {/*<SelectWithForm
+          name="country"
+          title="Select country"
+          options={COUNTRIES}
+        />*/}
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor={"Select salary type"}>
+                Select salary type
+              </FormLabel>
+              <Select {...field} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger
+                    id={"type"}
+                    className={cn(
+                      "aria-invalid:border-destructive aria-invalid:ring-destructive w-full",
+                    )}
+                  >
+                    <SelectValue placeholder="Select salary type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {SALARY_TYPES.map((item) => (
+                    <SelectItem key={`${name}_${item.id}`} value={item.id}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
-        <FormField
+        {/*<FormField
           control={form.control}
           name="country"
           render={({ field }) => (
@@ -126,7 +175,7 @@ export const CreateSalaryForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        />*/}
 
         <div className="md:col-span-2 flex justify-end">
           <ActionTinyButton type="submit" disabled={createSalaryLoading}>
@@ -137,3 +186,58 @@ export const CreateSalaryForm = () => {
     </Form>
   );
 };
+
+// type OptionType = {
+//   id: string;
+//   name: string;
+// };
+// type SelectWithFormProps<K> = {
+//   name: keyof K & string;
+//   title?: string;
+//   className?: string;
+//   options: OptionType[];
+// } & Omit<
+//   SelectHTMLAttributes<HTMLSelectElement>,
+//   "children" | "onValueChange" | "value" | "defaultValue" | "dir"
+// >;
+// export function SelectWithForm<K>({
+//   title,
+//   name,
+//   className,
+//   options,
+//   ...props
+// }: SelectWithFormProps<K>) {
+//   const form = useFormContext();
+//   return (
+//     <FormField
+//       control={form.control}
+//       name={name}
+//       render={({ field }) => (
+//         <FormItem>
+//           {title && <FormLabel htmlFor={name}>{title}</FormLabel>}
+//           <Select {...field} {...props} onValueChange={field.onChange}>
+//             <FormControl>
+//               <SelectTrigger
+//                 id={name}
+//                 className={cn(
+//                   "aria-invalid:border-destructive aria-invalid:ring-destructive w-full",
+//                   className,
+//                 )}
+//               >
+//                 <SelectValue placeholder="Select" />
+//               </SelectTrigger>
+//             </FormControl>
+//             <SelectContent>
+//               {options.map((item) => (
+//                 <SelectItem key={`${name}_${item.id}`} value={item.id}>
+//                   {item.name}
+//                 </SelectItem>
+//               ))}
+//             </SelectContent>
+//           </Select>
+//           <FormMessage />
+//         </FormItem>
+//       )}
+//     />
+//   );
+// }

@@ -38,6 +38,7 @@ export const salaryApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: [tagTypes.salary],
     }),
 
     // deleting the salary by the salary id
@@ -46,6 +47,7 @@ export const salaryApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         url: `/admin/salaries/${salaryId}`,
         method: "DELETE",
       }),
+      invalidatesTags: [tagTypes.salary],
     }),
 
     // deleting the salary by the salary id
