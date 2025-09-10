@@ -27,7 +27,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Pencil, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { CreateSalaryForm } from "@/components/forms/create-salary-form";
 import {
   useAgencySalaryAutoDistributeMutation,
@@ -94,11 +94,11 @@ export default function SalaryManagementPage() {
   // ];
   console.log(salariesRes, "sajuty");
 
-  const handleEdit = (salary: FormValues & { _id: string }) => {
-    setEditingSalary(salary);
-    form.reset(salary);
-    setOpen(true);
-  };
+  // const handleEdit = (salary: FormValues & { _id: string }) => {
+  //   setEditingSalary(salary);
+  //   form.reset(salary);
+  //   setOpen(true);
+  // };
 
   const handleUpdate = (values: FormValues) => {
     console.log(values);
