@@ -50,10 +50,10 @@ export function CreateSubAdmin() {
     // TODO: integrate with API
     try {
       const body = {
-        name: values.name,
-        userId: values.userId,
-        password: values.password,
-        designation: values.designation,
+        name: values.name.trim(),
+        userId: values.userId.trim(),
+        password: values.password.trim(),
+        designation: values.designation.trim(),
         userRole: values.userRole,
         // parentCreator: values.parentCreator,
         userPermissions: values.userPermissions,
@@ -71,7 +71,7 @@ export function CreateSubAdmin() {
       form.reset();
     } catch (error: any) {
       toast.error(
-        error.data.message || error.message || "Failed to create sub admin"
+        error.data.message || error.message || "Failed to create sub admin",
       );
     }
   };
@@ -244,8 +244,8 @@ export function CreateSubAdmin() {
                                         ])
                                       : field.onChange(
                                           field.value?.filter(
-                                            (val) => val !== perm.id
-                                          )
+                                            (val) => val !== perm.id,
+                                          ),
                                         );
                                   }}
                                 />

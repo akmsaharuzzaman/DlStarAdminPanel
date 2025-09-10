@@ -4,7 +4,7 @@ import { tagTypesList } from "../tag.types";
 import { logOut } from "../features/auth.slice";
 import { persistStor } from "../store"; // Make sure you export persistor from your store
 
-const baseURL = " http://dlstarlive.com:8000/api"; // hosted server
+const baseURL = " http://dlstarliveplan1.com:8000/api"; // hosted server
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: baseURL,

@@ -1,42 +1,15 @@
-import { useGetHostsWithdrawRequestsQuery } from "@/redux/api/auth.api";
+import { useGetAgencyWithdrawRequestsQuery } from "@/redux/api/auth.api";
 import { TWidrawRequest } from "@/types/api/auth";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
-// const hostWithdrawHistory = [
-//   {
-//     id: "HW001",
-//     name: "HostGamer1",
-//     amount: 150.0,
-//     withdrawDate: "2025-08-28",
-//     status: "Completed",
-//   },
-//   {
-//     id: "HW002",
-//     name: "LiveStreamerPro",
-//     amount: 275.25,
-//     withdrawDate: "2025-08-28",
-//     status: "Completed",
-//   },
-//   {
-//     id: "HW003",
-//     name: "QueenOfGames",
-//     amount: 500.0,
-//     withdrawDate: "2025-08-29",
-//     status: "Pending",
-//   },
-//   {
-//     id: "HW004",
-//     name: "TheJoker",
-//     amount: 95.5,
-//     withdrawDate: "2025-08-29",
-//     status: "Completed",
-//   },
-// ];
-
-export const WithdrawHistoryPage = ({ onBack = "/" }: { onBack: string }) => {
+export const AgencyWithdrawHistoryPage = ({
+  onBack = "/",
+}: {
+  onBack: string;
+}) => {
   const { data: withdrawRequestRes, isLoading } =
-    useGetHostsWithdrawRequestsQuery({});
+    useGetAgencyWithdrawRequestsQuery({});
   const agencyWithdrawHistory = withdrawRequestRes?.result?.data || [];
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
@@ -47,7 +20,9 @@ export const WithdrawHistoryPage = ({ onBack = "/" }: { onBack: string }) => {
         >
           <ArrowLeft className="mr-2" /> Back to Dashboard
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Withdraw History</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Agency Withdraw History
+        </h1>
       </header>
       <div className="space-y-8">
         {isLoading ? (

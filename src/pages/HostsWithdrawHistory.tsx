@@ -3,7 +3,7 @@ import { TWidrawRequest } from "@/types/api/auth";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
-// const hostWithdrawHistory = [
+// const hostsWithdrawHistory = [
 //   {
 //     id: "HW001",
 //     name: "HostGamer1",
@@ -33,11 +33,14 @@ import { Link } from "react-router-dom";
 //     status: "Completed",
 //   },
 // ];
-
-export const WithdrawHistoryPage = ({ onBack = "/" }: { onBack: string }) => {
+export const HostsWithdrawHistoryPage = ({
+  onBack = "/",
+}: {
+  onBack: string;
+}) => {
   const { data: withdrawRequestRes, isLoading } =
     useGetHostsWithdrawRequestsQuery({});
-  const agencyWithdrawHistory = withdrawRequestRes?.result?.data || [];
+  const hostsWithdrawHistory = withdrawRequestRes?.result?.data || [];
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <header className="mb-8">
@@ -47,13 +50,15 @@ export const WithdrawHistoryPage = ({ onBack = "/" }: { onBack: string }) => {
         >
           <ArrowLeft className="mr-2" /> Back to Dashboard
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Withdraw History</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Hosts Withdraw History
+        </h1>
       </header>
       <div className="space-y-8">
         {isLoading ? (
           <p>Loading...</p>
         ) : (
-          <HistoryTable title="Agency Withdraws" data={agencyWithdrawHistory} />
+          <HistoryTable title="Agency Withdraws" data={hostsWithdrawHistory} />
         )}
         {/* <HistoryTable title="Host Withdraws" data={hostWithdrawHistory} /> */}
       </div>

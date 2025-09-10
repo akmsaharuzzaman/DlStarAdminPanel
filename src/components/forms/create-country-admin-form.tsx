@@ -51,11 +51,11 @@ export function CreateCountryAdminForm() {
     // TODO: integrate with API
     try {
       const body = {
-        name: values.name,
-        userId: values.userId,
-        password: values.password,
-        designation: values.designation,
-        userRole: values.userRole,
+        name: values.name.trim(),
+        userId: values.userId.trim(),
+        password: values.password.trim(),
+        designation: values.designation.trim(),
+        userRole: values.userRole.trim(),
         // parentCreator: values.parentCreator,
         userPermissions: values.userPermissions,
       };
@@ -72,7 +72,7 @@ export function CreateCountryAdminForm() {
       form.reset();
     } catch (error: any) {
       toast.error(
-        error.data.message || error.message || "Failed to create country admin"
+        error.data.message || error.message || "Failed to create country admin",
       );
     }
   };
@@ -245,8 +245,8 @@ export function CreateCountryAdminForm() {
                                         ])
                                       : field.onChange(
                                           field.value?.filter(
-                                            (val) => val !== perm.id
-                                          )
+                                            (val) => val !== perm.id,
+                                          ),
                                         );
                                   }}
                                 />

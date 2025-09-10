@@ -1,6 +1,7 @@
 import { Roles } from "@/constants/route.enum";
 import { DashboardPage } from "@/pages";
 import AgencyById from "@/pages/AgencyById";
+import { AgencyWithdrawHistoryPage } from "@/pages/AgencyWithdrawHistory";
 import CountryAdmin from "@/pages/CountryAdmin";
 import CountryAdminById from "@/pages/CountryAdminById";
 import { CreateAgencyPage } from "@/pages/CreateAgency";
@@ -9,6 +10,7 @@ import { CreateMerchantPage } from "@/pages/CreateMerchant";
 import { CreateResellerPage } from "@/pages/CreateReseller";
 import { CreateSubAdminPage } from "@/pages/CreateSubAdmin";
 import { GiftListsPage } from "@/pages/GiftLIsts";
+import { HostsWithdrawHistoryPage } from "@/pages/HostsWithdrawHistory";
 import Merchant from "@/pages/Merchant";
 import MerchantById from "@/pages/MerchantById";
 import SalaryManagementPage from "@/pages/SalaryManagement";
@@ -110,10 +112,21 @@ export const appRoutes = [
     roles: [Roles.Admin],
   },
   {
+    path: "/agency-withdraw-history",
+    element: <AgencyWithdrawHistoryPage onBack={"/"} />,
+    roles: [Roles.Admin],
+  },
+  {
+    path: "/host-withdraw-history",
+    element: <HostsWithdrawHistoryPage onBack={"/"} />,
+    roles: [Roles.Admin],
+  },
+  {
     path: "/salary-management",
     element: <SalaryManagementPage />,
-    roles: [Roles.Admin, Roles.Merchant, Roles.Reseller],
+    roles: [Roles.Admin],
   },
+
   {
     path: "/transaction-history",
     element: <TransactionHistoryPage onBack={"/"} />,

@@ -69,15 +69,45 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
-    getWithdrawRequests: builder.query<
+    getHostsWithdrawRequests: builder.query<
       TResponse<{ pagination: Tpagination; data: TWidrawRequest[] }>,
-      void
+      { limit?: number; page?: number }
     >({
-      query: () => ({
-        url: "/admin/withdraw-requests",
+      query: ({ limit = 99999, page = 1 }) => ({
+        url: `/admin/withdraw-requests?limit=${limit}&page=${page}`,
         method: "GET",
       }),
-      // providesTags: [tagTypes],
+      providesTags: [tagTypes.withdraw],
+    }),
+    acceptHostWithdrawReqStatus: builder.mutation({
+      query: ({ withdrawId }) => ({
+        url: `/admin/withdraw-requests/${withdrawId}`,
+        method: "PUT",
+        body: {
+          status: "accepted",
+        },
+      }),
+      invalidatesTags: [tagTypes.withdraw],
+    }),
+    getAgencyWithdrawRequests: builder.query<
+      TResponse<{ pagination: Tpagination; data: TWidrawRequest[] }>,
+      { page?: number; limit?: number }
+    >({
+      query: ({ limit = 99999, page = 1 }) => ({
+        url: `/admin/agency-withdraw?limit=${limit}&page=${page}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.withdraw],
+    }),
+    acceptAgencyWithdrawReqStatus: builder.mutation({
+      query: ({ withdrawId }) => ({
+        url: `/admin/agency-withdraw/${withdrawId}`,
+        method: "PUT",
+        body: {
+          status: "accepted",
+        },
+      }),
+      invalidatesTags: [tagTypes.withdraw],
     }),
     updateRole: builder.mutation({
       query: ({ userId, newRole }: { userId: string; newRole: string }) => ({
@@ -137,7 +167,10 @@ export const {
   useCreatePortalUserMutation,
   useAdminProfileQuery,
   useMyProfileQuery,
-  useGetWithdrawRequestsQuery,
+  useGetHostsWithdrawRequestsQuery,
+  useAcceptHostWithdrawReqStatusMutation,
+  useGetAgencyWithdrawRequestsQuery,
+  useAcceptAgencyWithdrawReqStatusMutation,
   useUpdateRoleMutation,
   useGetDashboardStatsQuery,
   useAddCoinForAdminMutation,
