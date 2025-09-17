@@ -41,6 +41,7 @@ const publicChildren = [
 
 const protectedRoutes = appRoutes.map((route) => ({
   path: route.path,
+  // element: <>{route.element}</>,
   element: (
     <ProtectedRoute allowedRoles={route.roles}>{route.element}</ProtectedRoute>
   ),

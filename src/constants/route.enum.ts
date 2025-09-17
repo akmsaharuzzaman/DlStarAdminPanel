@@ -20,6 +20,9 @@ export enum ClientRoutes {
   CreateReseller = "/create-reseller",
   CreateHost = "/create-host",
   CreateCountryAdmin = "/create-country-admin",
+
+  // External Links
+  GreedyGameDashboardPanel = "http://31.97.222.97:9001",
 }
 
 export enum Roles {

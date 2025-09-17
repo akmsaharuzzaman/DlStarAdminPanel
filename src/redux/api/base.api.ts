@@ -4,7 +4,8 @@ import { tagTypesList } from "../tag.types";
 import { logOut } from "../features/auth.slice";
 import { persistStor } from "../store"; // Make sure you export persistor from your store
 
-const baseURL = " http://dlstarliveplan1.com:8000/api"; // hosted server
+const baseURL = "http://dlstarliveplan1.com:8000/api"; // hosted server
+// const baseURL = "http://dlstarlive.com:8000/api"; // staging mode
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: baseURL,
@@ -22,7 +23,7 @@ const rawBaseQuery = fetchBaseQuery({
 const baseQueryWith401Handler: typeof rawBaseQuery = async (
   args,
   api,
-  extraOptions
+  extraOptions,
 ) => {
   const result = await rawBaseQuery(args, api, extraOptions);
 
