@@ -27,13 +27,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Pencil, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { CreateSalaryForm } from "@/components/forms/create-salary-form";
 import {
+  useAgencySalaryAutoDistributeMutation,
   useDeleteSalaryMutation,
   useGetSalariesQuery,
 } from "@/redux/api/salaries.api";
 import { toast } from "sonner";
+import { ActionTinyButton } from "@/components/buttons/action-tiny-buttons";
 
 // -------------------- Schema --------------------
 const formSchema = z.object({
@@ -65,6 +67,9 @@ export default function SalaryManagementPage() {
   // RTK: endpoint cathicng ro deleting salary by salary id
   const [deleteSalary, { isLoading: salaryDeleteLoading }] =
     useDeleteSalaryMutation();
+  // RTK: endpoint for auto distribution at a time period manually
+  const [agencySalaryAutoDistribute, { isLoading: autoDistributionLoading }] =
+    useAgencySalaryAutoDistributeMutation();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,22 +83,22 @@ export default function SalaryManagementPage() {
   if (salariesLoading) {
     return <h4>Please wait for salaries...</h4>;
   }
-  // const salaries = salariesRes?.result;
-  const salaries = [
-    {
-      _id: "5454474",
-      diamondCount: 1,
-      moneyCount: 10,
-      country: "BDT",
-    },
-  ];
+  const salaries = salariesRes?.result;
+  // const salaries = [
+  //   {
+  //     _id: "5454474",
+  //     diamondCount: 1,
+  //     moneyCount: 10,
+  //     country: "BDT",
+  //   },
+  // ];
   console.log(salariesRes, "sajuty");
 
-  const handleEdit = (salary: FormValues & { _id: string }) => {
-    setEditingSalary(salary);
-    form.reset(salary);
-    setOpen(true);
-  };
+  // const handleEdit = (salary: FormValues & { _id: string }) => {
+  //   setEditingSalary(salary);
+  //   form.reset(salary);
+  //   setOpen(true);
+  // };
 
   const handleUpdate = (values: FormValues) => {
     console.log(values);
@@ -119,12 +124,28 @@ export default function SalaryManagementPage() {
     }
   };
 
+  const handleAutoDistribution = async () => {
+    try {
+      const res = await agencySalaryAutoDistribute({}).unwrap();
+      toast.success(res.message || "auto distributed salaries");
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.message || err.data.message || "something went wrong!");
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-gray-50 px-6 py-10">
       <div className="max-w-5xl mx-auto space-y-10">
         {/* Header */}
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Salary Management</h1>
+          <ActionTinyButton
+            disabled={autoDistributionLoading}
+            onClick={handleAutoDistribution}
+          >
+            Auto Distribute Salary
+          </ActionTinyButton>
         </div>
 
         {/* Form Card */}
@@ -160,14 +181,14 @@ export default function SalaryManagementPage() {
                     <TableCell>{salary.moneyCount}</TableCell>
                     {/*<TableCell>{salary.type}</TableCell>*/}
                     <TableCell>{salary.country}</TableCell>
-                    <TableCell className="text-right flex gap-x-1">
-                      <Button
+                    <TableCell className="text-right flex justify-end gap-x-1">
+                      {/*<Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleEdit(salary)}
                       >
                         <Pencil className="h-4 w-4 mr-1" /> Edit
-                      </Button>
+                      </Button>*/}
                       <Button
                         variant="destructive"
                         size="sm"

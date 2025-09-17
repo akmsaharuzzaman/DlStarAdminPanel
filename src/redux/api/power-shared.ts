@@ -1,10 +1,14 @@
 import { Tpagination, TResponse } from "@/types/api";
 import { onuliveCloneDashboardBaseApi } from "./base.api";
 import { TUser } from "@/types/api/auth";
-import { TAsignCoinToUserRequestBody, TCreateHost, TUserRewards } from "@/types/api/user";
+import {
+  TAsignCoinToUserRequestBody,
+  TCreateHost,
+  TUserRewards,
+} from "@/types/api/user";
 import { tagTypes } from "../tag.types";
 import { Roles } from "@/constants/route.enum";
-import { TPortalLoginBody } from "@/types/api/power-shared";
+import { TApplyWithdrawBody, TPortalLoginBody } from "@/types/api/power-shared";
 
 type TGetUserResponse = TResponse<{ pagination: Tpagination; users: TUser[] }>;
 type TAsignCoinToUserResponse = TResponse<TUserRewards>;
@@ -184,16 +188,21 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
     //   providesTags: [tagTypes.user],
     // }),
 
-     createHost: builder.mutation<
-      TAsignCoinToUserResponse,
-      TCreateHost
-    >({
+    createHost: builder.mutation<TAsignCoinToUserResponse, TCreateHost>({
       query: (userInfo) => ({
         url: "/power-shared/users/promote",
         method: "PUT",
         body: userInfo,
       }),
       invalidatesTags: [tagTypes.user],
+    }),
+    agencyApplyWithdraw: builder.mutation<TResponse<any>, TApplyWithdrawBody>({
+      query: (userInfo) => ({
+        url: "/power-shared/agency/withdraw",
+        method: "POST",
+        body: userInfo,
+      }),
+      // invalidatesTags: [tagTypes.user],
     }),
   }),
 });
@@ -210,5 +219,6 @@ export const {
   useGetTopPortalManagementQuery,
   useGetMidPortalManagementQuery,
   useLowerPortalManagementQuery,
-  useCreateHostMutation
+  useCreateHostMutation,
+  useAgencyApplyWithdrawMutation,
 } = sharedPowerApi;

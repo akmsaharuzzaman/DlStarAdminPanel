@@ -61,11 +61,11 @@ export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
     // TODO: integrate with API
     try {
       const body = {
-        name: values.name,
-        userId: values.userId,
-        password: values.password,
-        designation: values.designation,
-        userRole: values.userRole,
+        name: values.name.trim(),
+        userId: values.userId.trim(),
+        password: values.password.trim(),
+        designation: values.designation.trim(),
+        userRole: values.userRole.trim(),
         parentCreator: values.parentCreator,
         userPermissions: [Permissions.PromoteUser],
       };
@@ -85,7 +85,7 @@ export function CreateAgencyForm({ parentCreator }: { parentCreator: string }) {
       // TODO: change the directive name of "Merchant"
 
       toast.error(
-        error.data.message || error.message || "Failed to create merchant"
+        error.data.message || error.message || "Failed to create merchant",
       );
     }
   };
