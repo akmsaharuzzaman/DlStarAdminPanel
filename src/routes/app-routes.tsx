@@ -109,7 +109,7 @@ export const appRoutes = [
   {
     path: "/withdraw-history",
     element: <WithdrawHistoryPage onBack={"/"} />,
-    roles: [Roles.Admin],
+    roles: [Roles.Admin, Roles.Agency],
   },
   {
     path: "/agency-withdraw-history",
