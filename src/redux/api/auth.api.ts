@@ -154,7 +154,20 @@ const authApi = onuliveCloneDashboardBaseApi.injectEndpoints({
         url: "/admin/transaction-admin",
         method: "GET",
       }),
-      providesTags: [tagTypes.user],
+      providesTags: [tagTypes.transaction],
+    }),
+    getPortalUserTransactions: builder.query<
+      TResponse<{
+        pagination: Tpagination;
+        data: TTransactionAdminHistory[];
+      }>,
+      { userId: string }
+    >({
+      query: ({ userId }) => ({
+        url: `/admin/transaction-portal-user/${userId}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.transaction],
     }),
   }),
 });
@@ -175,4 +188,5 @@ export const {
   useGetDashboardStatsQuery,
   useAddCoinForAdminMutation,
   useGetAdminTransactionsQuery,
+  useGetPortalUserTransactionsQuery,
 } = authApi;

@@ -7,6 +7,7 @@ export const tagTypes = {
   giftCategory: "GiftCategory",
   salary: "Salary",
   withdraw: "Withdraw",
+  transaction: "Transaction",
 };
 
 export const tagTypesList = [
@@ -18,4 +19,5 @@ export const tagTypesList = [
   tagTypes.giftCategory,
   tagTypes.salary,
   tagTypes.withdraw,
+  tagTypes.transaction,
 ];

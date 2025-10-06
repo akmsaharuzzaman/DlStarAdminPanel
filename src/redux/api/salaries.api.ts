@@ -4,7 +4,11 @@ import { tagTypes } from "../tag.types";
 import { TCreateSalaryBody, TSalary } from "@/types/api/salary";
 
 type TGetSalariesResponse = TResponse<TSalary[]>;
-
+type TAutoDistributeSalaryResponse = TResponse<{
+  total: number;
+  paid: number;
+  successRate: number;
+}>;
 export const salaryApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     // TODO: need to remove this endpoint
@@ -50,8 +54,11 @@ export const salaryApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       invalidatesTags: [tagTypes.salary],
     }),
 
-    // deleting the salary by the salary id
-    agencySalaryAutoDistribute: builder.mutation({
+    // salary distributed by triggured a button
+    agencySalaryAutoDistribute: builder.mutation<
+      TAutoDistributeSalaryResponse,
+      any
+    >({
       query: () => ({
         url: `/admin/agency-commission-distribute`,
         method: "PUT",
