@@ -127,7 +127,13 @@ export default function SalaryManagementPage() {
   const handleAutoDistribution = async () => {
     try {
       const res = await agencySalaryAutoDistribute({}).unwrap();
-      toast.success(res.message || "auto distributed salaries");
+      const message = `Salary Distributed: Total: ${res?.result?.total}, Paid: ${res?.result?.paid}, Success Rate: ${res?.result?.successRate}%`;
+      console.log(message, "distribution salary");
+      if (res.success) {
+        toast.success(message || res?.message || "auto distributed salaries");
+      } else {
+        toast.success(res?.message || "auto distributed salaries");
+      }
     } catch (err: any) {
       console.log(err);
       toast.error(err.message || err.data.message || "something went wrong!");
@@ -143,6 +149,7 @@ export default function SalaryManagementPage() {
           <ActionTinyButton
             disabled={autoDistributionLoading}
             onClick={handleAutoDistribution}
+            variant={autoDistributionLoading ? "secondary" : "primary"}
           >
             Auto Distribute Salary
           </ActionTinyButton>

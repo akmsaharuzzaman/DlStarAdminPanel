@@ -1,7 +1,4 @@
-import {
-  useGetAdminTransactionsQuery,
-  useGetPortalUserTransactionsQuery,
-} from "@/redux/api/auth.api";
+import { useGetPortalUserTransactionsQuery } from "@/redux/api/auth.api";
 import { selectUser } from "@/redux/features/auth.slice";
 import { useAppSelector } from "@/redux/hooks";
 import { TTransactionAdminHistory } from "@/types/api/auth";
