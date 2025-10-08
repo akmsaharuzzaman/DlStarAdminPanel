@@ -38,11 +38,11 @@ export const SellCoinForm = () => {
     useSearchUsersByEmailQuery(
       debouncedSearch.length > 0
         ? { email: debouncedSearch, page: 1, limit: 5 }
-        : skipToken
+        : skipToken,
     );
 
   const filteredUsers =
-    debouncedSearch.length > 0 ? searchedUsers?.result || [] : [];
+    debouncedSearch.length > 0 ? searchedUsers?.result?.users || [] : [];
 
   const {
     register,
@@ -76,7 +76,7 @@ export const SellCoinForm = () => {
     } catch (error: any) {
       console.log(error);
       toast.error(
-        error?.data?.message || "Failed to sell coins. Please try again."
+        error?.data?.message || "Failed to sell coins. Please try again.",
       );
       // setSuccessMsg("Failed to sell coins. Please try again.");
     }
@@ -112,7 +112,7 @@ export const SellCoinForm = () => {
                     setValue={setValue}
                     setSearchName={setSearchName}
                   />
-                )
+                ),
               )
             ) : (
               <div className="px-3 py-2 text-gray-400 text-sm">

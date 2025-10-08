@@ -54,12 +54,15 @@ const sharedPowerApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       invalidatesTags: [tagTypes.coin],
     }),
     searchUsersByEmail: builder.query<
-      TResponse<{ meta: Tpagination; result: TUser[] }>,
+      TResponse<{
+        users: TUser[];
+        paginations: Tpagination;
+      }>,
       { email: string; page?: number; limit?: number }
     >({
       query: ({ email, page = 1, limit = 5 }) => ({
-        url: `/power-shared/users/search?email=${encodeURIComponent(
-          email
+        url: `/power-shared/users?searchTerm=${encodeURIComponent(
+          email,
         )}&page=${page}&limit=${limit}`,
         method: "GET",
       }),
