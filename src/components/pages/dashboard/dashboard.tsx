@@ -352,7 +352,7 @@ export const DashboardContent: FC<{
           label: "Coin Transaction History",
           icon: DollarSign,
           variant: "primary",
-          link: ClientRoutes.TransactionHistory,
+          link: ClientRoutes.PortalsTransactions,
         },
         // { label: "Create Reseller", icon: UserCog, modal: "createReseller" },
         // {
@@ -385,7 +385,7 @@ export const DashboardContent: FC<{
           label: "Coin Transaction History",
           icon: DollarSign,
           variant: "primary",
-          link: ClientRoutes.TransactionHistory,
+          link: ClientRoutes.PortalsTransactions,
         },
         // {
         //   label: "History",

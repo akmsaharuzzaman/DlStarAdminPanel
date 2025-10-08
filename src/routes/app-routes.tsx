@@ -13,6 +13,7 @@ import { GiftListsPage } from "@/pages/GiftLIsts";
 import { HostsWithdrawHistoryPage } from "@/pages/HostsWithdrawHistory";
 import Merchant from "@/pages/Merchant";
 import MerchantById from "@/pages/MerchantById";
+import { PortalsTransactionHistoryPage } from "@/pages/PortalsTransactionHistory";
 import SalaryManagementPage from "@/pages/SalaryManagement";
 import SubAdmin from "@/pages/Sub-admin";
 import SubAdminById from "@/pages/SubAdminById";
@@ -130,6 +131,11 @@ export const appRoutes = [
   {
     path: "/transaction-history",
     element: <TransactionHistoryPage onBack={"/"} />,
-    roles: [Roles.Admin, Roles.Merchant, Roles.Reseller],
+    roles: [Roles.Admin],
+  },
+  {
+    path: "/portals-transactions",
+    element: <PortalsTransactionHistoryPage onBack={"/"} />,
+    roles: [Roles.Merchant, Roles.Reseller],
   },
 ];
