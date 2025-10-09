@@ -3,7 +3,6 @@ import { Input } from "../ui/input";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
 import { useForm, UseFormSetValue } from "react-hook-form";
 import { toast } from "sonner";
 import { TUser } from "@/types/api/auth";
@@ -11,21 +10,11 @@ import {
   useCreateHostMutation,
   useSearchUsersByEmailQuery,
 } from "@/redux/api/power-shared";
-
-// Allowed permissions
-const PERMISSION_OPTIONS = [
-  "coin-distributor",
-  "update-users",
-  "block-user",
-  "device-ban",
-  "live-room-close",
-];
-
-const createHostSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
-  permission: z.string().min(1, "Select a permission"),
-});
-type CreateHostFormValues = z.infer<typeof createHostSchema>;
+import { PERMISSION_OPTIONS } from "@/constants/constant";
+import {
+  CreateHostFormValues,
+  createHostSchema,
+} from "@/schema/create-host-form";
 
 export const CreateHostForm = () => {
   const [searchName, setSearchName] = useState("");
@@ -52,11 +41,11 @@ export const CreateHostForm = () => {
             page: 1,
             limit: 5,
           }
-        : skipToken
+        : skipToken,
     );
 
   const filteredUsers =
-    debouncedSearch.length > 0 ? searchedUsers?.result || [] : [];
+    debouncedSearch.length > 0 ? searchedUsers?.result?.users || [] : []; // correctly used api response based on the tyepscript type latest changes
 
   const {
     register,
@@ -82,7 +71,7 @@ export const CreateHostForm = () => {
       }, 1500);
     } catch (error: any) {
       toast.error(
-        error?.data?.message || "Failed to create host. Please try again."
+        error?.data?.message || "Failed to create host. Please try again.",
       );
     }
   };

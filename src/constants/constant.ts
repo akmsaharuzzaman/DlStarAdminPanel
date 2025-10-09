@@ -6,3 +6,12 @@ export const colors = {
   textPrimary: "#0F172A",
   textMuted: "#6B7280",
 };
+
+// Allowed permissions
+export const PERMISSION_OPTIONS = [
+  "coin-distributor",
+  "update-users",
+  "block-user",
+  "device-ban",
+  "live-room-close",
+];

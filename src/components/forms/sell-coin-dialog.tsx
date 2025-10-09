@@ -44,13 +44,13 @@ export function SellCoinDialog({ open, onClose }: SellCoinDialogProps) {
     useSearchUsersByEmailQuery(
       debouncedSearch.length > 0
         ? { email: debouncedSearch, page: 1, limit: 5 }
-        : skipToken
+        : skipToken,
     );
 
   console.log("searchedUsers response:", searchedUsers);
 
   const filteredUsers =
-    debouncedSearch.length > 0 ? searchedUsers?.result || [] : [];
+    debouncedSearch.length > 0 ? searchedUsers?.result?.users || [] : [];
 
   const {
     register,
@@ -74,7 +74,7 @@ export function SellCoinDialog({ open, onClose }: SellCoinDialogProps) {
       const response = await asignCoinToUser(payload).unwrap();
       toast.success(response.message);
       setSuccessMsg(
-        `Successfully added ${data.coinAmount} coins to user ${data.userId}`
+        `Successfully added ${data.coinAmount} coins to user ${data.userId}`,
       );
       setTimeout(() => {
         onClose();
@@ -84,7 +84,7 @@ export function SellCoinDialog({ open, onClose }: SellCoinDialogProps) {
     } catch (error: any) {
       console.log(error);
       toast.error(
-        error?.data?.message || "Failed to sell coins. Please try again."
+        error?.data?.message || "Failed to sell coins. Please try again.",
       );
       setSuccessMsg("Failed to sell coins. Please try again.");
     }
@@ -161,7 +161,7 @@ export function SellCoinDialog({ open, onClose }: SellCoinDialogProps) {
                           </span>
                         </div>
                       </div>
-                    )
+                    ),
                   )
                 ) : (
                   <div className="px-3 py-2 text-gray-400 text-sm">

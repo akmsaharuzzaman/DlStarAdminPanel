@@ -6,7 +6,7 @@ import { tagTypes } from "../tag.types";
 
 type TGetUserResponse = TResponse<{ pagination: Tpagination; users: TUser[] }>;
 type TAsignCoinToUserResponse = TResponse<TUserRewards>;
-export const userApi= onuliveCloneDashboardBaseApi.injectEndpoints({
+export const userApi = onuliveCloneDashboardBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     // TODO: need to remove this endpoint
 
@@ -32,12 +32,12 @@ export const userApi= onuliveCloneDashboardBaseApi.injectEndpoints({
       invalidatesTags: [tagTypes.coin],
     }),
     searchUsersByEmail: builder.query<
-      TResponse<{ meta: Tpagination; result: TUser[] }>,
+      TResponse<{ users: TUser; pagination: Tpagination }>,
       { email: string; page?: number; limit?: number }
     >({
       query: ({ email, page = 1, limit = 5 }) => ({
-        url: `/power-shared/users/search?email=${encodeURIComponent(
-          email
+        url: `/power-shared/users?searchTerm=${encodeURIComponent(
+          email,
         )}&page=${page}&limit=${limit}`,
         method: "GET",
       }),
