@@ -15,3 +15,9 @@ export const PERMISSION_OPTIONS = [
   "device-ban",
   "live-room-close",
 ];
+
+export const ACTIVITY_ZONES = {
+  TEMP_BLOCK: "temp_block",
+  SAFE: "safe",
+  PERMANENT_BLOCK: "permanent_block",
+};

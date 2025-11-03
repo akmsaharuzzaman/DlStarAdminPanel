@@ -68,6 +68,7 @@ export type TUser = {
   coins: number;
   activityZone: {
     zone: string;
+    expire?: string;
   };
   createdAt: string;
   updatedAt: string;

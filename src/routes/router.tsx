@@ -19,6 +19,7 @@ import UnauthorizedPage from "@/pages/Unauthorize";
 import AdminLoginPage from "@/components/pages/login/admin-login";
 import PortalLoginPage from "@/components/pages/login/portal-login";
 import LoginPage from "@/pages/Login";
+import RestrictPage from "@/pages/Restrict";
 
 const protectedChildren = [
   { path: "", element: <DashboardPage /> },
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <RootLayout />,
     children: [...protectedRoutes],
+  },
+  {
+    path: "/restrict",
+    element: <RestrictPage />,
   },
   {
     path: "/unauthorize",
