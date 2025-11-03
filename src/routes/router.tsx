@@ -20,6 +20,7 @@ import AdminLoginPage from "@/components/pages/login/admin-login";
 import PortalLoginPage from "@/components/pages/login/portal-login";
 import LoginPage from "@/pages/Login";
 import RestrictPage from "@/pages/Restrict";
+import { HostsWithdrawHistoryPage } from "@/pages/HostsWithdrawHistory";
 
 const protectedChildren = [
   { path: "", element: <DashboardPage /> },
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <PublicLayout />,
     children: publicChildren,
+  },
+  {
+    path: "/host-withdraw-history",
+    element: <HostsWithdrawHistoryPage onBack={"/"} />,
   },
   {
     path: "/demo",

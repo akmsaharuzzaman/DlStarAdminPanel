@@ -99,7 +99,11 @@ export type TCreatePortalRoleBody = {
 export type TWidrawRequest = {
   _id: string;
   name: string;
-  hostId: string;
+  hostId: {
+    _id: string;
+    avatar: string;
+    name: string;
+  };
   accountNumber: string;
   accountType: string;
   withdrawDate: string;
@@ -108,12 +112,16 @@ export type TWidrawRequest = {
   audioHour: number;
   videoHour: number;
   country: string;
+  totalDiamond: number;
   totalSalary: number;
   status: string;
-  agencyId: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: 0;
+  agencyId: {
+    _id: string;
+    name: string;
+    userId: string;
+  };
+  createdAt: "2025-10-15T09:56:21.949Z";
+  updatedAt: "2025-10-15T09:56:21.949Z";
 };
 
 export type TTransactionAdminHistory = {

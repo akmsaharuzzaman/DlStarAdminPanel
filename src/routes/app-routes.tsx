@@ -117,11 +117,11 @@ export const appRoutes = [
     element: <AgencyWithdrawHistoryPage onBack={"/"} />,
     roles: [Roles.Admin],
   },
-  {
-    path: "/host-withdraw-history",
-    element: <HostsWithdrawHistoryPage onBack={"/"} />,
-    roles: [Roles.Admin],
-  },
+  // {
+  //   path: "/host-withdraw-history",
+  //   element: <HostsWithdrawHistoryPage onBack={"/"} />,
+  //   roles: [Roles.Admin],
+  // },
   {
     path: "/salary-management",
     element: <SalaryManagementPage />,
