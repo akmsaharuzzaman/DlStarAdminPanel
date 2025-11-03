@@ -10,7 +10,6 @@ import { CreateMerchantPage } from "@/pages/CreateMerchant";
 import { CreateResellerPage } from "@/pages/CreateReseller";
 import { CreateSubAdminPage } from "@/pages/CreateSubAdmin";
 import { GiftListsPage } from "@/pages/GiftLIsts";
-import { HostsWithdrawHistoryPage } from "@/pages/HostsWithdrawHistory";
 import Merchant from "@/pages/Merchant";
 import MerchantById from "@/pages/MerchantById";
 import { PortalsTransactionHistoryPage } from "@/pages/PortalsTransactionHistory";
