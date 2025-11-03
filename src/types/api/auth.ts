@@ -120,8 +120,8 @@ export type TWidrawRequest = {
     name: string;
     userId: string;
   };
-  createdAt: "2025-10-15T09:56:21.949Z";
-  updatedAt: "2025-10-15T09:56:21.949Z";
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type TTransactionAdminHistory = {
