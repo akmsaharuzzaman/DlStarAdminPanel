@@ -5,9 +5,10 @@ import { useGetAllGiftsQuery } from "@/redux/api/gift.api";
 
 import { useGetGiftCategoriesQuery } from "@/redux/api/auth.api";
 import { Link } from "react-router-dom";
-import { CreateGiftForm } from "@/components/forms/create-gift-form";
+import { CreateStoreFrom } from "@/components/forms/create-store-form";
 import { GiftCard } from "@/components/cards";
 import { TGift } from "@/types/api/gift";
+import { useGetStoreCategoriesQuery } from "@/redux/api/store.api";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary" | "danger" | "success" | "info" | "ghost";
@@ -22,57 +23,57 @@ type DialogProps = {
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
-type GiftListsPageProps = {
+type StoreManagementProps = {
   backRoute: string;
 };
 
 // Mock Data
-// const initialGifts: Gift[] = [
-//   {
-//     _id: "1",
-//     name: "Rose",
-//     category: "Popular",
-//     diamonds: 50,
-//     coinPrice: 100,
-//     previewImage: "https://placehold.co/100x100/f87171/ffffff?text=Rose",
-//     svgaImage: "rose.svga",
-//     createdAt: "2024-08-15T10:00:00Z",
-//     updatedAt: "2024-08-15T10:00:00Z",
-//   },
-//   {
-//     _id: "2",
-//     name: "Diamond Ring",
-//     category: "Luxury",
-//     diamonds: 5000,
-//     coinPrice: 10000,
-//     previewImage: "https://placehold.co/100x100/38bdf8/ffffff?text=Ring",
-//     svgaImage: "ring.svga",
-//     createdAt: "2024-08-15T11:00:00Z",
-//     updatedAt: "2024-08-15T11:00:00Z",
-//   },
-//   {
-//     _id: "3",
-//     name: "Teddy Bear",
-//     category: "Popular",
-//     diamonds: 200,
-//     coinPrice: 400,
-//     previewImage: "https://placehold.co/100x100/facc15/ffffff?text=Bear",
-//     svgaImage: "bear.svga",
-//     createdAt: "2024-08-16T14:00:00Z",
-//     updatedAt: "2024-08-16T14:00:00Z",
-//   },
-//   {
-//     _id: "4",
-//     name: "Sports Car",
-//     category: "Luxury",
-//     diamonds: 50000,
-//     coinPrice: 100000,
-//     previewImage: "https://placehold.co/100x100/e11d48/ffffff?text=Car",
-//     svgaImage: "car.svga",
-//     createdAt: "2024-08-17T09:00:00Z",
-//     updatedAt: "2024-08-17T09:00:00Z",
-//   },
-// ];
+const initialGifts: TGift[] = [
+  {
+    _id: "1",
+    name: "Rose",
+    category: "Popular",
+    diamonds: 50,
+    coinPrice: 100,
+    previewImage: "https://placehold.co/100x100/f87171/ffffff?text=Rose",
+    svgaImage: "rose.svga",
+    createdAt: "2024-08-15T10:00:00Z",
+    updatedAt: "2024-08-15T10:00:00Z",
+  },
+  {
+    _id: "2",
+    name: "Diamond Ring",
+    category: "Luxury",
+    diamonds: 5000,
+    coinPrice: 10000,
+    previewImage: "https://placehold.co/100x100/38bdf8/ffffff?text=Ring",
+    svgaImage: "ring.svga",
+    createdAt: "2024-08-15T11:00:00Z",
+    updatedAt: "2024-08-15T11:00:00Z",
+  },
+  {
+    _id: "3",
+    name: "Teddy Bear",
+    category: "Popular",
+    diamonds: 200,
+    coinPrice: 400,
+    previewImage: "https://placehold.co/100x100/facc15/ffffff?text=Bear",
+    svgaImage: "bear.svga",
+    createdAt: "2024-08-16T14:00:00Z",
+    updatedAt: "2024-08-16T14:00:00Z",
+  },
+  {
+    _id: "4",
+    name: "Sports Car",
+    category: "Luxury",
+    diamonds: 50000,
+    coinPrice: 100000,
+    previewImage: "https://placehold.co/100x100/e11d48/ffffff?text=Car",
+    svgaImage: "car.svga",
+    createdAt: "2024-08-17T09:00:00Z",
+    updatedAt: "2024-08-17T09:00:00Z",
+  },
+];
 
 // Helper & UI Components (shadcn/ui inspired)
 const Button: React.FC<ButtonProps> = ({
@@ -168,23 +169,24 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
   backRoute = "/",
 }) => {
   const { data: storeCategories, isLoading: getCategoryLoading } =
-    useGetGiftCategoriesQuery(undefined);
-  const { data: allGiftData, isLoading } = useGetAllGiftsQuery(undefined);
+    useGetStoreCategoriesQuery(undefined);
+  // const { data: allGiftData, isLoading } = (undefined);
 
-  const initialCategories: string[] = giftCategories?.result || [];
+  const initialCategories = storeCategories?.result || [];
   console.log(initialCategories);
-  const gifts = allGiftData?.result || [];
+  // const gifts = allGiftData?.result || [];
   // const [gifts, setGifts] = useState<Gift[]>(initialGifts);
-  const [categories, setCategories] = useState<string[]>([
-    ...initialCategories,
-  ]);
+  const [categories, setCategories] = useState([...initialCategories]);
   console.log(categories);
   const [isCreateModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
-  const groupedGifts = gifts.reduce<Record<string, TGift[]>>((acc, gift) => {
-    (acc[gift.category] = acc[gift.category] || []).push(gift);
-    return acc;
-  }, {});
+  const groupedGifts = initialGifts.reduce<Record<string, TGift[]>>(
+    (acc, gift) => {
+      (acc[gift.category] = acc[gift.category] || []).push(gift);
+      return acc;
+    },
+    {},
+  );
 
   const addCategory = (newCategory: string) => {
     if (!categories.includes(newCategory)) {
@@ -192,7 +194,7 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
     }
   };
 
-  if (isLoading) return <p>Hello Loading</p>;
+  // if (isLoading) return <p>Hello Loading</p>;
 
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
@@ -204,10 +206,12 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
           >
             <ArrowLeft size={16} className="mr-2" /> Back to Dashboard
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Gift Management</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Stores Management
+          </h1>
         </div>
         <Button variant="success" onClick={() => setCreateModalOpen(true)}>
-          <PlusCircle size={16} className="mr-2" /> Create Gift
+          <PlusCircle size={16} className="mr-2" /> Create Store
         </Button>
       </header>
       <div className="space-y-10">
@@ -217,8 +221,8 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
               {category}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {giftList.map((gift) => (
-                <GiftCard key={gift._id} gift={gift} />
+              {giftList.map((store) => (
+                <GiftCard key={store._id} gift={store} />
               ))}
             </div>
           </section>
@@ -227,9 +231,9 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
       <Dialog
         isOpen={isCreateModalOpen}
         onClose={() => setCreateModalOpen(false)}
-        title="Create New Gift"
+        title="Create a New Store"
       >
-        <CreateGiftForm
+        <CreateStoreFrom
           onSave={() => setCreateModalOpen(false)}
           categories={categories}
           addCategory={addCategory}

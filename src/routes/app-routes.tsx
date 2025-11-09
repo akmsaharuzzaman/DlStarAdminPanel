@@ -14,6 +14,7 @@ import Merchant from "@/pages/Merchant";
 import MerchantById from "@/pages/MerchantById";
 import { PortalsTransactionHistoryPage } from "@/pages/PortalsTransactionHistory";
 import SalaryManagementPage from "@/pages/SalaryManagement";
+import { StoreManagement } from "@/pages/StoreManagement";
 import SubAdmin from "@/pages/Sub-admin";
 import SubAdminById from "@/pages/SubAdminById";
 import { TransactionHistoryPage } from "@/pages/TransactionHistory";
@@ -136,5 +137,10 @@ export const appRoutes = [
     path: "/portals-transactions",
     element: <PortalsTransactionHistoryPage onBack={"/"} />,
     roles: [Roles.Merchant, Roles.Reseller],
+  },
+  {
+    path: "/stores",
+    element: <StoreManagement backRoute={"/"} />,
+    roles: [Roles.Admin],
   },
 ];
