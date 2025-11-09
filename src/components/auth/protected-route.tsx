@@ -13,7 +13,7 @@ export default function ProtectedRoute({
 }) {
   const user = useAppSelector(selectUser);
 
-  const isAdmin = user!.role === "admin";
+  const isAdmin = user?.role === "admin";
 
   // ✅ Safe way: hook always runs, but query is skipped if admin
   const {
