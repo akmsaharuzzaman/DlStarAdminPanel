@@ -68,6 +68,7 @@ export type TUser = {
   coins: number;
   activityZone: {
     zone: string;
+    expire?: string;
   };
   createdAt: string;
   updatedAt: string;
@@ -98,7 +99,11 @@ export type TCreatePortalRoleBody = {
 export type TWidrawRequest = {
   _id: string;
   name: string;
-  hostId: string;
+  hostId: {
+    _id: string;
+    avatar: string;
+    name: string;
+  };
   accountNumber: string;
   accountType: string;
   withdrawDate: string;
@@ -107,12 +112,16 @@ export type TWidrawRequest = {
   audioHour: number;
   videoHour: number;
   country: string;
+  totalDiamond: number;
   totalSalary: number;
   status: string;
-  agencyId: string;
+  agencyId: {
+    _id: string;
+    name: string;
+    userId: string;
+  };
   createdAt: string;
   updatedAt: string;
-  __v: 0;
 };
 
 export type TTransactionAdminHistory = {

@@ -10,11 +10,11 @@ import { CreateMerchantPage } from "@/pages/CreateMerchant";
 import { CreateResellerPage } from "@/pages/CreateReseller";
 import { CreateSubAdminPage } from "@/pages/CreateSubAdmin";
 import { GiftListsPage } from "@/pages/GiftLIsts";
-import { HostsWithdrawHistoryPage } from "@/pages/HostsWithdrawHistory";
 import Merchant from "@/pages/Merchant";
 import MerchantById from "@/pages/MerchantById";
 import { PortalsTransactionHistoryPage } from "@/pages/PortalsTransactionHistory";
 import SalaryManagementPage from "@/pages/SalaryManagement";
+import { StoreManagement } from "@/pages/StoreManagement";
 import SubAdmin from "@/pages/Sub-admin";
 import SubAdminById from "@/pages/SubAdminById";
 import { TransactionHistoryPage } from "@/pages/TransactionHistory";
@@ -117,11 +117,11 @@ export const appRoutes = [
     element: <AgencyWithdrawHistoryPage onBack={"/"} />,
     roles: [Roles.Admin],
   },
-  {
-    path: "/host-withdraw-history",
-    element: <HostsWithdrawHistoryPage onBack={"/"} />,
-    roles: [Roles.Admin],
-  },
+  // {
+  //   path: "/host-withdraw-history",
+  //   element: <HostsWithdrawHistoryPage onBack={"/"} />,
+  //   roles: [Roles.Admin],
+  // },
   {
     path: "/salary-management",
     element: <SalaryManagementPage />,
@@ -137,5 +137,10 @@ export const appRoutes = [
     path: "/portals-transactions",
     element: <PortalsTransactionHistoryPage onBack={"/"} />,
     roles: [Roles.Merchant, Roles.Reseller],
+  },
+  {
+    path: "/stores",
+    element: <StoreManagement backRoute={"/"} />,
+    roles: [Roles.Admin],
   },
 ];

@@ -12,7 +12,14 @@ import { useAppSelector } from "@/redux/hooks";
 
 import { ButtonProps } from "@/types/buttons";
 import { ModalName, Role } from "@/types/pages/dashboard";
-import { Coins, DollarSign, Gamepad2, Gift, LucideIcon } from "lucide-react";
+import {
+  Coins,
+  DollarSign,
+  Gamepad2,
+  Gift,
+  LucideIcon,
+  Store,
+} from "lucide-react";
 import { FC, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -213,6 +220,12 @@ export const DashboardContent: FC<{
           icon: Gamepad2,
           variant: "secondary",
           link: ClientRoutes.GreedyGameDashboardPanel,
+        },
+        {
+          label: "Stores Management",
+          icon: Store,
+          variant: "primary",
+          link: ClientRoutes.StoreManagement,
         },
 
         // { label: "Create Sub-Admin", icon: UserPlus, modal: "createSubAdmin" },

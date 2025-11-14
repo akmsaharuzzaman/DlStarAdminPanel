@@ -5,6 +5,8 @@ export const tagTypes = {
   coin: "Coin",
   gift: "Gift",
   giftCategory: "GiftCategory",
+  store: "Store",
+  storeCategory: "StoreCategory",
   salary: "Salary",
   withdraw: "Withdraw",
   transaction: "Transaction",
