@@ -8,7 +8,10 @@ import { Link } from "react-router-dom";
 import { CreateStoreFrom } from "@/components/forms/create-store-form";
 import { GiftCard } from "@/components/cards";
 import { TGift } from "@/types/api/gift";
-import { useGetStoreCategoriesQuery } from "@/redux/api/store.api";
+import {
+  useCreateStoreCategoryMutation,
+  useGetStoreCategoriesQuery,
+} from "@/redux/api/store.api";
 import { TStoreCategory } from "@/types/api/store";
 import { StoreCard } from "@/components/cards/store-card";
 
@@ -175,6 +178,8 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
   const [isCreateModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const { data: storeCategories, isLoading: getCategoryLoading } =
     useGetStoreCategoriesQuery(undefined);
+  const [addCategory, { isLoading: createStoreCategoryLoading }] =
+    useCreateStoreCategoryMutation();
   // const { data: allGiftData, isLoading } = (undefined);
 
   const initialCategories = storeCategories?.result || [];
@@ -185,11 +190,11 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
   // const gifts = allGiftData?.result || [];
   // const [gifts, setGifts] = useState<Gift[]>(initialGifts);
 
-  const addCategory = (newCategory: string) => {
-    if (!categories.includes(newCategory)) {
-      setCategories((prev) => [...prev, newCategory]);
-    }
-  };
+  // const addCategory = (newCategory: string) => {
+  //   if (!categories.includes(newCategory)) {
+  //     setCategories((prev) => [...prev, newCategory]);
+  //   }
+  // };
 
   // if (isLoading) return <p>Hello Loading</p>;
 
@@ -248,6 +253,7 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
           onSave={() => setCreateModalOpen(false)}
           categories={categories}
           addCategory={addCategory}
+          createStoreCategoryLoading={createStoreCategoryLoading}
           getCategoryLoading={getCategoryLoading}
         />
       </Dialog>

@@ -1,4 +1,3 @@
-import { useCreateGiftMutation } from "@/redux/api/gift.api";
 import { TCreateGiftBody } from "@/types/api/gift";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { FormEvent, useState } from "react";
@@ -23,27 +22,25 @@ import {
 } from "../ui/select";
 import { Button } from "../ui/button";
 import { ActionTinyButton } from "../buttons/action-tiny-buttons";
-import { TStoreCategory } from "@/types/api/store";
+import { TCreateStoreBody, TStoreCategory } from "@/types/api/store";
+import { useCreateStoreMutation } from "@/redux/api/store.api";
 type CreateStoreFromProps = {
   onSave: (e?: FormEvent) => void;
   categories: TStoreCategory[];
-  addCategory: (cat: string) => void;
+  addCategory: any;
+  createStoreCategoryLoading: boolean;
   getCategoryLoading: boolean;
 };
 
-const giftSchema = z.object({
-  giftName: z.string().min(1, "Gift name is required"),
-  category: z.string().min(1, "Category is required"),
-  diamonds: z.preprocess(
+const storeSchema = z.object({
+  name: z.string().min(1, "Store name is required"),
+  validity: z.string(),
+  categoryId: z.string().min(1, "Category is required"),
+  price: z.preprocess(
     (val) => Number(val),
-    z.number().min(1, "Diamonds required"),
+    z.number().min(1, "Price required"),
   ),
-  coinPrice: z.preprocess(
-    (val) => Number(val),
-    z.number().min(1, "Coin price required"),
-  ),
-  previewImage: z.instanceof(File, { message: "Preview image required" }),
-  svgaImage: z.instanceof(File, { message: "SVGA image required" }),
+  svgaFile: z.instanceof(File, { message: "SVGA image required" }),
 });
 
 export const CreateStoreFrom: React.FC<
@@ -51,20 +48,25 @@ export const CreateStoreFrom: React.FC<
     // onCreateGift?: (body: any) => void;
     isLoading?: boolean;
   }
-> = ({ onSave, categories, addCategory, getCategoryLoading }) => {
+> = ({
+  onSave,
+  categories,
+  addCategory,
+  getCategoryLoading,
+  createStoreCategoryLoading,
+}) => {
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
-  const [createGift, { isLoading }] = useCreateGiftMutation();
+  const [createStore, { isLoading }] = useCreateStoreMutation();
 
   const form = useForm({
-    resolver: zodResolver(giftSchema),
+    resolver: zodResolver(storeSchema),
     defaultValues: {
-      giftName: "",
-      category: "",
-      diamonds: "",
-      coinPrice: "",
-      previewImage: undefined,
-      svgaImage: undefined,
+      name: "",
+      validity: "",
+      categoryId: "",
+      price: "",
+      svgaFile: undefined,
     },
   });
 
@@ -77,12 +79,20 @@ export const CreateStoreFrom: React.FC<
   //   }
   // };
 
-  const handleCreateCategory = () => {
-    if (newCategoryName.trim()) {
-      addCategory(newCategoryName.trim());
-      form.setValue("category", newCategoryName.trim());
-      setIsCreatingCategory(false);
-      setNewCategoryName("");
+  const handleCreateCategory = async () => {
+    try {
+      if (newCategoryName.trim()) {
+        const res = await addCategory({
+          title: newCategoryName.trim(),
+          isPremium: false,
+        });
+        toast.success(`${res?.result?.title} created successfully`);
+        form.setValue("categoryId", res.result._id);
+        setIsCreatingCategory(false);
+        setNewCategoryName("");
+      }
+    } catch (err: any) {
+      toast.error(err.data.message || "Caught error for creating category");
     }
   };
 
@@ -93,20 +103,19 @@ export const CreateStoreFrom: React.FC<
     //   onCreateGift(values);
     // }
     try {
-      if (!values.previewImage || !values.svgaImage) {
-        toast.error("Please upload both preview and SVGA images.");
+      if (!values.svgaFile) {
+        toast.error("Please upload SVGA image.");
         return;
       }
-      const payload: TCreateGiftBody = {
-        giftName: values.giftName,
-        category: values.category,
-        coinPrice: values.coinPrice,
-        diamonds: values.diamonds,
-        previewImage: values.previewImage,
-        svgaImage: values.svgaImage,
+      const payload: TCreateStoreBody = {
+        name: values.name,
+        validity: Number(values.validity),
+        categoryId: form.getValues("categoryId"),
+        price: Number(values.price),
+        svgaFile: values.svgaFile,
       };
-      console.log("Creating gift with payload:", payload);
-      const response = await createGift(payload).unwrap();
+      console.log("Creating store with payload:", payload);
+      const response = await createStore(payload).unwrap();
       console.log("response", response);
       toast.success(response.message);
       setTimeout(() => {
@@ -116,7 +125,7 @@ export const CreateStoreFrom: React.FC<
     } catch (error: any) {
       console.log(error);
       toast.error(
-        error?.data?.message || "Failed to create gift. Please try again.",
+        error?.data?.message || "Failed to create store. Please try again.",
       );
     }
   });
@@ -126,7 +135,7 @@ export const CreateStoreFrom: React.FC<
       <form onSubmit={onSubmit} className="space-y-4">
         <FormField
           control={form.control}
-          name="giftName"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Gift Name</FormLabel>
@@ -139,7 +148,7 @@ export const CreateStoreFrom: React.FC<
         />
         <FormField
           control={form.control}
-          name="category"
+          name="categoryId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
@@ -163,7 +172,7 @@ export const CreateStoreFrom: React.FC<
                       <SelectItem value={""}>Please wait...</SelectItem>
                     ) : (
                       categories?.map((cat) => (
-                        <SelectItem key={cat._id} value={cat?.title}>
+                        <SelectItem key={cat._id} value={cat?._id}>
                           {cat?.title}
                         </SelectItem>
                       ))
@@ -185,15 +194,19 @@ export const CreateStoreFrom: React.FC<
               onChange={(e) => setNewCategoryName(e.target.value)}
               placeholder="New category name"
             />
-            <Button type="button" onClick={handleCreateCategory}>
-              Add
+            <Button
+              type="button"
+              onClick={handleCreateCategory}
+              disabled={createStoreCategoryLoading}
+            >
+              {createStoreCategoryLoading ? "Wait.." : "Add"}
             </Button>
           </div>
         )}
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="diamonds"
+            name="validity"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Diamonds</FormLabel>
@@ -211,7 +224,7 @@ export const CreateStoreFrom: React.FC<
           />
           <FormField
             control={form.control}
-            name="coinPrice"
+            name="price"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Coin Price</FormLabel>
@@ -228,26 +241,10 @@ export const CreateStoreFrom: React.FC<
             )}
           />
         </div>
+
         <FormField
           control={form.control}
-          name="previewImage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Preview Image</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => field.onChange(e.target.files?.[0])}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="svgaImage"
+          name="svgaFile"
           render={({ field }) => (
             <FormItem>
               <FormLabel>SVGA Image</FormLabel>

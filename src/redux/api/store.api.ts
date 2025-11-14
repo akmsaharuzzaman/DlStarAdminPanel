@@ -1,7 +1,12 @@
 import { tagTypes } from "../tag.types";
 import { Tpagination, TResponse } from "@/types/api";
 import { onuliveCloneDashboardBaseApi } from "./base.api";
-import { TCreateStoreBody, TStore, TStoreCategory } from "@/types/api/store";
+import {
+  TCreateStoreBody,
+  TCreateStoreCategoryBody,
+  TStore,
+  TStoreCategory,
+} from "@/types/api/store";
 
 // type TGetAllStoreResponse = TResponse<TStore[]>;
 type TGetStoresByCategoryResponse = TResponse<{
@@ -64,6 +69,20 @@ const storeApi = onuliveCloneDashboardBaseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.store], // Adjust tag if you use cache tags
     }),
+    createStoreCategory: builder.mutation<any, TCreateStoreCategoryBody>({
+      query: (storeInfo) => {
+        const body = {
+          title: storeInfo.title,
+          isPremium: storeInfo.isPremium,
+        };
+        return {
+          url: "/store/categories",
+          method: "POST",
+          body: body,
+        };
+      },
+      invalidatesTags: [tagTypes.storeCategory],
+    }),
   }),
 });
 
@@ -72,4 +91,5 @@ export const {
   useGetStoresByCategoryQuery,
   useCreateStoreMutation,
   useDeleteStoreMutation,
+  useCreateStoreCategoryMutation,
 } = storeApi;

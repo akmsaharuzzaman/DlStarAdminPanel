@@ -13,6 +13,7 @@ export enum ClientRoutes {
   TransactionHistory = "/transaction-history",
   PortalsTransactions = "/portals-transactions",
   SalaryManagement = "/salary-management",
+  StoreManagement = "/stores",
 
   // creating pages
   CreateSubAdmin = "/create-sub-admin",
