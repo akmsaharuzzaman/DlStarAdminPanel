@@ -34,3 +34,8 @@ export type TCreateStoreBody = {
   price: number;
   svgaFile: File;
 };
+
+export type TCreateStoreCategoryBody = {
+  title: string;
+  isPremium: boolean;
+};
