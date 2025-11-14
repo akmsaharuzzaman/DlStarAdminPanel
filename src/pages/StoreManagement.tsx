@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 import { PlusCircle, ArrowLeft } from "lucide-react";
-import { useGetAllGiftsQuery } from "@/redux/api/gift.api";
 
-import { useGetGiftCategoriesQuery } from "@/redux/api/auth.api";
 import { Link } from "react-router-dom";
 import { CreateStoreFrom } from "@/components/forms/create-store-form";
-import { GiftCard } from "@/components/cards";
-import { TGift } from "@/types/api/gift";
+
 import {
   useCreateStoreCategoryMutation,
   useGetStoreCategoriesQuery,
@@ -33,52 +30,52 @@ type StoreManagementProps = {
 };
 
 // Mock Data
-const initialGifts: TGift[] = [
-  {
-    _id: "1",
-    name: "Rose",
-    category: "Popular",
-    diamonds: 50,
-    coinPrice: 100,
-    previewImage: "https://placehold.co/100x100/f87171/ffffff?text=Rose",
-    svgaImage: "rose.svga",
-    createdAt: "2024-08-15T10:00:00Z",
-    updatedAt: "2024-08-15T10:00:00Z",
-  },
-  {
-    _id: "2",
-    name: "Diamond Ring",
-    category: "Luxury",
-    diamonds: 5000,
-    coinPrice: 10000,
-    previewImage: "https://placehold.co/100x100/38bdf8/ffffff?text=Ring",
-    svgaImage: "ring.svga",
-    createdAt: "2024-08-15T11:00:00Z",
-    updatedAt: "2024-08-15T11:00:00Z",
-  },
-  {
-    _id: "3",
-    name: "Teddy Bear",
-    category: "Popular",
-    diamonds: 200,
-    coinPrice: 400,
-    previewImage: "https://placehold.co/100x100/facc15/ffffff?text=Bear",
-    svgaImage: "bear.svga",
-    createdAt: "2024-08-16T14:00:00Z",
-    updatedAt: "2024-08-16T14:00:00Z",
-  },
-  {
-    _id: "4",
-    name: "Sports Car",
-    category: "Luxury",
-    diamonds: 50000,
-    coinPrice: 100000,
-    previewImage: "https://placehold.co/100x100/e11d48/ffffff?text=Car",
-    svgaImage: "car.svga",
-    createdAt: "2024-08-17T09:00:00Z",
-    updatedAt: "2024-08-17T09:00:00Z",
-  },
-];
+// const initialGifts: TGift[] = [
+//   {
+//     _id: "1",
+//     name: "Rose",
+//     category: "Popular",
+//     diamonds: 50,
+//     coinPrice: 100,
+//     previewImage: "https://placehold.co/100x100/f87171/ffffff?text=Rose",
+//     svgaImage: "rose.svga",
+//     createdAt: "2024-08-15T10:00:00Z",
+//     updatedAt: "2024-08-15T10:00:00Z",
+//   },
+//   {
+//     _id: "2",
+//     name: "Diamond Ring",
+//     category: "Luxury",
+//     diamonds: 5000,
+//     coinPrice: 10000,
+//     previewImage: "https://placehold.co/100x100/38bdf8/ffffff?text=Ring",
+//     svgaImage: "ring.svga",
+//     createdAt: "2024-08-15T11:00:00Z",
+//     updatedAt: "2024-08-15T11:00:00Z",
+//   },
+//   {
+//     _id: "3",
+//     name: "Teddy Bear",
+//     category: "Popular",
+//     diamonds: 200,
+//     coinPrice: 400,
+//     previewImage: "https://placehold.co/100x100/facc15/ffffff?text=Bear",
+//     svgaImage: "bear.svga",
+//     createdAt: "2024-08-16T14:00:00Z",
+//     updatedAt: "2024-08-16T14:00:00Z",
+//   },
+//   {
+//     _id: "4",
+//     name: "Sports Car",
+//     category: "Luxury",
+//     diamonds: 50000,
+//     coinPrice: 100000,
+//     previewImage: "https://placehold.co/100x100/e11d48/ffffff?text=Car",
+//     svgaImage: "car.svga",
+//     createdAt: "2024-08-17T09:00:00Z",
+//     updatedAt: "2024-08-17T09:00:00Z",
+//   },
+// ];
 
 // Helper & UI Components (shadcn/ui inspired)
 const Button: React.FC<ButtonProps> = ({

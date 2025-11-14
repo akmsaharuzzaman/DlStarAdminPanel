@@ -1,4 +1,3 @@
-import { TCreateGiftBody } from "@/types/api/gift";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
