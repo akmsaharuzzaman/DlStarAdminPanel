@@ -23,9 +23,10 @@ import {
 } from "../ui/select";
 import { Button } from "../ui/button";
 import { ActionTinyButton } from "../buttons/action-tiny-buttons";
+import { TStoreCategory } from "@/types/api/store";
 type CreateStoreFromProps = {
   onSave: (e?: FormEvent) => void;
-  categories: string[];
+  categories: TStoreCategory[];
   addCategory: (cat: string) => void;
   getCategoryLoading: boolean;
 };
@@ -162,8 +163,8 @@ export const CreateStoreFrom: React.FC<
                       <SelectItem value={""}>Please wait...</SelectItem>
                     ) : (
                       categories?.map((cat) => (
-                        <SelectItem key={cat} value={cat}>
-                          {cat}
+                        <SelectItem key={cat._id} value={cat?.title}>
+                          {cat?.title}
                         </SelectItem>
                       ))
                     )}

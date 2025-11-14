@@ -1,10 +1,13 @@
 import { tagTypes } from "../tag.types";
-import { TResponse } from "@/types/api";
+import { Tpagination, TResponse } from "@/types/api";
 import { onuliveCloneDashboardBaseApi } from "./base.api";
 import { TCreateStoreBody, TStore, TStoreCategory } from "@/types/api/store";
 
 // type TGetAllStoreResponse = TResponse<TStore[]>;
-type TGetStoresByCategoryResponse = TResponse<TStore[]>;
+type TGetStoresByCategoryResponse = TResponse<{
+  pagination: Tpagination;
+  items: TStore[];
+}>;
 type TCreateStoreResponse = TResponse<TStore>;
 // type TDeleteStoreResponse = TResponse<{ deleted: boolean }>;
 type TGetStoreCategryResponse = TResponse<TStoreCategory[]>;
@@ -26,15 +29,16 @@ const storeApi = onuliveCloneDashboardBaseApi.injectEndpoints({
     //   providesTags: [tagTypes.store],
     // }),
 
-    getStoresByCategory: builder.query<TGetStoresByCategoryResponse, undefined>(
-      {
-        query: (categoryId) => ({
-          url: `/store/items/category/${categoryId}`,
-          method: "GET",
-        }),
-        providesTags: [tagTypes.store],
-      },
-    ),
+    getStoresByCategory: builder.query<
+      TGetStoresByCategoryResponse,
+      { store_id: string }
+    >({
+      query: ({ store_id }) => ({
+        url: `/store/items/category/${store_id}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.store],
+    }),
 
     createStore: builder.mutation<TCreateStoreResponse, TCreateStoreBody>({
       query: (storeInfo) => {

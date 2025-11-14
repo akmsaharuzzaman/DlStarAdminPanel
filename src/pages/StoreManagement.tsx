@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { PlusCircle, ArrowLeft } from "lucide-react";
 import { useGetAllGiftsQuery } from "@/redux/api/gift.api";
@@ -9,6 +9,8 @@ import { CreateStoreFrom } from "@/components/forms/create-store-form";
 import { GiftCard } from "@/components/cards";
 import { TGift } from "@/types/api/gift";
 import { useGetStoreCategoriesQuery } from "@/redux/api/store.api";
+import { TStoreCategory } from "@/types/api/store";
+import { StoreCard } from "@/components/cards/store-card";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary" | "danger" | "success" | "info" | "ghost";
@@ -168,25 +170,20 @@ Input.displayName = "Input";
 export const StoreManagement: React.FC<StoreManagementProps> = ({
   backRoute = "/",
 }) => {
+  const [categories, setCategories] = useState<TStoreCategory[]>([]);
+  console.log({ categories });
+  const [isCreateModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const { data: storeCategories, isLoading: getCategoryLoading } =
     useGetStoreCategoriesQuery(undefined);
   // const { data: allGiftData, isLoading } = (undefined);
 
   const initialCategories = storeCategories?.result || [];
-  console.log(initialCategories);
+  useEffect(() => {
+    setCategories([...initialCategories]);
+  }, [initialCategories]);
+  console.log({ initialCategories });
   // const gifts = allGiftData?.result || [];
   // const [gifts, setGifts] = useState<Gift[]>(initialGifts);
-  const [categories, setCategories] = useState([...initialCategories]);
-  console.log(categories);
-  const [isCreateModalOpen, setCreateModalOpen] = useState<boolean>(false);
-
-  const groupedGifts = initialGifts.reduce<Record<string, TGift[]>>(
-    (acc, gift) => {
-      (acc[gift.category] = acc[gift.category] || []).push(gift);
-      return acc;
-    },
-    {},
-  );
 
   const addCategory = (newCategory: string) => {
     if (!categories.includes(newCategory)) {
@@ -196,6 +193,9 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
 
   // if (isLoading) return <p>Hello Loading</p>;
 
+  if (getCategoryLoading) {
+    return <h1>Please wait for getting all categories</h1>;
+  }
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <header className="flex items-center justify-between mb-8">
@@ -215,6 +215,17 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
         </Button>
       </header>
       <div className="space-y-10">
+        {categories.map((category) => (
+          <section key={category._id}>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">
+              {category?.title}
+            </h2>
+
+            <StoreCard key={category._id} storeId={category._id} />
+          </section>
+        ))}
+      </div>
+      {/*<div className="space-y-10">
         {Object.entries(groupedGifts).map(([category, giftList]) => (
           <section key={category}>
             <h2 className="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">
@@ -227,7 +238,7 @@ export const StoreManagement: React.FC<StoreManagementProps> = ({
             </div>
           </section>
         ))}
-      </div>
+      </div>*/}
       <Dialog
         isOpen={isCreateModalOpen}
         onClose={() => setCreateModalOpen(false)}
